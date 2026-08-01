@@ -266,18 +266,25 @@ function calcAll() {
     badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
   }
 
-  // --- حسابات الصهريج والمقارنة ---
-  const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value);
-  const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value);
+ // --- حسابات الصهريج والمقارنة ---
+  const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
+  const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value) || 0;
 
   // حساب سعر متر الصهريج
   const tankerPerM3 = (tankerPriceInput > 0 && tankerQtyInput > 0) ? (tankerPriceInput / tankerQtyInput) : 0;
 
-  // طباعة الأسعار المقارنة
-  document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}` : `-`;
+  // 1. عرض سعر متر العداد (أو 0.00 إذا لم يتم إدخال استهلاك بعد)
+  const safeMarginal = (typeof marginal !== 'undefined' && !isNaN(marginal)) ? marginal : 0;
+  document.getElementById('networkMarginal').textContent = `${safeMarginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
-  // تحديد المربع الفائز والتوصية
+  // 2. عرض سعر متر الصهريج (أو 0.00 د بدلاً من -)
+  if (tankerPerM3 > 0) {
+    document.getElementById('tankerMarginal').textContent = `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  } else {
+    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+  }
+
+  // 3. تحديد المربع الفائز والتوصية
   const boxNetwork = document.getElementById('boxNetwork');
   const boxTanker = document.getElementById('boxTanker');
   const recommendHint = document.getElementById('recommendHint');
@@ -286,7 +293,7 @@ function calcAll() {
   boxTanker.classList.remove('win');
 
   if (tankerPerM3 > 0) {
-    if (marginal < tankerPerM3) {
+    if (safeMarginal < tankerPerM3) {
       boxNetwork.classList.add('win');
       recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
     } else {
@@ -297,7 +304,6 @@ function calcAll() {
     recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
   }
 }
-
 /* ==========================================================================
    6. LOCK FEATURE — قفل/فتح تعديل جدول التعرفة
    ------------------------------------------------------------------------
