@@ -312,18 +312,22 @@ function calcAll() {
     } else if (n <= 24) {
       newHTML = '<span class="badge warn">⚠️ استهلاك متوسط-مرتفع - تحقق من السبب</span>';
     } else if (n <= 50) {
-      newHTML = '<span class="badge bad">🚨 استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
-    } else {
+       } else {
+  // فوق 50 م³ (الشارّة الذهبية)
+  newHTML = '<span class="badge critical">🏆 تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً</span>';
+}
+      // newHTML = '<span class="badge bad">🚨 استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
+    // } else {
       // فوق 50 م³ (أيقونة SVG ذهبية + شريط ذهبي)
-      newHTML = `
-        <span class="badge critical">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px; height:18px; vertical-align:middle; margin-left:5px;">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-          تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً
-        </span>`;
+      // newHTML = `
+        // <span class="badge critical">
+          // <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px; height:18px; vertical-align:middle; margin-left:5px;">
+            // <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            // <line x1="12" y1="9" x2="12" y2="13"/>
+            // <line x1="12" y1="17" x2="12.01" y2="17"/>
+          // </svg>
+          // تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً
+        // </span>`;
     }
 
     // منع الومضة
