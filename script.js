@@ -239,6 +239,25 @@ function calcAll() {
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
   document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+   const n = sanitizeNumber(document.getElementById('consumption').value, 0);
+  const water = costFor(n, 'water');
+  const sewage = costFor(n, 'sewage');
+  const total = water + sewage;
+
+  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+
+  // إظهار/إخفاء ليبل (رسوم المقطوعية) عند عدم إدخال الاستهلاك
+  const flatFeeHint = document.getElementById('flatFeeHint');
+  if (flatFeeHint) {
+    const rawInput = document.getElementById('consumption').value;
+    if (!rawInput || parseFloat(rawInput) === 0) {
+      flatFeeHint.style.display = 'inline-block';
+    } else {
+      flatFeeHint.style.display = 'none';
+    }
+  }
 
   const nextWater = costFor(n + 1, 'water') - water;
   const nextSewage = costFor(n + 1, 'sewage') - sewage;
