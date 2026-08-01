@@ -230,7 +230,7 @@ function onTariffEdit(el) {
  *   - شارة حالة الاستهلاك (آمن / متوسط / مرتفع)
  *   - مقارنة العداد بصهريج المياه والتوصية الأوفر
  */
-ffunction calcAll() {
+function calcAll() {
   const n = sanitizeNumber(document.getElementById('consumption').value, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
