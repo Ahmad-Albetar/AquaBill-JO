@@ -230,71 +230,30 @@ function onTariffEdit(el) {
  *   - شارة حالة الاستهلاك (آمن / متوسط / مرتفع)
  *   - مقارنة العداد بصهريج المياه والتوصية الأوفر
  */
-function calcAll() {
+// --- 1. دالة حساب الخطوة 3 (الصهريج) فقط لمنع الومضة ---
+function calcTankerOnly() {
+  const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
+  const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value) || 0;
+  const tankerPerM3 = (tankerPriceInput > 0 && tankerQtyInput > 0) ? (tankerPriceInput / tankerQtyInput) : 0;
+
+  // جلب قيمة العداد الهامشي الحالية من الواجهة
   const n = sanitizeNumber(document.getElementById('consumption').value, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
-  const total = water + sewage;
-
-  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
-
-  // إظهار/إخفاء ليبل (رسوم المقطوعية) فقط للاستهلاك من 0 إلى 6 م³
-  const flatFeeHint = document.getElementById('flatFeeHint');
-  if (flatFeeHint) {
-    const rawInput = document.getElementById('consumption').value;
-    if (!rawInput || n <= 6) {
-      flatFeeHint.style.display = 'inline-block';
-    } else {
-      flatFeeHint.style.display = 'none';
-    }
-  }
-
   const nextWater = costFor(n + 1, 'water') - water;
   const nextSewage = costFor(n + 1, 'sewage') - sewage;
   const marginal = nextWater + nextSewage;
-  document.getElementById('marginalHint').textContent =
-    `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
-  // --- شارة تقييم الاستهلاك (الشريحة) ---
-  const badge = document.getElementById('statusBadge');
-  if (badge) {
-    if (n <= 18) {
-      badge.innerHTML = '<span class="badge ok">ضمن نطاق استهلاك منزلي معتدل</span>';
-    } else if (n <= 24) {
-      badge.innerHTML = '<span class="badge warn">استهلاك متوسط-مرتفع - تحقق من السبب</span>';
-    } else {
-      badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
-    }
-  }
-   
-  // --- حسابات الصهريج والمقارنة ---
-  const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
-  const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value) || 0;
+  document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 
+    ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}` 
+    : `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
 
-  // حساب سعر متر الصهريج
-  const tankerPerM3 = (tankerPriceInput > 0 && tankerQtyInput > 0) ? (tankerPriceInput / tankerQtyInput) : 0;
-
-  // عرض سعر متر العداد
-  const safeMarginal = (typeof marginal !== 'undefined' && !isNaN(marginal)) ? marginal : 0;
-  document.getElementById('networkMarginal').textContent = `${safeMarginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-
-  // عرض سعر متر الصهريج
-  if (tankerPerM3 > 0) {
-    document.getElementById('tankerMarginal').textContent = `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  } else {
-    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-  }
-
-  // تحديد المربع الفائز والتوصية
-  // تحديد المربع الفائز والتوصية بدون إعادة رسم مكررة
   const boxNetwork = document.getElementById('boxNetwork');
   const boxTanker = document.getElementById('boxTanker');
   const recommendHint = document.getElementById('recommendHint');
 
   if (tankerPerM3 > 0) {
-    if (safeMarginal < tankerPerM3) {
+    if (marginal < tankerPerM3) {
       if (!boxNetwork.classList.contains('win')) {
         boxNetwork.classList.add('win');
         boxTanker.classList.remove('win');
@@ -312,6 +271,135 @@ function calcAll() {
     boxTanker.classList.remove('win');
     recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
   }
+}
+
+// --- 2. دالة الحسابات الشاملة (العداد + الشارة) ---
+function calcAll() {
+  const n = sanitizeNumber(document.getElementById('consumption').value, 0);
+  const water = costFor(n, 'water');
+  const sewage = costFor(n, 'sewage');
+  const total = water + sewage;
+
+  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+
+  const flatFeeHint = document.getElementById('flatFeeHint');
+  if (flatFeeHint) {
+    const rawInput = document.getElementById('consumption').value;
+    flatFeeHint.style.display = (!rawInput || n <= 6) ? 'inline-block' : 'none';
+  }
+
+  const nextWater = costFor(n + 1, 'water') - water;
+  const nextSewage = costFor(n + 1, 'sewage') - sewage;
+  const marginal = nextWater + nextSewage;
+  document.getElementById('marginalHint').textContent =
+    `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
+
+  // --- تحديث الشارة بدون إرجاع أو ومضة ---
+  const badge = document.getElementById('statusBadge');
+  if (badge) {
+    let newHTML = '';
+    if (n <= 18) {
+      newHTML = '<span class="badge ok">ضمن نطاق استهلاك منزلي معتدل</span>';
+    } else if (n <= 24) {
+      newHTML = '<span class="badge warn">استهلاك متوسط-مرتفع - تحقق من السبب</span>';
+    } else {
+      badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
+    }
+
+    if (badge.innerHTML !== newHTML) {
+      badge.innerHTML = newHTML;
+    }
+  }
+
+  document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+
+  // تحديث الصهريج
+  calcTankerOnly();
+}
+// function calcAll() {
+//   const n = sanitizeNumber(document.getElementById('consumption').value, 0);
+//   const water = costFor(n, 'water');
+//   const sewage = costFor(n, 'sewage');
+//   const total = water + sewage;
+
+//   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+//   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+//   document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+
+//   // إظهار/إخفاء ليبل (رسوم المقطوعية) فقط للاستهلاك من 0 إلى 6 م³
+//   const flatFeeHint = document.getElementById('flatFeeHint');
+//   if (flatFeeHint) {
+//     const rawInput = document.getElementById('consumption').value;
+//     if (!rawInput || n <= 6) {
+//       flatFeeHint.style.display = 'inline-block';
+//     } else {
+//       flatFeeHint.style.display = 'none';
+//     }
+//   }
+
+//   const nextWater = costFor(n + 1, 'water') - water;
+//   const nextSewage = costFor(n + 1, 'sewage') - sewage;
+//   const marginal = nextWater + nextSewage;
+//   document.getElementById('marginalHint').textContent =
+//     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
+
+//   // --- شارة تقييم الاستهلاك (الشريحة) ---
+//   const badge = document.getElementById('statusBadge');
+//   if (badge) {
+//     if (n <= 18) {
+//       badge.innerHTML = '<span class="badge ok">ضمن نطاق استهلاك منزلي معتدل</span>';
+//     } else if (n <= 24) {
+//       badge.innerHTML = '<span class="badge warn">استهلاك متوسط-مرتفع - تحقق من السبب</span>';
+//     } else {
+//       badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
+//     }
+//   }
+   
+//   // --- حسابات الصهريج والمقارنة ---
+//   const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
+//   const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value) || 0;
+
+//   // حساب سعر متر الصهريج
+//   const tankerPerM3 = (tankerPriceInput > 0 && tankerQtyInput > 0) ? (tankerPriceInput / tankerQtyInput) : 0;
+
+//   // عرض سعر متر العداد
+//   const safeMarginal = (typeof marginal !== 'undefined' && !isNaN(marginal)) ? marginal : 0;
+//   document.getElementById('networkMarginal').textContent = `${safeMarginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+
+//   // عرض سعر متر الصهريج
+//   if (tankerPerM3 > 0) {
+//     document.getElementById('tankerMarginal').textContent = `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+//   } else {
+//     document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+//   }
+
+//   // تحديد المربع الفائز والتوصية
+//   // تحديد المربع الفائز والتوصية بدون إعادة رسم مكررة
+//   const boxNetwork = document.getElementById('boxNetwork');
+//   const boxTanker = document.getElementById('boxTanker');
+//   const recommendHint = document.getElementById('recommendHint');
+
+//   if (tankerPerM3 > 0) {
+//     if (safeMarginal < tankerPerM3) {
+//       if (!boxNetwork.classList.contains('win')) {
+//         boxNetwork.classList.add('win');
+//         boxTanker.classList.remove('win');
+//       }
+//       recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
+//     } else {
+//       if (!boxTanker.classList.contains('win')) {
+//         boxTanker.classList.add('win');
+//         boxNetwork.classList.remove('win');
+//       }
+//       recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
+//     }
+//   } else {
+//     boxNetwork.classList.remove('win');
+//     boxTanker.classList.remove('win');
+//     recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
+//   }
 /* ==========================================================================
    6. LOCK FEATURE — قفل/فتح تعديل جدول التعرفة
    ------------------------------------------------------------------------
