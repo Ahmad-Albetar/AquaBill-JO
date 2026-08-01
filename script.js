@@ -230,7 +230,7 @@ function onTariffEdit(el) {
  *   - شارة حالة الاستهلاك (آمن / متوسط / مرتفع)
  *   - مقارنة العداد بصهريج المياه والتوصية الأوفر
  */
-function calcAll() {
+ffunction calcAll() {
   const n = sanitizeNumber(document.getElementById('consumption').value, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
@@ -239,20 +239,12 @@ function calcAll() {
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
   document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
-   const n = sanitizeNumber(document.getElementById('consumption').value, 0);
-  const water = costFor(n, 'water');
-  const sewage = costFor(n, 'sewage');
-  const total = water + sewage;
 
-  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
-
-  // إظهار/إخفاء ليبل (رسوم المقطوعية) عند عدم إدخال الاستهلاك
+  // إظهار/إخفاء ليبل (رسوم المقطوعية) فقط للاستهلاك من 0 إلى 6 م³
   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
     const rawInput = document.getElementById('consumption').value;
-    if (!rawInput || parseFloat(rawInput) === 0) {
+    if (!rawInput || n <= 6) {
       flatFeeHint.style.display = 'inline-block';
     } else {
       flatFeeHint.style.display = 'none';
@@ -274,28 +266,37 @@ function calcAll() {
     badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
   }
 
-  const tankerPrice = sanitizeNumber(document.getElementById('tankerPrice').value, APP_CONFIG.defaultTankerPrice);
-  const tankerQty = sanitizeNumber(document.getElementById('tankerQty').value, APP_CONFIG.defaultTankerQty) || 1;
-  const tankerPerM3 = tankerPrice / tankerQty;
+  // --- حسابات الصهريج والمقارنة ---
+  const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value);
+  const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value);
 
+  // حساب سعر متر الصهريج
+  const tankerPerM3 = (tankerPriceInput > 0 && tankerQtyInput > 0) ? (tankerPriceInput / tankerQtyInput) : 0;
+
+  // طباعة الأسعار المقارنة
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('tankerMarginal').textContent = `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-   
+  document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}` : `-`;
+
+  // تحديد المربع الفائز والتوصية
   const boxNetwork = document.getElementById('boxNetwork');
   const boxTanker = document.getElementById('boxTanker');
+  const recommendHint = document.getElementById('recommendHint');
+
   boxNetwork.classList.remove('win');
   boxTanker.classList.remove('win');
 
-  const recommendHint = document.getElementById('recommendHint');
-  if (marginal < tankerPerM3) {
-    boxNetwork.classList.add('win');
-    recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
+  if (tankerPerM3 > 0) {
+    if (marginal < tankerPerM3) {
+      boxNetwork.classList.add('win');
+      recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
+    } else {
+      boxTanker.classList.add('win');
+      recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
+    }
   } else {
-    boxTanker.classList.add('win');
-    recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
+    recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
   }
 }
-
 
 /* ==========================================================================
    6. LOCK FEATURE — قفل/فتح تعديل جدول التعرفة
