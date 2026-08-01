@@ -728,11 +728,23 @@ input:focus-visible{
 }
 /* --- شارة التنبيه المرتفع جداً (200+ م³) --- */
 .badge.critical {
-  background-color: #8b0000; /* أحمر داكن عالي التباين */
-  color: #ffffff;            /* نص أبيض ناصع للقراءة الواضحة */
-  border: 1px solid #5a0000;
-  font-weight: 700;
-  animation: pulse-danger 2s infinite;
+  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+  color: #1a1a1a;
+  border: 1px solid #d4af37;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 3px 10px rgba(212, 175, 55, 0.45);
+}
+
+.badge.critical svg {
+  stroke: #1a1a1a;
+  width: 18px;
+  height: 18px;
+  flex: none;
 }
 
 @keyframes pulse-danger {
