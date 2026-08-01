@@ -726,3 +726,23 @@ input:focus-visible{
     transition-duration: 0.001ms !important;
   }
 }
+/* --- شارة التنبيه المرتفع جداً (200+ م³) --- */
+.badge.critical {
+  background-color: var(--red-bg);
+  color: var(--red-ink);
+  border: 1px solid #d9381e;
+  font-weight: 700;
+  animation: pulse-danger 2s infinite;
+}
+
+@keyframes pulse-danger {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 56, 30, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(217, 56, 30, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 56, 30, 0);
+  }
+}
