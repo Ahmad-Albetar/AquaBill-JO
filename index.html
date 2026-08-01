@@ -221,16 +221,20 @@
           <span class="titletext">قدّر فاتورتك الشهرية</span>
         </span>
       </h2>
-     <label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
+    <label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
 <input type="number" id="consumption" min="0" step="0.5" placeholder="أدخل كمية الاستهلاك" inputmode="decimal" oninput="calcAll()">
-      <div class="result" aria-live="polite">
-        <div class="line"><span>تكلفة المياه</span><span id="waterOut">0.00 د</span></div>
-        <div class="line"><span>تكلفة الصرف الصحي</span><span id="sewageOut">0.00 د</span></div>
-        <div class="total"><span>إجمالي الفاتورة المتوقعة</span><span id="totalOut">0.00</span></div>
-      </div>
-      <div id="statusBadge" role="status" aria-live="polite"></div>
-      <p class="hint" id="marginalHint"></p>
+
+<div class="result" aria-live="polite">
+  <div class="line"><span>تكلفة المياه</span><span id="waterOut">2.50 د</span></div>
+  <div class="line"><span>تكلفة الصرف الصحي</span><span id="sewageOut">0.23 د</span></div>
+  <div class="total">
+    <span>إجمالي الفاتورة المتوقعة</span>
+    <div>
+      <span id="totalOut">2.73 د.أ</span>
+      <small id="flatFeeHint" style="display: inline-block; font-size: 0.8em; opacity: 0.85; margin-right: 4px;">(رسوم المقطوعية)</small>
     </div>
+  </div>
+</div>
 
     <!-- ---------- الخطوة 3: مقارنة العداد بصهريج المياه ---------- -->
     <div class="card fade-in">
