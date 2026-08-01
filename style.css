@@ -728,7 +728,33 @@ input:focus-visible{
 }
 /* --- شارة التنبيه المرتفع جداً (200+ م³) --- */
 /* --- شارة التنبيه المرتفع جداً الذهبية (فوق 50 م³) --- */
+/* الشارّة الحرجة فوق 50 م³ (مع تأثير الشعاع الأحمر المتحرك) */
 .badge.critical {
+  background-color: #8b0000; /* أحمر داكن */
+  color: #ffffff;            /* نص أبيض ناصع */
+  border: 1px solid #ff4d4d;
+  font-weight: bold;
+  padding: 4px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  position: relative;
+  /* إضافة تأثير الشعاع والنواض */
+  animation: redGlowPulse 1.8s infinite alternate;
+}
+
+/* حركة الشعاع والأحمر المضيء */
+@keyframes redGlowPulse {
+  0% {
+    box-shadow: 0 0 4px rgba(255, 0, 0, 0.4);
+    border-color: #ff4d4d;
+  }
+  100% {
+    box-shadow: 0 0 16px rgba(255, 0, 0, 0.9), 0 0 25px rgba(139, 0, 0, 0.6);
+    border-color: #ff1a1a;
+  }
+}
+
+/* .badge.critical {
   background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
   color: #1a1a1a;
   border: 1px solid #d4af37;
@@ -746,7 +772,7 @@ input:focus-visible{
   width: 18px;
   height: 18px;
   flex: none;
-}
+} */
 
 @keyframes pulse-danger {
   0% {
