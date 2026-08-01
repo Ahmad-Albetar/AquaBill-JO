@@ -300,136 +300,44 @@ function calcAll() {
    
 // --- شارة تقييم الاستهلاك المحدثة بالإيقونات والشرائح ---
    
+ // --- شارة تقييم الاستهلاك (الشارّة والأيقونة الذهبية) ---
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
 
     if (n <= 6) {
-      // شريحة المقطوعية
       newHTML = '<span class="badge ok">💧 شريحة المقطوعية - استهلاك منزلي ممتاز</span>';
     } else if (n <= 18) {
-      // استهلاك معتدل/جيد
       newHTML = '<span class="badge ok">🌿 استهلاك منزلي جيد جداً</span>';
     } else if (n <= 24) {
-      // متوسط مرتفع
       newHTML = '<span class="badge warn">⚠️ استهلاك متوسط-مرتفع - تحقق من السبب</span>';
-    } else if (n < 50) {
-      // مرتفع
+    } else if (n <= 50) {
       newHTML = '<span class="badge bad">🚨 استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
     } else {
-      // مرتفع جداً (50فما فوق)
-      newHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً</span>';
+      // فوق 50 م³ (أيقونة SVG ذهبية + شريط ذهبي)
+      newHTML = `
+        <span class="badge critical">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px; height:18px; vertical-align:middle; margin-left:5px;">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً
+        </span>`;
     }
 
-    // منع الومضة: لا يتم تحديث الـ DOM إلا إذا تغيرت الشارة
+    // منع الومضة
     if (badge.innerHTML !== newHTML) {
       badge.innerHTML = newHTML;
     }
   }
-  // --- تحديث الشارة بدون إرجاع أو ومضة ---
-  // const badge = document.getElementById('statusBadge');
-  // if (badge) {
-  //   let newHTML = '';
-  //   if (n <= 18) {
-  //     newHTML = '<span class="badge ok">ضمن نطاق استهلاك منزلي معتدل</span>';
-  //   } else if (n <= 24) {
-  //     newHTML = '<span class="badge warn">استهلاك متوسط-مرتفع - تحقق من السبب</span>';
-  //   } else {
-  //     badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
-  //   }
-
-  //   if (badge.innerHTML !== newHTML) {
-  //     badge.innerHTML = newHTML;
-  //   }
-  // }
-
+  
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
   // تحديث الصهريج
   calcTankerOnly();
 }
-// function calcAll() {
-//   const n = sanitizeNumber(document.getElementById('consumption').value, 0);
-//   const water = costFor(n, 'water');
-//   const sewage = costFor(n, 'sewage');
-//   const total = water + sewage;
-
-//   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-//   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-//   document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
-
-//   // إظهار/إخفاء ليبل (رسوم المقطوعية) فقط للاستهلاك من 0 إلى 6 م³
-//   const flatFeeHint = document.getElementById('flatFeeHint');
-//   if (flatFeeHint) {
-//     const rawInput = document.getElementById('consumption').value;
-//     if (!rawInput || n <= 6) {
-//       flatFeeHint.style.display = 'inline-block';
-//     } else {
-//       flatFeeHint.style.display = 'none';
-//     }
-//   }
-
-//   const nextWater = costFor(n + 1, 'water') - water;
-//   const nextSewage = costFor(n + 1, 'sewage') - sewage;
-//   const marginal = nextWater + nextSewage;
-//   document.getElementById('marginalHint').textContent =
-//     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
-
-//   // --- شارة تقييم الاستهلاك (الشريحة) ---
-//   const badge = document.getElementById('statusBadge');
-//   if (badge) {
-//     if (n <= 18) {
-//       badge.innerHTML = '<span class="badge ok">ضمن نطاق استهلاك منزلي معتدل</span>';
-//     } else if (n <= 24) {
-//       badge.innerHTML = '<span class="badge warn">استهلاك متوسط-مرتفع - تحقق من السبب</span>';
-//     } else {
-//       badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
-//     }
-//   }
-   
-//   // --- حسابات الصهريج والمقارنة ---
-//   const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
-//   const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value) || 0;
-
-//   // حساب سعر متر الصهريج
-//   const tankerPerM3 = (tankerPriceInput > 0 && tankerQtyInput > 0) ? (tankerPriceInput / tankerQtyInput) : 0;
-
-//   // عرض سعر متر العداد
-//   const safeMarginal = (typeof marginal !== 'undefined' && !isNaN(marginal)) ? marginal : 0;
-//   document.getElementById('networkMarginal').textContent = `${safeMarginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-
-//   // عرض سعر متر الصهريج
-//   if (tankerPerM3 > 0) {
-//     document.getElementById('tankerMarginal').textContent = `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-//   } else {
-//     document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-//   }
-
-//   // تحديد المربع الفائز والتوصية
-//   // تحديد المربع الفائز والتوصية بدون إعادة رسم مكررة
-//   const boxNetwork = document.getElementById('boxNetwork');
-//   const boxTanker = document.getElementById('boxTanker');
-//   const recommendHint = document.getElementById('recommendHint');
-
-//   if (tankerPerM3 > 0) {
-//     if (safeMarginal < tankerPerM3) {
-//       if (!boxNetwork.classList.contains('win')) {
-//         boxNetwork.classList.add('win');
-//         boxTanker.classList.remove('win');
-//       }
-//       recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
-//     } else {
-//       if (!boxTanker.classList.contains('win')) {
-//         boxTanker.classList.add('win');
-//         boxNetwork.classList.remove('win');
-//       }
-//       recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
-//     }
-//   } else {
-//     boxNetwork.classList.remove('win');
-//     boxTanker.classList.remove('win');
-//     recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
-//   }
+/
 /* ==========================================================================
    6. LOCK FEATURE — قفل/فتح تعديل جدول التعرفة
    ------------------------------------------------------------------------
