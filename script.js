@@ -268,7 +268,7 @@ function calcAll() {
       badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
     }
   }
-
+   
   // --- حسابات الصهريج والمقارنة ---
   const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
   const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value) || 0;
