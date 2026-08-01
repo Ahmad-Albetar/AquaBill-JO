@@ -315,8 +315,10 @@ function calcAll() {
        } else {
   // فوق 50 م³ (الشارّة الذهبية)
       newHTML = '<span class="badge bad">🚨 استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
+ } else if (n <= 50) {
+      newHTML = '<span class="badge bad">🚨 استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
     } else {
-      فوق 50 م³ (أيقونة SVG ذهبية + شريط ذهبي)
+      // فوق 50 م³ (أيقونة SVG ذهبية + شريط ذهبي)
       newHTML = `
         <span class="badge critical">
           <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px; height:18px; vertical-align:middle; margin-left:5px;">
