@@ -727,6 +727,7 @@ input:focus-visible{
   }
 }
 /* --- شارة التنبيه المرتفع جداً (200+ م³) --- */
+/* --- شارة التنبيه المرتفع جداً الذهبية (فوق 50 م³) --- */
 .badge.critical {
   background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
   color: #1a1a1a;
