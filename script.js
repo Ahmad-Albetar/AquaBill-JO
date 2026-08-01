@@ -281,50 +281,30 @@ function calcTankerOnly() {
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
-  const consumptionInput = document.getElementById('consumption');
-  if (!consumptionInput) return;
+  const rawInput = document.getElementById('consumption').value;
+  const n = sanitizeNumber(rawInput, 0);
 
-  const rawVal = consumptionInput.value;
-  const n = (typeof sanitizeNumber === 'function') 
-    ? sanitizeNumber(rawVal, 0) 
-    : (parseFloat(rawVal) || 0);
-
-  const currSymbol = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.currencyLabelAr) 
-    ? APP_CONFIG.currencyLabelAr[0] 
-    : 'د.أ';
-
-  const water = (typeof costFor === 'function') ? costFor(n, 'water') : 0;
-  const sewage = (typeof costFor === 'function') ? costFor(n, 'sewage') : 0;
+  const water = costFor(n, 'water');
+  const sewage = costFor(n, 'sewage');
   const total = water + sewage;
 
-  const waterOut = document.getElementById('waterOut');
-  const sewageOut = document.getElementById('sewageOut');
-  const totalOut = document.getElementById('totalOut');
-
-  if (waterOut) waterOut.textContent = `${water.toFixed(2)} ${currSymbol}`;
-  if (sewageOut) sewageOut.textContent = `${sewage.toFixed(2)} ${currSymbol}`;
-  if (totalOut) totalOut.textContent = `${total.toFixed(2)} ${currSymbol}`;
+  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
 
   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
-    flatFeeHint.style.display = (!rawVal || n <= 6) ? 'inline-block' : 'none';
+    flatFeeHint.style.display = (!rawInput || n <= 6) ? 'inline-block' : 'none';
   }
 
-  const nextWater = (typeof costFor === 'function') ? (costFor(n + 1, 'water') - water) : 0;
-  const nextSewage = (typeof costFor === 'function') ? (costFor(n + 1, 'sewage') - sewage) : 0;
+  const nextWater = costFor(n + 1, 'water') - water;
+  const nextSewage = costFor(n + 1, 'sewage') - sewage;
   const marginal = nextWater + nextSewage;
+  
+  document.getElementById('marginalHint').textContent =
+    `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
-  const marginalHint = document.getElementById('marginalHint');
-  if (marginalHint) {
-    marginalHint.textContent = `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${currSymbol} إضافية.`;
-  }
-
-  const networkMarginal = document.getElementById('networkMarginal');
-  if (networkMarginal) {
-    networkMarginal.textContent = `${marginal.toFixed(2)} ${currSymbol}`;
-  }
-
-  // --- تحديث الشارة بالأيقونات والألوان الجملية (شاملة الأحمر الداكن فوق 50) ---
+  // --- شارة تقييم الاستهلاك (مع الشريحة الداكنة لـ 50م³) ---
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
@@ -345,8 +325,36 @@ function calcAll() {
     }
   }
 
-  // تحديث مقارنة الصهريج
-  calcTankerOnly();
+  // --- الخطوة 3: صهريج المياه ---
+  document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+
+  const tankerPrice = parseFloat(document.getElementById('tankerPrice').value) || 0;
+  const tankerQty = parseFloat(document.getElementById('tankerQty').value) || 0;
+  const tankerPerM3 = (tankerPrice > 0 && tankerQty > 0) ? (tankerPrice / tankerQty) : 0;
+
+  document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 
+    ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}` 
+    : `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+
+  const boxNetwork = document.getElementById('boxNetwork');
+  const boxTanker = document.getElementById('boxTanker');
+  const recommendHint = document.getElementById('recommendHint');
+
+  if (tankerPerM3 > 0) {
+    if (marginal < tankerPerM3) {
+      boxNetwork.classList.add('win');
+      boxTanker.classList.remove('win');
+      recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
+    } else {
+      boxTanker.classList.add('win');
+      boxNetwork.classList.remove('win');
+      recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
+    }
+  } else {
+    boxNetwork.classList.remove('win');
+    boxTanker.classList.remove('win');
+    recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
+  }
 }
 
 /* ==========================================================================
