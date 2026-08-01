@@ -257,33 +257,6 @@ function calcAll() {
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
- function calcAll() {
-  const n = sanitizeNumber(document.getElementById('consumption').value, 0);
-  const water = costFor(n, 'water');
-  const sewage = costFor(n, 'sewage');
-  const total = water + sewage;
-
-  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
-
-  // إظهار/إخفاء ليبل (رسوم المقطوعية) فقط للاستهلاك من 0 إلى 6 م³
-  const flatFeeHint = document.getElementById('flatFeeHint');
-  if (flatFeeHint) {
-    const rawInput = document.getElementById('consumption').value;
-    if (!rawInput || n <= 6) {
-      flatFeeHint.style.display = 'inline-block';
-    } else {
-      flatFeeHint.style.display = 'none';
-    }
-  }
-
-  const nextWater = costFor(n + 1, 'water') - water;
-  const nextSewage = costFor(n + 1, 'sewage') - sewage;
-  const marginal = nextWater + nextSewage;
-  document.getElementById('marginalHint').textContent =
-    `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
-
   // --- شارة تقييم الاستهلاك (الشريحة) ---
   const badge = document.getElementById('statusBadge');
   if (badge) {
