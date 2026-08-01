@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ahmadalbetar295.github.io/Water-Bill-Calculator/sitemap.xml

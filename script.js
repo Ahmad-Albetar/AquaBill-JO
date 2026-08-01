@@ -1,0 +1,564 @@
+/* ==========================================================================
+   AquaBill JO — حاسبة فاتورة المياه الأردنية — ملف المنطق (JavaScript)
+   ------------------------------------------------------------------------
+   يعتمد هذا الملف على الكائن APP_CONFIG المُعرَّف بملف config.js (يجب أن
+   يُحمَّل قبل هذا الملف بـ index.html).
+
+   الوحدات المنطقية بهذا الملف:
+     1. ERROR LOGGING     → تسجيل أخطاء العميل محلياً دون أي خادم خارجي
+     2. STORAGE            → طبقة موحّدة للقراءة/الكتابة بالتخزين المحلي
+     3. VALIDATION          → التحقق من صحة مدخلات المستخدم
+     4. CALCULATION ENGINE  → دوال حساب الفاتورة (لم تتغيّر نتائجها إطلاقاً)
+     5. UI RENDERING         → بناء جدول التعرفة وتحديث نتائج الواجهة
+     6. LOCK FEATURE          → قفل/فتح تعديل الأسعار برمز سري
+     7. THEME TOGGLE           → التبديل اليدوي بين الوضع الفاتح والداكن
+     8. EXPORT / IMPORT        → تصدير واستيراد الإعدادات كملف JSON
+     9. SCROLL EFFECTS       → شريط التقدم والظهور التدريجي للبطاقات
+     10. INITIALIZATION       → التشغيل الأولي عند تحميل الصفحة
+     11. SERVICE WORKER       → تسجيل العمل بدون إنترنت (PWA)
+     12. PWA INSTALL PROMPT   → إشعار "تثبيت التطبيق" على الهاتف
+   ========================================================================== */
+
+'use strict';
+
+/* نسخة قابلة للتعديل من جدول التعرفة (تُبنى من APP_CONFIG، وتتغيّر فقط إذا
+   فتح المستخدم القفل وعدّل الأرقام يدوياً؛ القيم الأصلية بـ config.js تبقى
+   ثابتة دائماً بفضل Object.freeze) */
+const tiers = APP_CONFIG.tiers.map((t) => ({ ...t }));
+
+let unlocked = false;
+let deferredInstallPrompt = null;
+
+
+/* ==========================================================================
+   1. ERROR LOGGING — تسجيل أخطاء العميل محلياً
+   ------------------------------------------------------------------------
+   عند حدوث أي خطأ JavaScript غير متوقع، يُسجَّل محلياً بالمتصفح (بدون أي
+   خادم خارجي أو اتصال إنترنت)، ولا يُقاطع تجربة المستخدم إطلاقاً. يفيد هذا
+   عند تشخيص مشكلة أبلغ عنها مستخدم لاحقاً (يمكنه نسخ السجل من وحدة التحكم).
+   ========================================================================== */
+
+const MAX_LOG_ENTRIES = 20;
+
+/**
+ * logClientError
+ * يخزّن خطأ واحد بقائمة محلية محدودة الحجم (آخر 20 خطأ فقط، لتفادي تضخم
+ * التخزين المحلي بمرور الوقت).
+ * @param {string} message - وصف الخطأ
+ * @param {string} [context] - أين حدث الخطأ (اسم الدالة مثلاً)
+ */
+function logClientError(message, context) {
+  try {
+    const key = APP_CONFIG.storageKeys.errorLog;
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    existing.push({
+      message: String(message),
+      context: context || 'unknown',
+      time: new Date().toISOString(),
+      version: APP_CONFIG.version,
+    });
+    // الاحتفاظ بآخر MAX_LOG_ENTRIES فقط
+    const trimmed = existing.slice(-MAX_LOG_ENTRIES);
+    localStorage.setItem(key, JSON.stringify(trimmed));
+  } catch (e) {
+    // فشل التسجيل نفسه لا يجب أن يكسر التطبيق — يُتجاهل بصمت
+  }
+}
+
+/* التقاط أي خطأ JavaScript غير متوقع بالصفحة بالكامل، بدون مقاطعة المستخدم */
+window.addEventListener('error', (e) => {
+  logClientError(e.message, e.filename ? `${e.filename}:${e.lineno}` : 'global');
+});
+
+
+/* ==========================================================================
+   2. STORAGE — طبقة موحّدة للتخزين المحلي
+   ------------------------------------------------------------------------
+   كل إعدادات المستخدم (الوضع الفاتح/الداكن، تعديلات التعرفة إن وُجدت)
+   تُحفظ ضمن كائن واحد بمفتاح واحد (APP_CONFIG.storageKeys.settings) بدل
+   مفاتيح متفرقة، لسهولة التوسعة مستقبلاً (إعدادات إضافية) وللتصدير/الاستيراد.
+   ========================================================================== */
+
+const DEFAULT_SETTINGS = {
+  theme: null,           // 'light' | 'dark' | null (يتبع نظام التشغيل)
+  tariffOverride: null,  // مصفوفة تعرفة مخصصة إن عدّلها المستخدم، وإلا null
+};
+
+/**
+ * loadSettings
+ * يقرأ كائن الإعدادات المحفوظ محلياً، ويدمجه مع القيم الافتراضية (بحيث لا
+ * ينكسر التطبيق لو أُضيف إعداد جديد مستقبلاً ولم يكن موجوداً بنسخة قديمة محفوظة).
+ * @returns {object} كائن الإعدادات الكامل
+ */
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem(APP_CONFIG.storageKeys.settings);
+    if (!raw) return { ...DEFAULT_SETTINGS };
+    return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
+  } catch (e) {
+    logClientError(e.message, 'loadSettings');
+    return { ...DEFAULT_SETTINGS };
+  }
+}
+
+/**
+ * saveSettings
+ * يحفظ كائن الإعدادات كاملاً بالتخزين المحلي.
+ * @param {object} settings - كائن الإعدادات المطلوب حفظه
+ */
+function saveSettings(settings) {
+  try {
+    localStorage.setItem(APP_CONFIG.storageKeys.settings, JSON.stringify(settings));
+  } catch (e) {
+    logClientError(e.message, 'saveSettings');
+  }
+}
+
+/**
+ * updateSetting
+ * يحدّث حقلاً واحداً فقط بكائن الإعدادات دون المساس بباقي الحقول.
+ * @param {string} key - اسم الحقل
+ * @param {*} value - القيمة الجديدة
+ */
+function updateSetting(key, value) {
+  const settings = loadSettings();
+  settings[key] = value;
+  saveSettings(settings);
+}
+
+
+/* ==========================================================================
+   3. VALIDATION — التحقق من صحة مدخلات المستخدم
+   ------------------------------------------------------------------------
+   حقول الإدخال أصلاً من نوع number بحد أدنى (min) بالـ HTML، لكن هذه
+   الدالة تحمي أيضاً من قيم سالبة أو غير رقمية قد تصل بطرق أخرى (مثل اللصق
+   اليدوي)، فتُعيد دائماً رقماً صالحاً غير سالب.
+   ========================================================================== */
+
+/**
+ * sanitizeNumber
+ * يحوّل أي مُدخَل إلى رقم غير سالب صالح، أو يعيد قيمة افتراضية إن كان غير صالح.
+ * @param {*} value - القيمة الخام من حقل الإدخال
+ * @param {number} fallback - القيمة الافتراضية إن فشل التحويل
+ * @returns {number}
+ */
+function sanitizeNumber(value, fallback = 0) {
+  const n = parseFloat(value);
+  if (Number.isNaN(n) || !Number.isFinite(n) || n < 0) return fallback;
+  return n;
+}
+
+
+/* ==========================================================================
+   4. CALCULATION ENGINE — دوال حساب الفاتورة
+   ------------------------------------------------------------------------
+   ⚠️ منطق الحساب هنا مطابق تماماً لكل النسخ السابقة ولم يُغيَّر بأي شكل.
+   ========================================================================== */
+
+/**
+ * costFor
+ * يحسب التكلفة التراكمية (تصاعدية) لعدد أمتار "n" لحقل معين ("water" أو "sewage").
+ * يمر على كل شريحة بالترتيب، ويحسب فقط الكمية الواقعة ضمن كل شريحة، مع معاملة
+ * الشريحة الأولى (flat) كرسم ثابت لا يتغير بتغير الكمية ضمنها.
+ * @param {number} n - إجمالي الاستهلاك بالمتر المكعب
+ * @param {'water'|'sewage'} field - الحقل المطلوب حسابه
+ * @returns {number} التكلفة الإجمالية لهذا الحقل بالدينار
+ */
+function costFor(n, field) {
+  let cost = 0;
+  let prevCap = 0;
+
+  for (const t of tiers) {
+    const cap = t.upTo;
+
+    if (t.flat) {
+      cost += t[field];
+      prevCap = cap;
+      if (n <= cap) break;
+      continue;
+    }
+
+    if (n > prevCap) {
+      const units = Math.min(n, cap) - prevCap;
+      cost += units * t[field];
+    }
+    prevCap = cap;
+    if (n <= cap) break;
+  }
+
+  return cost;
+}
+
+
+/* ==========================================================================
+   5. UI RENDERING — بناء جدول التعرفة وتحديث نتائج الواجهة
+   ========================================================================== */
+
+/**
+ * renderTariffTable
+ * يبني صفوف جدول التعرفة داخل <tbody> ديناميكياً من مصفوفة tiers.
+ */
+function renderTariffTable() {
+  const tbody = document.querySelector('#tariffTable tbody');
+  tbody.innerHTML = tiers.map((t, i) => `
+    <tr>
+      <td>${t.label}</td>
+      <td><input type="number" step="0.01" value="${t.water}" data-i="${i}" data-f="water" oninput="onTariffEdit(this)" readonly aria-label="سعر المياه للشريحة ${t.label}"></td>
+      <td><input type="number" step="0.01" value="${t.sewage}" data-i="${i}" data-f="sewage" oninput="onTariffEdit(this)" readonly aria-label="سعر الصرف الصحي للشريحة ${t.label}"></td>
+    </tr>`).join('');
+}
+
+/**
+ * onTariffEdit
+ * يُستدعى عند تعديل قيمة بجدول التعرفة يدوياً (بعد فتح القفل). يحدّث
+ * مصفوفة tiers، يحفظها كإعداد مخصص، ثم يعيد حساب النتائج فوراً.
+ * @param {HTMLInputElement} el - حقل الإدخال الذي تم تعديله
+ */
+function onTariffEdit(el) {
+  const i = +el.dataset.i;
+  const f = el.dataset.f;
+  tiers[i][f] = sanitizeNumber(el.value, tiers[i][f]);
+  updateSetting('tariffOverride', tiers);
+  calcAll();
+}
+
+/**
+ * calcAll
+ * الدالة الرئيسية: تُستدعى عند أي تغيير بالمدخلات (oninput)، وتحدّث كل نتائج الصفحة:
+ *   - تكلفة المياه والصرف الصحي والإجمالي
+ *   - تكلفة المتر القادم (الهامشية)
+ *   - شارة حالة الاستهلاك (آمن / متوسط / مرتفع)
+ *   - مقارنة العداد بصهريج المياه والتوصية الأوفر
+ */
+function calcAll() {
+  const n = sanitizeNumber(document.getElementById('consumption').value, 0);
+  const water = costFor(n, 'water');
+  const sewage = costFor(n, 'sewage');
+  const total = water + sewage;
+
+  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+
+  const nextWater = costFor(n + 1, 'water') - water;
+  const nextSewage = costFor(n + 1, 'sewage') - sewage;
+  const marginal = nextWater + nextSewage;
+  document.getElementById('marginalHint').textContent =
+    `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
+
+  const badge = document.getElementById('statusBadge');
+  if (n <= 18) {
+    badge.innerHTML = '<span class="badge ok">ضمن نطاق استهلاك منزلي معتدل</span>';
+  } else if (n <= 24) {
+    badge.innerHTML = '<span class="badge warn">استهلاك متوسط-مرتفع - تحقق من السبب</span>';
+  } else {
+    badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
+  }
+
+  const tankerPrice = sanitizeNumber(document.getElementById('tankerPrice').value, APP_CONFIG.defaultTankerPrice);
+  const tankerQty = sanitizeNumber(document.getElementById('tankerQty').value, APP_CONFIG.defaultTankerQty) || 1;
+  const tankerPerM3 = tankerPrice / tankerQty;
+
+  document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('tankerMarginal').textContent = `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+
+  const boxNetwork = document.getElementById('boxNetwork');
+  const boxTanker = document.getElementById('boxTanker');
+  boxNetwork.classList.remove('win');
+  boxTanker.classList.remove('win');
+
+  const recommendHint = document.getElementById('recommendHint');
+  if (marginal < tankerPerM3) {
+    boxNetwork.classList.add('win');
+    recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
+  } else {
+    boxTanker.classList.add('win');
+    recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
+  }
+}
+
+
+/* ==========================================================================
+   6. LOCK FEATURE — قفل/فتح تعديل جدول التعرفة
+   ------------------------------------------------------------------------
+   ⚠️ ملاحظة أمان: هذه حماية بسيطة على مستوى الواجهة (Client-Side) فقط،
+   وليست تشفيراً حقيقياً. راجع README.md لخيارات حماية حقيقية على الخادم.
+   ========================================================================== */
+
+/**
+ * toggleLock
+ * يُستدعى بزر "تعديل/قفل" أعلى جدول التعرفة. يطلب الرمز السري لفتح الحقول
+ * للتعديل، أو يعيد قفلها إن كانت مفتوحة بالفعل.
+ */
+function toggleLock() {
+  const inputs = document.querySelectorAll('#tariffTable input');
+  const btn = document.getElementById('lockToggle');
+  const label = document.getElementById('lockLabel');
+
+  if (!unlocked) {
+    const entered = prompt('أدخل الرمز السري لتعديل الأسعار:');
+    if (entered === APP_CONFIG.editPin) {
+      unlocked = true;
+      inputs.forEach((i) => i.removeAttribute('readonly'));
+      label.textContent = 'قفل';
+      btn.setAttribute('aria-pressed', 'true');
+    } else if (entered !== null) {
+      alert('الرمز غير صحيح.');
+    }
+  } else {
+    unlocked = false;
+    inputs.forEach((i) => i.setAttribute('readonly', true));
+    label.textContent = 'تعديل';
+    btn.setAttribute('aria-pressed', 'false');
+  }
+}
+
+
+/* ==========================================================================
+   7. THEME TOGGLE — التبديل اليدوي بين الوضع الفاتح والداكن
+   ------------------------------------------------------------------------
+   يُخزَّن اختيار المستخدم ضمن كائن الإعدادات الموحّد (راجع قسم STORAGE)
+   ليبقى ثابتاً بعد إغلاق الصفحة. عند عدم وجود اختيار محفوظ، تتبع الصفحة
+   تلقائياً إعداد نظام التشغيل (راجع قسم Dark Mode بـ style.css).
+   ========================================================================== */
+
+/**
+ * toggleTheme
+ * يُستدعى بزر التبديل بالترويسة. يحسب الوضع الحالي الفعلي (المحفوظ، أو
+ * حسب نظام التشغيل إن لم يوجد شيء محفوظ)، ثم يبدّل إلى الوضع المقابل
+ * ويحفظه، حتى يبقى ثابتاً بالزيارات القادمة.
+ */
+function toggleTheme() {
+  const root = document.documentElement;
+  const settings = loadSettings();
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const currentlyDark = settings.theme ? settings.theme === 'dark' : systemPrefersDark;
+
+  const next = currentlyDark ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  updateSetting('theme', next);
+  document.getElementById('themeToggle').setAttribute('aria-pressed', String(next === 'dark'));
+}
+
+
+/* ==========================================================================
+   8. EXPORT / IMPORT — تصدير واستيراد الإعدادات كملف JSON
+   ------------------------------------------------------------------------
+   يسمح بحفظ نسخة احتياطية من الإعدادات الحالية (الوضع، تعديلات التعرفة
+   إن وُجدت) كملف JSON على الجهاز، واستعادتها لاحقاً أو نقلها لجهاز آخر.
+   ========================================================================== */
+
+/**
+ * exportSettings
+ * ينشئ ملف JSON يحتوي كل الإعدادات الحالية، ويبدأ تحميله تلقائياً بالمتصفح.
+ */
+function exportSettings() {
+  try {
+    const settings = loadSettings();
+    const payload = {
+      app: APP_CONFIG.appName,
+      version: APP_CONFIG.version,
+      exportedAt: new Date().toISOString(),
+      settings,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'aquabill-settings.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    logClientError(e.message, 'exportSettings');
+    alert('تعذّر تصدير الإعدادات.');
+  }
+}
+
+/**
+ * importSettings
+ * يقرأ ملف JSON اختاره المستخدم، ويستعيد منه الإعدادات (الوضع، وتعديلات
+ * التعرفة إن وُجدت)، ثم يعيد رسم الواجهة فوراً بالقيم المستوردة.
+ * @param {Event} event - حدث اختيار الملف من <input type="file">
+ */
+function importSettings(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(reader.result);
+      const settings = { ...DEFAULT_SETTINGS, ...(parsed.settings || {}) };
+      saveSettings(settings);
+
+      if (settings.theme) {
+        document.documentElement.setAttribute('data-theme', settings.theme);
+      }
+      if (Array.isArray(settings.tariffOverride) && settings.tariffOverride.length === tiers.length) {
+        settings.tariffOverride.forEach((t, i) => {
+          tiers[i].water = sanitizeNumber(t.water, tiers[i].water);
+          tiers[i].sewage = sanitizeNumber(t.sewage, tiers[i].sewage);
+        });
+        renderTariffTable();
+      }
+      calcAll();
+      alert('تم استيراد الإعدادات بنجاح.');
+    } catch (e) {
+      logClientError(e.message, 'importSettings');
+      alert('ملف غير صالح، تعذّر استيراد الإعدادات.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = ''; // يسمح باستيراد نفس الملف مرة أخرى لاحقاً إذا لزم
+}
+
+
+/* ==========================================================================
+   9. SCROLL EFFECTS — شريط التقدم والظهور التدريجي للبطاقات
+   ------------------------------------------------------------------------
+   تحسين تدريجي بحت (Progressive Enhancement): لا يوجد أي منطق حسابي هنا،
+   فقط تأثيرات بصرية خفيفة. تُحترَم تفضيلات "تقليل الحركة" تلقائياً عبر
+   CSS (راجع قسم Animations بـ style.css)، ولا تعتمد عليه أي وظيفة أساسية.
+   ========================================================================== */
+
+/**
+ * initScrollProgress
+ * يحدّث عرض شريط التقدم أعلى الشاشة تناسبياً مع موضع التمرير الحالي،
+   بأداء مُحسَّن عبر requestAnimationFrame لتفادي إبطاء التمرير.
+ */
+function initScrollProgress() {
+  const bar = document.getElementById('scrollProgress');
+  if (!bar) return;
+
+  let ticking = false;
+  function update() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    bar.style.width = Math.min(100, Math.max(0, pct)) + '%';
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+  update();
+}
+
+/**
+ * initFadeInCards
+ * يراقب بطاقات الأقسام الأربعة، ويضيف كلاس "is-visible" بمجرد دخول كل
+ * بطاقة نطاق الرؤية، لإحداث ظهور تدريجي لطيف. يتحقق أولاً من دعم
+ * IntersectionObserver بالمتصفح؛ وإلا تبقى البطاقات مرئية كما هي (بلا كسر).
+ */
+function initFadeInCards() {
+  const cards = document.querySelectorAll('.fade-in');
+  if (!cards.length) return;
+
+  if (!('IntersectionObserver' in window)) return; // بدون كسر أي شيء بالمتصفحات القديمة جداً
+
+  cards.forEach((c) => c.classList.add('fade-init'));
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  cards.forEach((c) => observer.observe(c));
+}
+
+
+/* ==========================================================================
+   10. INITIALIZATION — التشغيل الأولي عند تحميل الصفحة
+   ========================================================================== */
+
+(function initApp() {
+  // استعادة أي تعديل سابق على التعرفة كان المستخدم قد حفظه بجلسة سابقة
+  const settings = loadSettings();
+  if (Array.isArray(settings.tariffOverride) && settings.tariffOverride.length === tiers.length) {
+    settings.tariffOverride.forEach((t, i) => {
+      tiers[i].water = sanitizeNumber(t.water, tiers[i].water);
+      tiers[i].sewage = sanitizeNumber(t.sewage, tiers[i].sewage);
+    });
+  }
+
+  renderTariffTable();
+  calcAll();
+  initScrollProgress();
+  initFadeInCards();
+
+  // مزامنة حالة aria-pressed لزر تبديل الوضع مع الوضع الفعلي الحالي عند التحميل
+  // (إصلاح خلل وصولية: كانت تبقى "false" افتراضياً حتى لو كان الوضع محفوظاً داكناً فعلياً)
+  const themeToggleBtn = document.getElementById('themeToggle');
+  if (themeToggleBtn) {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDarkNow = currentTheme ? currentTheme === 'dark' : systemPrefersDark;
+    themeToggleBtn.setAttribute('aria-pressed', String(isDarkNow));
+  }
+
+  // عرض رقم إصدار التطبيق بالتذييل
+  const versionEl = document.getElementById('appVersion');
+  if (versionEl) {
+    versionEl.textContent = `${APP_CONFIG.appName} — الإصدار ${APP_CONFIG.version}`;
+  }
+})();
+
+
+/* ==========================================================================
+   11. SERVICE WORKER — تسجيل العمل بدون إنترنت (PWA)
+   ------------------------------------------------------------------------
+   يعمل فقط عند التصفح عبر HTTPS أو localhost (شرط أساسي من المتصفحات).
+   ========================================================================== */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .catch((err) => {
+        console.warn('تعذر تسجيل Service Worker:', err);
+        logClientError(err.message || String(err), 'serviceWorker.register');
+      });
+  });
+}
+
+
+/* ==========================================================================
+   12. PWA INSTALL PROMPT — إشعار "تثبيت التطبيق" على الهاتف
+   ========================================================================== */
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  showInstallToast();
+});
+
+/** يُظهر إشعار "ثبّتوا الأداة" العائم أسفل الشاشة */
+function showInstallToast() {
+  const toast = document.getElementById('pwaToast');
+  if (!toast) return;
+  toast.classList.add('show');
+}
+
+/** يُخفي إشعار التثبيت (عند الضغط على "لاحقاً" أو بعد بدء التثبيت) */
+function hideInstallToast() {
+  const toast = document.getElementById('pwaToast');
+  if (!toast) return;
+  toast.classList.remove('show');
+}
+
+/** يُشغّل حوار تثبيت PWA الأصلي للمتصفح عند الضغط على زر "تثبيت" */
+function installApp() {
+  hideInstallToast();
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  deferredInstallPrompt.userChoice.finally(() => {
+    deferredInstallPrompt = null;
+  });
+}

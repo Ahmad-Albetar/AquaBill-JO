@@ -1,0 +1,45 @@
+{
+  "name": "AquaBill JO — حاسبة فاتورة المياه الأردنية",
+  "short_name": "AquaBill JO",
+  "description": "أداة مدنية مستقلة تساعدك على حساب فاتورة المياه بدقة ومقارنة خيارات التوفير دون انقطاع.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2F6F5",
+  "theme_color": "#0B4F45",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "images/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/android-chrome-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/android-chrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/android-chrome-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "images/android-chrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

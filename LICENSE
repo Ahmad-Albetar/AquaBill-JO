@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Ahmad Albetar
+Copyright (c) 2026 AquaBill JO Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+ملاحظة بالعربية: رُخِّص هذا المشروع بموجب رخصة MIT مفتوحة المصدر — يعني هذا
+أن بإمكان أي شخص استخدام الكود، نسخه، تعديله، ودمجه بمشاريع أخرى (تجارية أو
+غير تجارية) بحرية تامة، شريطة الإبقاء على نص هذا الترخيص. الأداة نفسها
+(كخدمة توعوية) غير تابعة لأي جهة حكومية أو شركة مياه — راجع إخلاء المسؤولية
+في README.md.
