@@ -728,9 +728,9 @@ input:focus-visible{
 }
 /* --- شارة التنبيه المرتفع جداً (200+ م³) --- */
 .badge.critical {
-  background-color: var(--red-bg);
-  color: var(--red-ink);
-  border: 1px solid #d9381e;
+  background-color: #8b0000; /* أحمر داكن عالي التباين */
+  color: #ffffff;            /* نص أبيض ناصع للقراءة الواضحة */
+  border: 1px solid #5a0000;
   font-weight: 700;
   animation: pulse-danger 2s infinite;
 }
