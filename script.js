@@ -296,22 +296,52 @@ function calcAll() {
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
-  // --- تحديث الشارة بدون إرجاع أو ومضة ---
+
+   
+// --- شارة تقييم الاستهلاك المحدثة بالإيقونات والشرائح ---
+   
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
-    if (n <= 18) {
-      newHTML = '<span class="badge ok">ضمن نطاق استهلاك منزلي معتدل</span>';
+
+    if (n <= 6) {
+      // شريحة المقطوعية
+      newHTML = '<span class="badge ok">💧 شريحة المقطوعية - استهلاك منزلي ممتاز</span>';
+    } else if (n <= 18) {
+      // استهلاك معتدل/جيد
+      newHTML = '<span class="badge ok">🌿 استهلاك منزلي جيد جداً</span>';
     } else if (n <= 24) {
-      newHTML = '<span class="badge warn">استهلاك متوسط-مرتفع - تحقق من السبب</span>';
+      // متوسط مرتفع
+      newHTML = '<span class="badge warn">⚠️ استهلاك متوسط-مرتفع - تحقق من السبب</span>';
+    } else if (n < 50) {
+      // مرتفع
+      newHTML = '<span class="badge bad">🚨 استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
     } else {
-      badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
+      // مرتفع جداً (50فما فوق)
+      newHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً</span>';
     }
 
+    // منع الومضة: لا يتم تحديث الـ DOM إلا إذا تغيرت الشارة
     if (badge.innerHTML !== newHTML) {
       badge.innerHTML = newHTML;
     }
   }
+  // --- تحديث الشارة بدون إرجاع أو ومضة ---
+  // const badge = document.getElementById('statusBadge');
+  // if (badge) {
+  //   let newHTML = '';
+  //   if (n <= 18) {
+  //     newHTML = '<span class="badge ok">ضمن نطاق استهلاك منزلي معتدل</span>';
+  //   } else if (n <= 24) {
+  //     newHTML = '<span class="badge warn">استهلاك متوسط-مرتفع - تحقق من السبب</span>';
+  //   } else {
+  //     badge.innerHTML = '<span class="badge bad">استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
+  //   }
+
+  //   if (badge.innerHTML !== newHTML) {
+  //     badge.innerHTML = newHTML;
+  //   }
+  // }
 
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
