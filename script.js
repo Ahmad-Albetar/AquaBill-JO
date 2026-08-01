@@ -288,25 +288,30 @@ function calcAll() {
   }
 
   // تحديد المربع الفائز والتوصية
+  // تحديد المربع الفائز والتوصية بدون إعادة رسم مكررة
   const boxNetwork = document.getElementById('boxNetwork');
   const boxTanker = document.getElementById('boxTanker');
   const recommendHint = document.getElementById('recommendHint');
 
-  boxNetwork.classList.remove('win');
-  boxTanker.classList.remove('win');
-
   if (tankerPerM3 > 0) {
     if (safeMarginal < tankerPerM3) {
-      boxNetwork.classList.add('win');
+      if (!boxNetwork.classList.contains('win')) {
+        boxNetwork.classList.add('win');
+        boxTanker.classList.remove('win');
+      }
       recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
     } else {
-      boxTanker.classList.add('win');
+      if (!boxTanker.classList.contains('win')) {
+        boxTanker.classList.add('win');
+        boxNetwork.classList.remove('win');
+      }
       recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
     }
   } else {
+    boxNetwork.classList.remove('win');
+    boxTanker.classList.remove('win');
     recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
   }
-}
 /* ==========================================================================
    6. LOCK FEATURE — قفل/فتح تعديل جدول التعرفة
    ------------------------------------------------------------------------
