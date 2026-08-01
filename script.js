@@ -231,80 +231,103 @@ function onTariffEdit(el) {
  *   - مقارنة العداد بصهريج المياه والتوصية الأوفر
  */
 // --- 1. دالة حساب الخطوة 3 (الصهريج) فقط لمنع الومضة ---
+// --- 1. دالة حساب الصهريج فقط (الخطوة 3) ---
 function calcTankerOnly() {
   const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
   const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value) || 0;
   const tankerPerM3 = (tankerPriceInput > 0 && tankerQtyInput > 0) ? (tankerPriceInput / tankerQtyInput) : 0;
 
-  // جلب قيمة العداد الهامشي الحالية من الواجهة
-  const n = sanitizeNumber(document.getElementById('consumption').value, 0);
-  const water = costFor(n, 'water');
-  const sewage = costFor(n, 'sewage');
-  const nextWater = costFor(n + 1, 'water') - water;
-  const nextSewage = costFor(n + 1, 'sewage') - sewage;
-  const marginal = nextWater + nextSewage;
+  const currSymbol = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.currencyLabelAr) 
+    ? APP_CONFIG.currencyLabelAr[0] 
+    : 'د.أ';
 
-  document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 
-    ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}` 
-    : `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+  const tankerMarginalElem = document.getElementById('tankerMarginal');
+  if (tankerMarginalElem) {
+    tankerMarginalElem.textContent = tankerPerM3 > 0 
+      ? `${tankerPerM3.toFixed(2)} ${currSymbol}` 
+      : `0.00 ${currSymbol}`;
+  }
+
+  // جلب كلفة المتر الهامشي للشبكة من الواجهة إن وجدت
+  const networkMarginalElem = document.getElementById('networkMarginal');
+  const networkMarginal = networkMarginalElem ? (parseFloat(networkMarginalElem.textContent) || 0) : 0;
 
   const boxNetwork = document.getElementById('boxNetwork');
   const boxTanker = document.getElementById('boxTanker');
   const recommendHint = document.getElementById('recommendHint');
 
-  if (tankerPerM3 > 0) {
-    if (marginal < tankerPerM3) {
-      if (!boxNetwork.classList.contains('win')) {
-        boxNetwork.classList.add('win');
-        boxTanker.classList.remove('win');
+  if (boxNetwork && boxTanker && recommendHint) {
+    if (tankerPerM3 > 0) {
+      if (networkMarginal < tankerPerM3) {
+        if (!boxNetwork.classList.contains('win')) {
+          boxNetwork.classList.add('win');
+          boxTanker.classList.remove('win');
+        }
+        recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
+      } else {
+        if (!boxTanker.classList.contains('win')) {
+          boxTanker.classList.add('win');
+          boxNetwork.classList.remove('win');
+        }
+        recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
       }
-      recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
     } else {
-      if (!boxTanker.classList.contains('win')) {
-        boxTanker.classList.add('win');
-        boxNetwork.classList.remove('win');
-      }
-      recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
+      boxNetwork.classList.remove('win');
+      boxTanker.classList.remove('win');
+      recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
     }
-  } else {
-    boxNetwork.classList.remove('win');
-    boxTanker.classList.remove('win');
-    recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
   }
 }
 
-// --- 2. دالة الحسابات الشاملة (العداد + الشارة) ---
+// --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
-  const n = sanitizeNumber(document.getElementById('consumption').value, 0);
-  const water = costFor(n, 'water');
-  const sewage = costFor(n, 'sewage');
+  const consumptionInput = document.getElementById('consumption');
+  if (!consumptionInput) return;
+
+  const rawVal = consumptionInput.value;
+  const n = (typeof sanitizeNumber === 'function') 
+    ? sanitizeNumber(rawVal, 0) 
+    : (parseFloat(rawVal) || 0);
+
+  const currSymbol = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.currencyLabelAr) 
+    ? APP_CONFIG.currencyLabelAr[0] 
+    : 'د.أ';
+
+  const water = (typeof costFor === 'function') ? costFor(n, 'water') : 0;
+  const sewage = (typeof costFor === 'function') ? costFor(n, 'sewage') : 0;
   const total = water + sewage;
 
-  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+  const waterOut = document.getElementById('waterOut');
+  const sewageOut = document.getElementById('sewageOut');
+  const totalOut = document.getElementById('totalOut');
+
+  if (waterOut) waterOut.textContent = `${water.toFixed(2)} ${currSymbol}`;
+  if (sewageOut) sewageOut.textContent = `${sewage.toFixed(2)} ${currSymbol}`;
+  if (totalOut) totalOut.textContent = `${total.toFixed(2)} ${currSymbol}`;
 
   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
-    const rawInput = document.getElementById('consumption').value;
-    flatFeeHint.style.display = (!rawInput || n <= 6) ? 'inline-block' : 'none';
+    flatFeeHint.style.display = (!rawVal || n <= 6) ? 'inline-block' : 'none';
   }
 
-  const nextWater = costFor(n + 1, 'water') - water;
-  const nextSewage = costFor(n + 1, 'sewage') - sewage;
+  const nextWater = (typeof costFor === 'function') ? (costFor(n + 1, 'water') - water) : 0;
+  const nextSewage = (typeof costFor === 'function') ? (costFor(n + 1, 'sewage') - sewage) : 0;
   const marginal = nextWater + nextSewage;
-  document.getElementById('marginalHint').textContent =
-    `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
+  const marginalHint = document.getElementById('marginalHint');
+  if (marginalHint) {
+    marginalHint.textContent = `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${currSymbol} إضافية.`;
+  }
 
-   
-// --- شارة تقييم الاستهلاك المحدثة بالإيقونات والشرائح ---
-   
- // --- شارة تقييم الاستهلاك (الشارّة والأيقونة الذهبية) ---
+  const networkMarginal = document.getElementById('networkMarginal');
+  if (networkMarginal) {
+    networkMarginal.textContent = `${marginal.toFixed(2)} ${currSymbol}`;
+  }
+
+  // --- تحديث الشارة بالأيقونات والألوان الجملية (شاملة الأحمر الداكن فوق 50) ---
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
-
     if (n <= 6) {
       newHTML = '<span class="badge ok">💧 شريحة المقطوعية - استهلاك منزلي ممتاز</span>';
     } else if (n <= 18) {
@@ -312,33 +335,17 @@ function calcAll() {
     } else if (n <= 24) {
       newHTML = '<span class="badge warn">⚠️ استهلاك متوسط-مرتفع - تحقق من السبب</span>';
     } else if (n <= 50) {
-       } else {
-  // فوق 50 م³ (الشارّة الذهبية)
-      newHTML = '<span class="badge bad">🚨 استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
- } else if (n <= 50) {
       newHTML = '<span class="badge bad">🚨 استهلاك مرتفع - راجع التسريبات وأسباب الزيادة</span>';
     } else {
-      // فوق 50 م³ (أيقونة SVG ذهبية + شريط ذهبي)
-      newHTML = `
-        <span class="badge critical">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px; height:18px; vertical-align:middle; margin-left:5px;">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-          تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً
-        </span>`;
+      newHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً</span>';
     }
 
-    // منع الومضة
     if (badge.innerHTML !== newHTML) {
       badge.innerHTML = newHTML;
     }
   }
-  
-  document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
-  // تحديث الصهريج
+  // تحديث مقارنة الصهريج
   calcTankerOnly();
 }
 /
