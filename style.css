@@ -781,3 +781,27 @@ input:focus-visible{
     border-color: #ff4d4f;
   }
 }
+/* --- تجميل وتكبير حقل إدخال الاستهلاك والنتيجة --- */
+#consumption {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  padding: 0.75rem !important;
+  border: 2px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  background: var(--bg) !important;
+  transition: all 0.25s ease !important;
+}
+
+#consumption:focus {
+  border-color: var(--teal) !important;
+  box-shadow: 0 0 0 4px rgba(11, 79, 69, 0.15) !important;
+}
+
+/* تجميل خط إجمالي المبلغ بالنتيجة */
+.result .total span:last-child {
+  font-size: 1.8rem !important;
+  font-weight: 900 !important;
+  color: var(--accent-strong) !important;
+  letter-spacing: -0.5px !important;
+}
