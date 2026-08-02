@@ -304,14 +304,16 @@ function calcAll() {
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
-  // --- شارة تقييم الاستهلاك (مع الشريحة الداكنة لـ 50م³) ---
+ // --- شارة تقييم الاستهلاك ---
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
     if (n <= 6) {
       newHTML = '<span class="badge ok">💧 شريحة المقطوعية - استهلاك منزلي ممتاز</span>';
-    } else if (n <= 18) {
+    } else if (n <= 12) {
       newHTML = '<span class="badge ok">🌿 استهلاك منزلي جيد جداً</span>';
+    } else if (n <= 18) {
+      newHTML = '<span class="badge ok">⚖️ استهلاك منزلي معتدل</span>';
     } else if (n <= 24) {
       newHTML = '<span class="badge warn">⚠️ استهلاك متوسط-مرتفع - تحقق من السبب</span>';
     } else if (n <= 50) {
