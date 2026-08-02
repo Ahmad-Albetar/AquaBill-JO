@@ -576,7 +576,26 @@ table.tariff input[readonly]{
 :root[data-theme="dark"] table.tariff input[readonly]{
   background: #172723;
 }
+/* --- ضبط الشارّة الحرجة للوضع الداكن (Dark Mode) --- */
+body.dark-mode .badge.critical,
+[data-theme="dark"] .badge.critical {
+  background-color: rgba(255, 77, 79, 0.15); /* خلفية حمراء شفافة تتناسب مع السمة الداكنة */
+  color: #ff7875;                             /* أحمر ممتد وواضح جداً في الظلام */
+  border-color: #ff4d4f;
+  animation: redGlowPulseDark 1.8s infinite alternate;
+}
 
+/* حركة الشعاع المضيء الخاصة بالوضع الداكن (توهج أقوى) */
+@keyframes redGlowPulseDark {
+  0% {
+    box-shadow: 0 0 6px rgba(255, 77, 79, 0.4);
+    border-color: #ff4d4f;
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 77, 79, 0.9), 0 0 30px rgba(255, 77, 79, 0.4);
+    border-color: #ff7875;
+  }
+}
 
 /* ==========================================================================
    12. UTILITIES — عناصر مساعدة عامة
@@ -751,34 +770,3 @@ input:focus-visible{
     border-color: #ff4d4f;
   }
 }
-/* .badge.critical {
-  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-  color: #1a1a1a;
-  border: 1px solid #d4af37;
-  font-weight: 800;
-  padding: 5px 12px;
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 3px 10px rgba(212, 175, 55, 0.45);
-}
-
-.badge.critical svg {
-  stroke: #1a1a1a;
-  width: 18px;
-  height: 18px;
-  flex: none;
-} */
-
-/* @keyframes pulse-danger {
-  0% {
-    box-shadow: 0 0 0 0 rgba(217, 56, 30, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 8px rgba(217, 56, 30, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(217, 56, 30, 0);
-  }
-} */
