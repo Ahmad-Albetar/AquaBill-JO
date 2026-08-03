@@ -203,9 +203,10 @@ function renderTariffTable() {
   tbody.innerHTML = tiers.map((t, i) => `
     <tr>
       <td>${t.label}</td>
-      <td><input type="number" step="0.01" value="${t.water}" data-i="${i}" data-f="water" oninput="onTariffEdit(this)" readonly aria-label="سعر المياه للشريحة ${t.label}"></td>
-      <td><input type="number" step="0.01" value="${t.sewage}" data-i="${i}" data-f="sewage" oninput="onTariffEdit(this)" readonly aria-label="سعر الصرف الصحي للشريحة ${t.label}"></td>
-    </tr>`).join('');
+      <td><input type="number" class="tariff-input" data-tier="${i}" data-field="water" value="${t.water}" step="0.01" min="0" readonly></td>
+      <td><input type="number" class="tariff-input" data-tier="${i}" data-field="sewage" value="${t.sewage}" step="0.01" min="0" readonly></td>
+    </tr>`
+  ).join('');
 }
 
 /**
