@@ -384,7 +384,7 @@ function toggleTheme() {
   // التحقق من وجود الزر قبل تغييره لعدم التسبب في خطأ كود
   const themeBtn = document.querySelector('.btn-theme-toggle') || document.getElementById('themeToggle');
   if (themeBtn) {
-    themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+   icon.textContent = current === 'dark' ? '🌞' : '🌕';
   }
 }
 
