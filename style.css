@@ -186,30 +186,89 @@ h2 .titletext{ font-size: 1.04rem; font-weight: 700; color: var(--accent-strong)
 /* ---------- الترويسة (Header) ---------- */
 /* ملاحظة: خلفية الترويسة ثابتة دائماً بلون العلامة التجارية الداكن،
    بغض النظر عن الوضع الفاتح/الداكن العام للصفحة، فلا تتأثر بتبديل الوضع */
-header{
-  background: linear-gradient(180deg, #0B4F45 0%, #0E5D51 100%);
+/* ---------- الترويسة المحدثة (Header) ---------- */
+header {
+  background: linear-gradient(135deg, #083932 0%, #0B4F45 50%, #0E5D51 100%);
   color: #fff;
-  padding: 1.9rem 1.25rem 3rem;
+  padding: 2.2rem 1.4rem 3.4rem;
   position: relative;
   overflow: hidden;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  box-shadow: 0 12px 30px -10px rgba(11, 79, 69, 0.4);
 }
 
-/* توهجات دائرية خفيفة بخلفية الترويسة لإحساس بصري أعمق */
-header::before{
+/* خلفية توهج جمالية ناعمة */
+header::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image:
-    radial-gradient(circle at 85% 8%, rgba(255, 255, 255, 0.08) 0, transparent 45%),
-    radial-gradient(circle at 6% 90%, rgba(255, 255, 255, 0.06) 0, transparent 40%);
+  background-image: 
+    radial-gradient(circle at 85% 15%, rgba(221, 184, 84, 0.15) 0, transparent 40%),
+    radial-gradient(circle at 10% 85%, rgba(127, 217, 196, 0.12) 0, transparent 45%);
+  pointer-events: none;
 }
 
+/* تحسين بروز اسم التطبيق (AquaBill JO) */
+header h1 {
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin: 0;
+  position: relative;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* الشارة الذهبية الصغيرة بجانب الاسم */
+header h1 .jo-badge {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #f3d078, #b98a1f);
+  color: #0b4f45;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* تحسين السطر الوصفي أسفل الهيدر */
+.brand-tagline-ar {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e1f0ec;
+  margin-top: 0.25rem;
+}
+
+header p {
+  font-size: 0.92rem;
+  color: #d1e7e2;
+  margin: 0.6rem 0 0;
+  max-width: 38ch;
+  line-height: 1.6;
+  position: relative;
+}
 /* الموجة الفاصلة أسفل الترويسة، تصل بصرياً مع خلفية الصفحة */
-.wave{
+/* ---------- شكل التموّج المستقبلي لأسفل الترويسة ---------- */
+.wave {
   position: absolute;
-  left: 0; right: 0; bottom: -1px;
-  width: 100%; height: 34px;
+  left: 0; 
+  right: 0; 
+  bottom: -1px;
+  width: 100%; 
+  height: 24px;
   display: block;
+  /* تأثير توهج نيون متدرج ناعم يعطي طابعاً مستقبلياً */
+  filter: drop-shadow(0 -3px 8px rgba(94, 234, 212, 0.4));
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+/* لون الموجة يتكيف ناعماً مع خلفية الصفحة */
+.wave path {
+  fill: var(--bg);
 }
 
 .brandrow{
