@@ -383,12 +383,11 @@ function toggleTheme() {
   
   // التحقق من وجود الزر قبل تغييره لعدم التسبب في خطأ كود
   const themeBtn = document.querySelector('.btn-theme-toggle') || document.getElementById('themeToggle');
-// استبدل السطر الخاص بالأيقونة بهذا السطر فقط:
-if (themeBtn) {
-themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';  
+ // استبدل السطر الخاص بالأيقونة بهذا السطر فقط:
+  if (themeBtn) {
+  themeBtn.textContent = newTheme === 'dark' ? '🌞' : '🌙';
+  }
 }
-}
-
 /* ==========================================================================
    8. EXPORT / IMPORT — تصدير واستيراد الإعدادات كملف JSON
    ------------------------------------------------------------------------
