@@ -383,11 +383,9 @@ function toggleTheme() {
   
   // التحقق من وجود الزر قبل تغييره لعدم التسبب في خطأ كود
   const themeBtn = document.querySelector('.btn-theme-toggle') || document.getElementById('themeToggle');
-  if (themeBtn) {
 // استبدل السطر الخاص بالأيقونة بهذا السطر فقط:
 if (themeBtn) {
-  themeBtn.textContent = newTheme === 'dark' ? '🌞' : '🌙';
-}  }
+themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';}  }
 }
 
 
