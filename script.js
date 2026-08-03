@@ -385,7 +385,7 @@ function toggleTheme() {
   const themeBtn = document.querySelector('.btn-theme-toggle') || document.getElementById('themeToggle');
 // استبدل السطر الخاص بالأيقونة بهذا السطر فقط:
 if (themeBtn) {
-themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌕';}  }
+themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌕';  
 }
 
 
