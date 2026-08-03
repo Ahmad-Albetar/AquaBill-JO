@@ -373,19 +373,19 @@ function calcAll() {
  * حسب نظام التشغيل إن لم يوجد شيء محفوظ)، ثم يبدّل إلى الوضع المقابل
  * ويحفظه، حتى يبقى ثابتاً بالزيارات القادمة.
  */
+// دالة آمنة لتبديل الثيم والأيقونة دون كسر باقي الكود
 function toggleTheme() {
-  const root = document.documentElement;
-  const settings = loadSettings();
-  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const currentlyDark = settings.theme ? settings.theme === 'dark' : systemPrefersDark;
-  const next = currentlyDark ? 'light' : 'dark';
-
-  root.setAttribute('data-theme', next);
-  updateSetting('theme', next);
-
- const icon = document.querySelector('#themeToggle .theme-icon');
-if (icon) {
-  icon.textContent = next === 'dark' ? '☀️' : '🌙';
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  
+  // التحقق من وجود الزر قبل تغييره لعدم التسبب في خطأ كود
+  const themeBtn = document.querySelector('.btn-theme-toggle') || document.getElementById('themeToggle');
+  if (themeBtn) {
+    themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  }
 }
 
 
