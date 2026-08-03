@@ -26,7 +26,6 @@
    ثابتة دائماً بفضل Object.freeze) */
 const tiers = APP_CONFIG.tiers.map((t) => ({ ...t }));
 
-let unlocked = false;
 let deferredInstallPrompt = null;
 
 
@@ -359,42 +358,6 @@ function calcAll() {
     recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
   }
 }
-
-/* ==========================================================================
-   6. LOCK FEATURE — قفل/فتح تعديل جدول التعرفة
-   ------------------------------------------------------------------------
-   ⚠️ ملاحظة أمان: هذه حماية بسيطة على مستوى الواجهة (Client-Side) فقط،
-   وليست تشفيراً حقيقياً. راجع README.md لخيارات حماية حقيقية على الخادم.
-   ========================================================================== */
-
-/**
- * toggleLock
- * يُستدعى بزر "تعديل/قفل" أعلى جدول التعرفة. يطلب الرمز السري لفتح الحقول
- * للتعديل، أو يعيد قفلها إن كانت مفتوحة بالفعل.
- */
-function toggleLock() {
-  const inputs = document.querySelectorAll('#tariffTable input');
-  const btn = document.getElementById('lockToggle');
-  const label = document.getElementById('lockLabel');
-
-  if (!unlocked) {
-    const entered = prompt('أدخل الرمز السري لتعديل الأسعار:');
-    if (entered === APP_CONFIG.editPin) {
-      unlocked = true;
-      inputs.forEach((i) => i.removeAttribute('readonly'));
-      label.textContent = 'قفل';
-      btn.setAttribute('aria-pressed', 'true');
-    } else if (entered !== null) {
-      alert('الرمز غير صحيح.');
-    }
-  } else {
-    unlocked = false;
-    inputs.forEach((i) => i.setAttribute('readonly', true));
-    label.textContent = 'تعديل';
-    btn.setAttribute('aria-pressed', 'false');
-  }
-}
-
 
 /* ==========================================================================
    7. THEME TOGGLE — التبديل اليدوي بين الوضع الفاتح والداكن
