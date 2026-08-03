@@ -379,10 +379,10 @@ function toggleTheme() {
   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const currentlyDark = settings.theme ? settings.theme === 'dark' : systemPrefersDark;
   const next = currentlyDark ? 'light' : 'dark';
-  
+
   root.setAttribute('data-theme', next);
   updateSetting('theme', next);
-  
+
   const icon = document.querySelector('#themeToggle .theme-icon');
   if (icon) {
     icon.textContent = next === 'dark' ? '☀️' : '🌙';
