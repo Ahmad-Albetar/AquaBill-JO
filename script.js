@@ -378,11 +378,15 @@ function toggleTheme() {
   const settings = loadSettings();
   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const currentlyDark = settings.theme ? settings.theme === 'dark' : systemPrefersDark;
-
   const next = currentlyDark ? 'light' : 'dark';
+  
   root.setAttribute('data-theme', next);
   updateSetting('theme', next);
-  document.getElementById('themeToggle').setAttribute('aria-pressed', String(next === 'dark'));
+  
+  const icon = document.querySelector('#themeToggle .theme-icon');
+  if (icon) {
+    icon.textContent = next === 'dark' ? '☀️' : '🌙';
+  }
 }
 
 
