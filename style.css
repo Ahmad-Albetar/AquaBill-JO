@@ -953,3 +953,50 @@ main > .card:first-of-type table.tariff th {
 .social-btn.instagram {
   background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aebe6 90%);
 }
+/* --- تطبيق الثيم العصري الموحد على كافة بطاقات التطبيق --- */
+.card {
+  background: var(--card);
+  border: 1px solid rgba(11, 79, 69, 0.18);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.3rem;
+  box-shadow: 0 10px 25px -10px rgba(11, 79, 69, 0.15);
+  position: relative;
+  z-index: 2;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+/* التباعد بين البطاقات */
+.card + .card {
+  margin-top: 1.2rem;
+}
+
+/* خط إضاءة نيون أعلى كل بطاقة لإعطاء طابع متكامل */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.2rem;
+  right: 1.2rem;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--teal), var(--gold), transparent);
+  border-radius: 2px;
+  opacity: 0.75;
+}
+
+/* تأثير التمرير الخفيف للبطاقات (Hover Effect) */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -10px rgba(11, 79, 69, 0.22);
+}
+
+/* --- دعم الوضع الداكن (Dark Mode) لكل البطاقات --- */
+:root[data-theme="dark"] .card {
+  border-color: rgba(94, 234, 212, 0.2);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-theme="dark"] .card::before {
+  background: linear-gradient(90deg, transparent, var(--accent-strong), var(--gold), transparent);
+  opacity: 0.9;
+}
