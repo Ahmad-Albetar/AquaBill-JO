@@ -383,10 +383,9 @@ function toggleTheme() {
   root.setAttribute('data-theme', next);
   updateSetting('theme', next);
 
-  const icon = document.querySelector('#themeToggle .theme-icon');
-  if (icon) {
-    icon.textContent = next === 'dark' ? '☀️' : '🌙';
-  }
+ const icon = document.querySelector('#themeToggle .theme-icon');
+if (icon) {
+  icon.textContent = next === 'dark' ? '☀️' : '🌙';
 }
 
 
