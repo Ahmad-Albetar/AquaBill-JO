@@ -281,7 +281,25 @@ function calcTankerOnly() {
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
-  const rawInput = document.getElementById('consumption').value;
+  const rawInput = document.getElementById('consumption').value.trim();
+
+  // 1. في حال كان المربع فارغاً تماماً (عند فتح الصفحة أول مرة)
+  if (!rawInput) {
+    document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('totalOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
+
+    const flatFeeHint = document.getElementById('flatFeeHint');
+    if (flatFeeHint) flatFeeHint.style.display = 'none';
+
+    document.getElementById('marginalHint').textContent = '';
+
+    const badge = document.getElementById('statusBadge');
+    if (badge) badge.innerHTML = '';
+    return; // التوقف عن الحساب والتحديث
+  }
+
+  // 2. إذا قام المستخدم بإدخال رقم (بدء الحسابات الحالية)
   const n = sanitizeNumber(rawInput, 0);
 
   const water = costFor(n, 'water');
@@ -294,7 +312,8 @@ function calcAll() {
 
   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
-    flatFeeHint.style.display = (!rawInput || n <= 6) ? 'inline-block' : 'none';
+    // يظهر التنبيه فقط إذا كانت القيمة المدخلة من 0 حتى 6
+    flatFeeHint.style.display = (n <= 6) ? 'inline-block' : 'none';
   }
 
   const nextWater = costFor(n + 1, 'water') - water;
@@ -303,7 +322,6 @@ function calcAll() {
   
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
-
  // --- شارة تقييم الاستهلاك ---
   const badge = document.getElementById('statusBadge');
   if (badge) {
