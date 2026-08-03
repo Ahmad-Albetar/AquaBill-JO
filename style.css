@@ -1003,24 +1003,24 @@ main > .card:first-of-type table.tariff th {
 /* تنسيق زر تبديل الوضع الفاتح/الداكن */
 .btn-theme-toggle {
   position: absolute;
-  top: 18px;
-  left: 20px; /* للواجهات العربية RTL */
-  width: 42px;
-  height: 42px;
+  top: 15px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: #ffffff;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.25s ease;
-  z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-theme-toggle:hover {
@@ -1030,10 +1030,4 @@ main > .card:first-of-type table.tariff th {
 
 .btn-theme-toggle:active {
   transform: scale(0.95);
-}
-
-/* تنسيق الأيقونة بالوضع الداكن */
-[data-theme="dark"] .btn-theme-toggle {
-  background: rgba(15, 23, 42, 0.6);
-  border-color: rgba(255, 255, 255, 0.15);
 }
