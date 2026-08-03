@@ -387,7 +387,7 @@ function toggleTheme() {
 if (themeBtn) {
 themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';  
 }
-
+}
 
 /* ==========================================================================
    8. EXPORT / IMPORT — تصدير واستيراد الإعدادات كملف JSON
