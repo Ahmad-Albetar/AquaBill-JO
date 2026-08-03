@@ -1,29 +1,26 @@
-MIT License
+Proprietary License
 
-Copyright (c) 2026 AquaBill JO Contributors
+Copyright (c) 2026 Ahmad Albetar. All Rights Reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This software, its source code, and design are the exclusive property of Ahmad Albetar. 
+Permission is hereby granted solely for individuals to access and use the deployed application 
+for personal, non-commercial purposes via the official website.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+STRICTLY PROHIBITED:
+- Copying, reproducing, or redistributing any part of the source code.
+- Modifying, reverse-engineering, or creating derivative works.
+- Using this project or its assets for any commercial purposes.
 
 ---
 
-ملاحظة بالعربية: رُخِّص هذا المشروع بموجب رخصة MIT مفتوحة المصدر — يعني هذا
-أن بإمكان أي شخص استخدام الكود، نسخه، تعديله، ودمجه بمشاريع أخرى (تجارية أو
-غير تجارية) بحرية تامة، شريطة الإبقاء على نص هذا الترخيص. الأداة نفسها
-(كخدمة توعوية) غير تابعة لأي جهة حكومية أو شركة مياه — راجع إخلاء المسؤولية
-في README.md.
+حقوق الملكية والنشر
+
+حقوق الطبع والنشر © 2026 أحمد البيطار (Ahmad Albetar). جميع الحقوق محفوظة.
+
+هذا البرمجية وكودها المصدري وتصميمها ملك حصري للمطور أحمد البيطار. 
+يُسمح فقط بالأغراض الشخصية للاستخدام المباشر للأداة عبر الرابط الرسمي.
+
+يُمنع منعاً باتاً:
+- نسخ أو إعادة توزيع أو نشر أي جزء من الكود المصدري.
+- تعديل أو هندسة عكسية أو اشتقاق أعمال أخرى من هذا المشروع.
+- استخدام المشروع أو أي من أجزائه لأغراض تجارية أو غير شخصية دون إذن كتابي مسبق.
