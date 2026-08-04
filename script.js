@@ -21,9 +21,7 @@
 
 'use strict';
 
-/* نسخة قابلة للتعديل من جدول التعرفة (تُبنى من APP_CONFIG، وتتغيّر فقط إذا
-   فتح المستخدم القفل وعدّل الأرقام يدوياً؛ القيم الأصلية بـ config.js تبقى
-   ثابتة دائماً بفضل Object.freeze) */
+
 const tiers = APP_CONFIG.tiers.map((t) => ({ ...t }));
 
 let deferredInstallPrompt = null;
@@ -469,14 +467,6 @@ function importSettings(event) {
         renderTariffTable();
       }
       calcAll();
-      alert('تم استيراد الإعدادات بنجاح.');
-    } catch (e) {
-      logClientError(e.message, 'importSettings');
-      alert('ملف غير صالح، تعذّر استيراد الإعدادات.');
-    }
-  };
-  reader.readAsText(file);
-  event.target.value = ''; // يسمح باستيراد نفس الملف مرة أخرى لاحقاً إذا لزم
 }
 
 
