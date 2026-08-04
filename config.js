@@ -13,7 +13,7 @@ const APP_CONFIG = {
   /* ---------- معلومات التطبيق العامة ---------- */
   appName: 'AquaBill JO',
   appNameAr: 'حاسبة فاتورة المياه الأردنية',
-  version: '1.4.0',
+  version: '1.0.0',
   cacheVersion: 'aquabill-jo-v8.5',
   buildDate: '2026-07-31',
   currency: 'JOD',
