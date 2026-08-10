@@ -122,15 +122,20 @@ header p{
 }
 
 /* --- الشارات المحدثة (Hero Badges) --- */
-.hero-badges {
-  display: flex;
+/* ربط التنسيق مع trust-badges ليعمل على الصفحة الحالية فوراً */
+.hero-badges,
+.trust-badges {
+  list-style: none !important;
+  display: flex !important;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
   margin-top: 12px;
+  padding: 0;
 }
 
-.badge-pill {
+.badge-pill,
+.trust-badges li {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -145,11 +150,12 @@ header p{
   transition: var(--transition-fast, all 0.2s ease);
 }
 
-.badge-pill svg {
-  width: 14px;
-  height: 14px;
+.badge-pill svg,
+.trust-badges svg {
+  width: 14px !important;
+  height: 14px !important;
   flex: none;
-  color: #7FD9C4;
+  color: #7fd9c4;
 }
 
 .badge-pill:hover {
