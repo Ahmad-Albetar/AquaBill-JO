@@ -284,7 +284,7 @@ function calcAll() {
   const tankerPriceInput = document.getElementById('tankerPrice');
   const warningElem = document.getElementById('warning-message');
 
-  // 1. قص النص فوراً إلى 5 خانات كحد أقصى عند الكتابة في أي حقل
+  // 1. تقييد الإدخال بـ 5 خانات
   [consumptionInput, tankerCapInput, tankerPriceInput].forEach(input => {
     if (input && input.value && input.value.length > 5) {
       input.value = input.value.slice(0, 5);
@@ -297,8 +297,8 @@ function calcAll() {
   if (rawInput === '') {
     if (warningElem) warningElem.style.display = 'none';
 
-    document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-    document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
+    document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
     document.getElementById('totalOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
 
     const flatFeeHint = document.getElementById('flatFeeHint');
@@ -309,14 +309,14 @@ function calcAll() {
     const badge = document.getElementById('statusBadge');
     if (badge) badge.innerHTML = '';
 
-    document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
+    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
     return;
   }
 
   const consumptionVal = parseFloat(rawInput);
 
-  // 3. التحقق من منطقية الاستهلاك (حتى 500 م³ فقط)
+  // 3. التحقق من الحد الأقصى (500 م³)
   if (isNaN(consumptionVal) || consumptionVal > 500) {
     if (warningElem) {
       warningElem.textContent = '⚠️ تنبيه: الحد الأقصى المسموح لحساب الاستهلاك هو 500 م³.';
@@ -337,19 +337,19 @@ function calcAll() {
       badge.innerHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً يتجاوز 500 م³!</span>';
     }
 
-    return; // إيقاف الحسابات نهائياً لمنع الأرقام الفلكية
+    return;
   } else {
     if (warningElem) warningElem.style.display = 'none';
   }
 
-  // 4. الحساب الطبيعي للعداد
+  // 4. الحسابات الطبيعية
   const n = sanitizeNumber(rawInput, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
   const total = water + sewage;
 
-  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
-  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
 
   const flatFeeHint = document.getElementById('flatFeeHint');
@@ -384,8 +384,8 @@ function calcAll() {
     badge.innerHTML = newHTML;
   }
 
-  // 6. التحقق من منطقية الصهريج (أقصى سعر 500 وأقصى سعة 100)
-  document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  // 6. مقارنة الصهريج
+  document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
 
   const tankerPrice = parseFloat(tankerPriceInput?.value) || 0;
   const tankerQty = parseFloat(tankerCapInput?.value) || 0;
@@ -407,8 +407,8 @@ function calcAll() {
   const tankerPerM3 = (tankerPrice > 0 && tankerQty > 0) ? (tankerPrice / tankerQty) : 0;
 
   document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 
-    ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}` 
-    : `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr}` 
+    : `0.00 ${APP_CONFIG.currencyLabelAr}`;
 
   if (tankerPerM3 > 0) {
     if (marginal < tankerPerM3) {
