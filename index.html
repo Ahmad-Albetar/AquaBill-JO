@@ -259,7 +259,7 @@
 <p class="hint" id="marginalHint"></p>
       
 </div>
-    <!-- ---------- الخطوة 3: مقارنة العداد بصهريج المياه ---------- -->
+ <!-- ---------- الخطوة 3: مقارنة العداد بصهريج المياه ---------- -->
     <div class="card fade-in">
       <h2>
         <span class="icn">
@@ -271,7 +271,7 @@
         </span>
       </h2>
       <div class="row">
-   <div>
+        <div>
           <label for="tankerPrice">تكلفة صهريج المياه (د.أ)</label>
           <input 
             type="number" 
@@ -280,7 +280,8 @@
             min="1" 
             max="500" 
             maxlength="5" 
-            placeholder="مثال:12 (دينار)"
+            inputmode="numeric"
+            placeholder="مثال: 12 (دينار)"
           >
         </div>
         <div>
@@ -292,10 +293,12 @@
             min="1" 
             max="100" 
             maxlength="5" 
-            placeholder="مثال:3 (م³)"
+            inputmode="numeric"
+            placeholder="مثال: 3 (م³)"
           >
         </div>
-    <p class="hint">صهريج المياه: مركبة متنقلة تعبئ الماء من الآبار أو الينابيع وتوصله لمنزلك عند نقص التزويد أو الانقطاع.</p>
+      </div>
+      <p class="hint">صهريج المياه: مركبة متنقلة تعبئ الماء من الآبار أو الينابيع وتوصله لمنزلك عند نقص التزويد أو الانقطاع.</p>
       <div class="compare">
         <div class="box" id="boxNetwork">
           <div class="lbl">متر إضافي من العداد</div>
@@ -306,7 +309,7 @@
           <div class="val" id="tankerMarginal">-</div>
         </div>
       </div>
-      <p class="hint" id="recommendHint"></p>
+      <p class="hint" id="recommendHint">أدخل سعر وسعة الصهريج للمقارنة مع العداد.</p>
     </div>
 
     <!-- ---------- الخطوة 4: نصائح عملية ---------- -->
