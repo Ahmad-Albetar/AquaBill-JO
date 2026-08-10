@@ -279,25 +279,60 @@ function calcTankerOnly() {
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
-  // قراءة حقل الاستهلاك وقيمته
   const consumptionInput = document.getElementById('consumption');
-  const rawInput = consumptionInput?.value || '';
-  const consumptionVal = parseFloat(rawInput) || 0;
-
-  // إظهار أو إخفاء التنبيه عند تجاوز 500 م³ دون تغيير القيمة
   const warningElem = document.getElementById('warning-message');
+
+  // 1. قراءة النص وتجريده من المسافات
+  const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
+
+  // 2. معالجة حالة صندوق الإدخال الفارغ (Default State)
+  if (rawInput === '') {
+    if (warningElem) warningElem.style.display = 'none';
+
+    // إعادة تعيين الواجهة لقيم صفرية
+    document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('totalOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
+
+    const flatFeeHint = document.getElementById('flatFeeHint');
+    if (flatFeeHint) flatFeeHint.style.display = 'none';
+
+    document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
+
+    const badge = document.getElementById('statusBadge');
+    if (badge) badge.innerHTML = '';
+
+    document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+
+    return; // إيقاف التنفيذ
+  }
+
+  const consumptionVal = parseFloat(rawInput);
+
+  // 3. معالجة الرقم الهائل (تجاوز 500 م³) دون تغيير القيمة المكتوبة
   if (consumptionVal > 500) {
     if (warningElem) {
       warningElem.textContent = '⚠️ تنبيه: الاستهلاك المدخل مرتفع جداً (أعلى من 500 م³).';
       warningElem.style.display = 'block';
     }
+
+    document.getElementById('waterOut').textContent = '-';
+    document.getElementById('sewageOut').textContent = '-';
+    document.getElementById('totalOut').textContent = '-';
+
+    const badge = document.getElementById('statusBadge');
+    if (badge) {
+      badge.innerHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً</span>';
+    }
+
+    return; // إيقاف الحسابات الفلكية
   } else {
     if (warningElem) {
       warningElem.style.display = 'none';
     }
   }
 
-  // --- 3. تحويل المدخل والحسابات ---
+  // 4. الحسابات الطبيعية عند إدخال رقم صحيح
   const n = sanitizeNumber(rawInput, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
@@ -309,7 +344,6 @@ function calcAll() {
 
   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
-    // يظهر التنبيه فقط إذا كانت القيمة المدخلة من 0 حتى 6
     flatFeeHint.style.display = (n <= 6) ? 'inline-block' : 'none';
   }
 
@@ -320,7 +354,7 @@ function calcAll() {
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
-  // --- 4. شارة تقييم الاستهلاك ---
+  // 5. شارة تقييم الاستهلاك
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
@@ -343,10 +377,11 @@ function calcAll() {
     }
   }
 
-  // --- 5. صهريج المياه مقارنة بالعداد ---
+  // 6. صهريج المياه مقارنة بالعداد
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
   const tankerPrice = parseFloat(document.getElementById('tankerPrice')?.value) || 0;
+  const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
   const tankerQty = parseFloat(tankerCapInput?.value) || 0;
   const tankerPerM3 = (tankerPrice > 0 && tankerQty > 0) ? (tankerPrice / tankerQty) : 0;
 
@@ -374,6 +409,7 @@ function calcAll() {
     if (recommendHint) recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
   }
 }
+
 /* ==========================================================================
    7. THEME TOGGLE — التبديل اليدوي بين الوضع الفاتح والداكن
    ------------------------------------------------------------------------
