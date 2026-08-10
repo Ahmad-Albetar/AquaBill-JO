@@ -279,6 +279,8 @@ function calcTankerOnly() {
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 // حالة الحقل الفارغ (الحالة الافتراضية عند فتح الموقع)
+
+function calcAll() {
 if (rawInput === '') {
   if (warningElem) warningElem.style.display = 'none';
 
