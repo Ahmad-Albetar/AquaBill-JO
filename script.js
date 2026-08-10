@@ -228,7 +228,6 @@ function onTariffEdit(el) {
  *   - شارة حالة الاستهلاك (آمن / متوسط / مرتفع)
  *   - مقارنة العداد بصهريج المياه والتوصية الأوفر
  */
-// --- 1. دالة حساب الخطوة 3 (الصهريج) فقط لمنع الومضة ---
 // --- 1. دالة حساب الصهريج فقط (الخطوة 3) ---
 function calcTankerOnly() {
   const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
@@ -292,10 +291,10 @@ function calcAll() {
     }
   });
 
-  // 2. هــــذا هــو السطر المفقود الذي يسبب المشكلة (تعريف rawInput):
+  // 2. قراءة المدخل
   const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
 
-  // 3. حالة الحقل الفارغ (لا يحسب ولا يظهر أي شريحة)
+  // 3. حالة الحقل الفارغ
   if (rawInput === '') {
     if (warningElem) warningElem.style.display = 'none';
 
@@ -314,19 +313,48 @@ function calcAll() {
     document.getElementById('networkMarginal').textContent = '-';
     document.getElementById('tankerMarginal').textContent = '-';
     return;
-    } else {
+  }
+
+  const consumptionVal = parseFloat(rawInput);
+
+  // 4. فحص تجاوز الـ 500 م³
+  if (isNaN(consumptionVal) || consumptionVal > 500) {
+    if (warningElem) {
+      warningElem.textContent = '⚠️ تنبيه: الاستهلاك المدخل أعلى من 500 م³، هذا رقم كبير جداً خلال شهر واحد!';
+      warningElem.style.display = 'block';
+    }
+
+    document.getElementById('waterOut').textContent = '-';
+    document.getElementById('sewageOut').textContent = '-';
+    document.getElementById('totalOut').textContent = '-';
+
+    const flatFeeHint = document.getElementById('flatFeeHint');
+    if (flatFeeHint) flatFeeHint.style.display = 'none';
+
+    document.getElementById('marginalHint').textContent = 'القيمة المدخلة تتجاوز النطاق المسموح لحساب الفاتورة (500 م³).';
+
+    const badge = document.getElementById('statusBadge');
+    if (badge) badge.innerHTML = '';
+
+    document.getElementById('networkMarginal').textContent = '-';
+    document.getElementById('tankerMarginal').textContent = '-';
+    return;
+  } else {
     if (warningElem) warningElem.style.display = 'none';
   }
 
-  // 4. الحسابات الطبيعية للعداد (من 0 إلى 500 م³)
+  // 5. الحسابات الطبيعية للعداد (من 0 إلى 500 م³)
   const n = sanitizeNumber(rawInput, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
   const total = water + sewage;
 
+  // وسم المقطوعية بجانب المجموع في حال كان الاستهلاك من 0 إلى 6 م³
+  const flatFeeTag = (n >= 0 && n <= 6) ? ' <small style="font-size: 0.85em; opacity: 0.85;">(مقطوعية)</small>' : '';
+
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
-  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+  document.getElementById('totalOut').innerHTML = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}${flatFeeTag}`;
 
   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
@@ -340,7 +368,7 @@ function calcAll() {
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
-  // 5. شارة تقييم الاستهلاك
+  // 6. شارة تقييم الاستهلاك
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
@@ -360,7 +388,7 @@ function calcAll() {
     badge.innerHTML = newHTML;
   }
 
-  // 6. مقارنة الصهريج مع تحديد الحدود المنطقية
+  // 7. مقارنة الصهريج
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
 
   const tankerPrice = parseFloat(tankerPriceInput?.value) || 0;
@@ -370,7 +398,6 @@ function calcAll() {
   const boxTanker = document.getElementById('boxTanker');
   const recommendHint = document.getElementById('recommendHint');
 
-  // فحص الحدود المنطقية للصهريج (أقصى سعر 500 د.أ وأقصى سعة 100 م³)
   if (tankerPrice > 500 || tankerQty > 100) {
     document.getElementById('tankerMarginal').textContent = '-';
     boxNetwork?.classList.remove('win');
