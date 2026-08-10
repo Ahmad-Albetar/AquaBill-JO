@@ -224,52 +224,47 @@
 
     </div>
 
-<!-- ---------- الخطوة 2: حاسبة الفاتورة الشهرية ---------- -->
 <div class="card fade-in">
-  <h2>
-    <span class="icn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2C12 2 5 10.5 5 15.5A7 7 0 0019 15.5C19 10.5 12 2 12 2Z"/>
-      </svg>
-    </span>
-    <span class="titlewrap">
-      <span class="eyebrow2">الخطوة 2 من 3</span>
-      <span class="titletext">قدّر فاتورتك الشهرية</span>
-    </span>
-  </h2>
+  <h3>الخطوة 2: كمية الاستهلاك الشهرية</h3>
+  
+  <div class="input-field">
+    <label for="consumption">الاستهلاك بالحرية (م³)</label>
+    <input 
+      type="number" 
+      id="consumption" 
+      name="consumption" 
+      min="0" 
+      max="999" 
+      maxlength="3" 
+      oninput="calcAll()" 
+      placeholder="أدخل كمية الاستهلاك"
+    >
+  </div>
 
-  <!-- حقل الاستهلاك -->
-  <label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
-  <input 
-    type="number" 
-    id="consumption" 
-    name="consumption" 
-    value="0"
-    min="0" 
-    max="999" 
-    maxlength="3" 
-    oninput="calcAll()" 
-    placeholder="أدخل كمية الاستهلاك"
-  >
-
+  <!-- تنبيه التجاوز (يظهر فقط عند تجاوز 500 م³) -->
   <div id="warning-message" class="alert-warning" style="display: none;"></div>
 
-  <div class="result" aria-live="polite">
-    <div class="line"><span>تكلفة المياه</span><span id="waterOut">0.00 د.أ</span></div>
-    <div class="line"><span>تكلفة الصرف الصحي</span><span id="sewageOut">0.00 د.أ</span></div>
-    <div class="total">
-      <span>إجمالي الفاتورة المتوقعة</span>
-      <div>
-        <span id="totalOut">0.00 د.أ</span>
-        <small id="flatFeeHint" style="display: none; font-size: 0.8em; opacity: 0.85; margin-right: 4px;">(رسوم المقطوعية)</small>
-      </div>
+  <!-- مخرجات نتائج العداد -->
+  <div class="results-grid">
+    <div class="res-item">
+      <span class="lbl">أجور المياه:</span>
+      <span class="val" id="waterOut">-</span>
+    </div>
+    <div class="res-item">
+      <span class="lbl">أجور الصرف الصحي:</span>
+      <span class="val" id="sewageOut">-</span>
+    </div>
+    <div class="res-item total">
+      <span class="lbl">إجمالي الفاتورة المتوقعة:</span>
+      <span class="val" id="totalOut">-</span>
     </div>
   </div>
 
-  <div id="statusBadge" role="status" aria-live="polite"></div>
+  <!-- الشارات والتلميحات -->
+  <div id="statusBadge" class="badge-container"></div>
+  <p class="hint" id="flatFeeHint" style="display: none;">تنبيه: تطبيق شريحة المقطوعية للاستهلاك المنخفض.</p>
   <p class="hint" id="marginalHint">أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.</p>
-</div> <!-- إغلاق الخطوة 2 -->
-
+</div>
 
 <!-- ---------- الخطوة 3: مقارنة تكلفة الصهريج ---------- -->
 <div class="card fade-in">
