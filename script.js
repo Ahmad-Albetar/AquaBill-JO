@@ -279,36 +279,25 @@ function calcTankerOnly() {
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 // حالة الحقل الفارغ (الحالة الافتراضية عند فتح الموقع)
-
 function calcAll() {
-if (rawInput === '') {
-  if (warningElem) warningElem.style.display = 'none';
+  const consumptionInput = document.getElementById('consumption');
+  const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
+  const tankerPriceInput = document.getElementById('tankerPrice');
+  const warningElem = document.getElementById('warning-message');
 
-  document.getElementById('waterOut').textContent = '-';
-  document.getElementById('sewageOut').textContent = '-';
-  document.getElementById('totalOut').textContent = '-';
-
-  const flatFeeHint = document.getElementById('flatFeeHint');
-  if (flatFeeHint) flatFeeHint.style.display = 'none';
-
-  document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
-
-  const badge = document.getElementById('statusBadge');
-  if (badge) badge.innerHTML = '';
-
-  document.getElementById('networkMarginal').textContent = '-';
-  document.getElementById('tankerMarginal').textContent = '-';
-  return;
-}
-
-  const consumptionVal = parseFloat(rawInput);
-
-  // 3. التوقف عند تجاوز 500 م³ وتصفير النتائج بخطوط (-)
-  if (isNaN(consumptionVal) || consumptionVal > 500) {
-    if (warningElem) {
-      warningElem.textContent = '⚠️ تنبيه: الاستهلاك المدخل أعلى من 500 م³، هذا رقم كبير جداً خلال شهر واحد!';
-      warningElem.style.display = 'block';
+  // 1. تقييد جميع الحقول بـ 3 خانات كحد أقصى (حتى 999)
+  [consumptionInput, tankerCapInput, tankerPriceInput].forEach(input => {
+    if (input && input.value && input.value.length > 3) {
+      input.value = input.value.slice(0, 3);
     }
+  });
+
+  // 2. هــــذا هــو السطر المفقود الذي يسبب المشكلة (تعريف rawInput):
+  const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
+
+  // 3. حالة الحقل الفارغ (لا يحسب ولا يظهر أي شريحة)
+  if (rawInput === '') {
+    if (warningElem) warningElem.style.display = 'none';
 
     document.getElementById('waterOut').textContent = '-';
     document.getElementById('sewageOut').textContent = '-';
@@ -317,7 +306,7 @@ if (rawInput === '') {
     const flatFeeHint = document.getElementById('flatFeeHint');
     if (flatFeeHint) flatFeeHint.style.display = 'none';
 
-    document.getElementById('marginalHint').textContent = 'القيمة المدخلة تتجاوز النطاق المسموح لحساب الفاتورة (500 م³).';
+    document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
 
     const badge = document.getElementById('statusBadge');
     if (badge) badge.innerHTML = '';
@@ -325,7 +314,7 @@ if (rawInput === '') {
     document.getElementById('networkMarginal').textContent = '-';
     document.getElementById('tankerMarginal').textContent = '-';
     return;
-  } else {
+    } else {
     if (warningElem) warningElem.style.display = 'none';
   }
 
