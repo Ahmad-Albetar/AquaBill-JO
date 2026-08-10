@@ -1079,3 +1079,23 @@ main > .card:first-of-type table.tariff th {
 .btn-theme-toggle:active {
   transform: scale(0.92);
 }
+/* ==========================================================================
+   تنسيقات رسائل وشارات التحذير للمدخلات (Input Warnings)
+   ========================================================================== */
+
+/* إطار أحمر تنبيهي متناسق مع الوضعين الفاتح والداكن */
+.input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+/* شارة الرسالة التحذيرية أسفل الحقل */
+.warning-badge {
+  margin-top: 6px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: #fca5a5;
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+}
