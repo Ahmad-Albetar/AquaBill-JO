@@ -282,14 +282,19 @@ function calcAll() {
   const consumptionInput = document.getElementById('consumption');
   const warningElem = document.getElementById('warning-message');
 
-  // 1. قراءة النص وتجريده من المسافات
-  const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
+  if (!consumptionInput) return;
 
-  // 2. معالجة حالة صندوق الإدخال الفارغ (Default State)
+  // 1. تقييد الإدخال بـ 5 خانات فوراً أثناء الكتابة
+  if (consumptionInput.value.length > 5) {
+    consumptionInput.value = consumptionInput.value.slice(0, 5);
+  }
+
+  const rawInput = consumptionInput.value.trim();
+
+  // 2. حالة الحقل الفارغ
   if (rawInput === '') {
     if (warningElem) warningElem.style.display = 'none';
 
-    // إعادة تعيين الواجهة لقيم صفرية
     document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
     document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
     document.getElementById('totalOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
@@ -303,36 +308,39 @@ function calcAll() {
     if (badge) badge.innerHTML = '';
 
     document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-
-    return; // إيقاف التنفيذ
+    return;
   }
 
   const consumptionVal = parseFloat(rawInput);
 
-  // 3. معالجة الرقم الهائل (تجاوز 500 م³) دون تغيير القيمة المكتوبة
+  // 3. التحقق من التجاوز عن 500 م³ (إيقاف الحسابات والتكست للقيم > 500)
   if (consumptionVal > 500) {
     if (warningElem) {
-      warningElem.textContent = '⚠️ تنبيه: الاستهلاك المدخل مرتفع جداً (أعلى من 500 م³).';
+      warningElem.textContent = '⚠️ تنبيه: الحد الأقصى المسموح لحساب الاستهلاك هو 500 م³.';
       warningElem.style.display = 'block';
     }
 
+    // إرجاع مخرجات الحسابات لـ (-) وعدم إظهار التكست أو الشريحة
     document.getElementById('waterOut').textContent = '-';
     document.getElementById('sewageOut').textContent = '-';
     document.getElementById('totalOut').textContent = '-';
 
+    const flatFeeHint = document.getElementById('flatFeeHint');
+    if (flatFeeHint) flatFeeHint.style.display = 'none';
+
+    document.getElementById('marginalHint').textContent = 'القيمة المدخلة تتجاوز النطاق المغطى في الحاسبة (500 م³).';
+
     const badge = document.getElementById('statusBadge');
     if (badge) {
-      badge.innerHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً</span>';
+      badge.innerHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً يتجاوز 500 م³!</span>';
     }
 
-    return; // إيقاف الحسابات الفلكية
+    return; // إيقاف الحساب
   } else {
-    if (warningElem) {
-      warningElem.style.display = 'none';
-    }
+    if (warningElem) warningElem.style.display = 'none';
   }
 
-  // 4. الحسابات الطبيعية عند إدخال رقم صحيح
+  // 4. الحسابات الطبيعية والتكست للأرقام من 0 حتى 500 م³
   const n = sanitizeNumber(rawInput, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
@@ -350,7 +358,7 @@ function calcAll() {
   const nextWater = costFor(n + 1, 'water') - water;
   const nextSewage = costFor(n + 1, 'sewage') - sewage;
   const marginal = nextWater + nextSewage;
-  
+
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
@@ -377,7 +385,7 @@ function calcAll() {
     }
   }
 
-  // 6. صهريج المياه مقارنة بالعداد
+  // 6. مقارنة العداد بالصهريج
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
   const tankerPrice = parseFloat(document.getElementById('tankerPrice')?.value) || 0;
