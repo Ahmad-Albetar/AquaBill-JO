@@ -280,18 +280,20 @@ function calcTankerOnly() {
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
   const consumptionInput = document.getElementById('consumption');
+  const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
+  const tankerPriceInput = document.getElementById('tankerPrice');
   const warningElem = document.getElementById('warning-message');
 
-  if (!consumptionInput) return;
+  // 1. تقييد جميع الحقول بـ 5 خانات كحد أقصى أثناء الكتابة
+  [consumptionInput, tankerCapInput, tankerPriceInput].forEach(input => {
+    if (input && input.value.length > 5) {
+      input.value = input.value.slice(0, 5);
+    }
+  });
 
-  // 1. تقييد الإدخال بـ 5 خانات فوراً أثناء الكتابة
-  if (consumptionInput.value.length > 5) {
-    consumptionInput.value = consumptionInput.value.slice(0, 5);
-  }
+  const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
 
-  const rawInput = consumptionInput.value.trim();
-
-  // 2. حالة الحقل الفارغ
+  // 2. حالة الحقل الأساسي (الاستهلاك) فارغ
   if (rawInput === '') {
     if (warningElem) warningElem.style.display = 'none';
 
@@ -308,19 +310,19 @@ function calcAll() {
     if (badge) badge.innerHTML = '';
 
     document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
     return;
   }
 
   const consumptionVal = parseFloat(rawInput);
 
-  // 3. التحقق من التجاوز عن 500 م³ (إيقاف الحسابات والتكست للقيم > 500)
+  // 3. التحقق من منطقية الاستهلاك (حتى 500 م³)
   if (consumptionVal > 500) {
     if (warningElem) {
       warningElem.textContent = '⚠️ تنبيه: الحد الأقصى المسموح لحساب الاستهلاك هو 500 م³.';
       warningElem.style.display = 'block';
     }
 
-    // إرجاع مخرجات الحسابات لـ (-) وعدم إظهار التكست أو الشريحة
     document.getElementById('waterOut').textContent = '-';
     document.getElementById('sewageOut').textContent = '-';
     document.getElementById('totalOut').textContent = '-';
@@ -335,12 +337,12 @@ function calcAll() {
       badge.innerHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً يتجاوز 500 م³!</span>';
     }
 
-    return; // إيقاف الحساب
+    return;
   } else {
     if (warningElem) warningElem.style.display = 'none';
   }
 
-  // 4. الحسابات الطبيعية والتكست للأرقام من 0 حتى 500 م³
+  // 4. الحسابات الطبيعية للعداد
   const n = sanitizeNumber(rawInput, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
@@ -385,21 +387,32 @@ function calcAll() {
     }
   }
 
-  // 6. مقارنة العداد بالصهريج
+  // 6. التحقق من منطقية مدخلات الصهريج والمقارنة
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
-  const tankerPrice = parseFloat(document.getElementById('tankerPrice')?.value) || 0;
-  const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
+  const tankerPrice = parseFloat(tankerPriceInput?.value) || 0;
   const tankerQty = parseFloat(tankerCapInput?.value) || 0;
+
+  const boxNetwork = document.getElementById('boxNetwork');
+  const boxTanker = document.getElementById('boxTanker');
+  const recommendHint = document.getElementById('recommendHint');
+
+  // فحص الحدود المنطقية للصهريج (سعر حتى 500 دينار وسعة حتى 100 م³)
+  if (tankerPrice > 500 || tankerQty > 100) {
+    document.getElementById('tankerMarginal').textContent = '-';
+    boxNetwork?.classList.remove('win');
+    boxTanker?.classList.remove('win');
+    if (recommendHint) {
+      recommendHint.textContent = '⚠️ قيم الصهريج المدخلة غير منطقية (السعر الأقصى 500 د، السعة القصوى 100 م³).';
+    }
+    return;
+  }
+
   const tankerPerM3 = (tankerPrice > 0 && tankerQty > 0) ? (tankerPrice / tankerQty) : 0;
 
   document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 
     ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}` 
     : `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-
-  const boxNetwork = document.getElementById('boxNetwork');
-  const boxTanker = document.getElementById('boxTanker');
-  const recommendHint = document.getElementById('recommendHint');
 
   if (tankerPerM3 > 0) {
     if (marginal < tankerPerM3) {
