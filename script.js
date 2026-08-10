@@ -278,41 +278,26 @@ function calcTankerOnly() {
 }
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
-function calcAll() {
-  const consumptionInput = document.getElementById('consumption');
-  const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
-  const tankerPriceInput = document.getElementById('tankerPrice');
-  const warningElem = document.getElementById('warning-message');
+// حالة الحقل الفارغ (الحالة الافتراضية عند فتح الموقع)
+if (rawInput === '') {
+  if (warningElem) warningElem.style.display = 'none';
 
-  // 1. تقييد الإدخال بـ 3 خانات فقط (حتى 999) لجميع الحقول
-  [consumptionInput, tankerCapInput, tankerPriceInput].forEach(input => {
-    if (input && input.value && input.value.length > 3) {
-      input.value = input.value.slice(0, 3);
-    }
-  });
+  document.getElementById('waterOut').textContent = '-';
+  document.getElementById('sewageOut').textContent = '-';
+  document.getElementById('totalOut').textContent = '-';
 
-  const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
+  const flatFeeHint = document.getElementById('flatFeeHint');
+  if (flatFeeHint) flatFeeHint.style.display = 'none';
 
-  // 2. حالة الحقل الفارغ (الحالة الافتراضية)
-  if (rawInput === '') {
-    if (warningElem) warningElem.style.display = 'none';
+  document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
 
-    document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
-    document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
-    document.getElementById('totalOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
+  const badge = document.getElementById('statusBadge');
+  if (badge) badge.innerHTML = '';
 
-    const flatFeeHint = document.getElementById('flatFeeHint');
-    if (flatFeeHint) flatFeeHint.style.display = 'none';
-
-    document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
-
-    const badge = document.getElementById('statusBadge');
-    if (badge) badge.innerHTML = '';
-
-    document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
-    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
-    return;
-  }
+  document.getElementById('networkMarginal').textContent = '-';
+  document.getElementById('tankerMarginal').textContent = '-';
+  return;
+}
 
   const consumptionVal = parseFloat(rawInput);
 
