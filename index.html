@@ -236,8 +236,15 @@
         </span>
       </h2>
     <label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
-<input type="number" id="consumption" name="consumption" min="0" max="500" maxlength="5" placeholder="أدخل كمية الاستهلاك (حتى 500 م³)">
-      <div class="result" aria-live="polite">
+<input 
+  type="number" 
+  id="consumption" 
+  name="consumption" 
+  min="0" 
+  max="500" 
+  maxlength="5" 
+  placeholder="أدخل كمية الاستهلاك (حتى 500 م³)"
+>      <div class="result" aria-live="polite">
   <div class="line"><span>تكلفة المياه</span><span id="waterOut">2.50 د</span></div>
   <div class="line"><span>تكلفة الصرف الصحي</span><span id="sewageOut">0.23 د</span></div>
   <div class="total">
@@ -266,10 +273,25 @@
       <div class="row">
      <div>
           <label for="tankerPrice">تكلفة صهريج المياه (د.أ)</label>
-<input type="number" id="tankerCap" name="tankerCap" min="1" max="100" maxlength="3" placeholder="مثال: 12">
-       <div>
+<input 
+  type="number" 
+  id="tankerPrice" 
+  name="tankerPrice" 
+  min="1" 
+  max="500" 
+  maxlength="5" 
+  placeholder="سعر الصهريج (دينار)"
+>       <div>
           <label for="tankerQty">سعة الصهريج (م³)</label>
-<input type="number" id="tankerPrice" name="tankerPrice" min="1" max="500" maxlength="3" placeholder="مثال: 3">
+<input 
+  type="number" 
+  id="tankerCap" 
+  name="tankerCap" 
+  min="1" 
+  max="100" 
+  maxlength="5" 
+  placeholder="سعة الصهريج (م³)"
+>
        </div>
       <p class="hint">صهريج المياه: مركبة متنقلة تعبئ الماء من الآبار أو الينابيع وتوصله لمنزلك عند نقص التزويد أو الانقطاع.</p>
       <div class="compare">
@@ -286,7 +308,6 @@
     </div>
 
     <!-- ---------- الخطوة 4: نصائح عملية ---------- -->
-   <!-- ---------- الخطوة 4: نصائح للتوفير دون انقطاع ---------- -->
 <div class="card fade-in">
   <h2>
     <span class="icn">
