@@ -301,7 +301,7 @@ function calcAll() {
   const n = sanitizeNumber(rawInput, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
-  const total = water + sewage;
+  const total = water + sewage; 
 
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
