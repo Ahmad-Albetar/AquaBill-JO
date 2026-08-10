@@ -133,6 +133,7 @@ header p{
 .badge-pill {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.82rem;
@@ -144,21 +145,31 @@ header p{
   transition: var(--transition-fast, all 0.2s ease);
 }
 
+.badge-pill svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: #7FD9C4;
+}
+
 .badge-pill:hover {
   border-color: #7fd9c4;
   transform: translateY(-1px);
 }
 
-/* ضبط التباين في حال استخدامها خارج الترويسة في الوضع الفاتح */
+/* ضبط التباين والجماليات في الوضع الفاتح */
 :root[data-theme="light"] .badge-pill {
   background-color: rgba(0, 0, 0, 0.04);
-  border-color: var(--border);
-  color: var(--ink);
+  border-color: var(--border, rgba(0, 0, 0, 0.1));
+  color: var(--ink, #2d3748);
 }
-.trust-badges svg{ width: 12px; height: 12px; flex: none; color: #7FD9C4; }
+
+:root[data-theme="light"] .badge-pill svg {
+  color: var(--primary-color, #0284c7);
+}
 
 /* عناوين الأقسام الأربعة (خطوة 1 من 4، إلخ) */
-h2{
+h2 {
   font-size: 1.02rem;
   font-weight: 700;
   margin: 0 0 1rem;
@@ -168,11 +179,26 @@ h2{
   gap: .7rem;
 }
 
-h2 .titlewrap{ display: flex; flex-direction: column; gap: .15rem; }
-h2 .eyebrow2{ font-size: .68rem; font-weight: 700; letter-spacing: .04em; color: var(--gold-text); }
-h2 .titletext{ font-size: 1.04rem; font-weight: 700; color: var(--accent-strong); }
+h2 .titlewrap { 
+  display: flex; 
+  flex-direction: column; 
+  gap: .15rem; 
+}
 
-.brandtext .eyebrow{
+h2 .eyebrow2 { 
+  font-size: .68rem; 
+  font-weight: 700; 
+  letter-spacing: .04em; 
+  color: var(--gold-text); 
+}
+
+h2 .titletext { 
+  font-size: 1.04rem; 
+  font-weight: 700; 
+  color: var(--accent-strong); 
+}
+
+.brandtext .eyebrow {
   font-size: .68rem;
   font-weight: 700;
   letter-spacing: .03em;
@@ -181,6 +207,10 @@ h2 .titletext{ font-size: 1.04rem; font-weight: 700; color: var(--accent-strong)
   align-items: center;
   gap: .35rem;
   margin-bottom: .15rem;
+}
+
+:root[data-theme="light"] .brandtext .eyebrow {
+  color: var(--text-muted, #555555);
 }
 
 
