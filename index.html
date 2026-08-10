@@ -224,82 +224,115 @@
 
     </div>
 
-    <!-- ---------- الخطوة 2: حاسبة الفاتورة الشهرية ---------- -->
-    <div class="card fade-in">
-      <h2>
-        <span class="icn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C12 2 5 10.5 5 15.5A7 7 0 0019 15.5C19 10.5 12 2 12 2Z"/></svg>
-        </span>
-        <span class="titlewrap">
-          <span class="eyebrow2">الخطوة 2 من 4</span>
-          <span class="titletext">قدّر فاتورتك الشهرية</span>
-        </span>
-      </h2>
-<!-- حقل الاستهلاك -->
-<label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
-<input 
-  type="number" 
-  id="consumption" 
-  name="consumption" 
-  min="0" 
-  max="999" 
-  maxlength="3" 
-  placeholder="أدخل كمية الاستهلاك (حتى 500 م³)"
->
+<!-- ---------- الخطوة 2: حاسبة الفاتورة الشهرية ---------- -->
+<div class="card fade-in">
+  <h2>
+    <span class="icn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C12 2 5 10.5 5 15.5A7 7 0 0019 15.5C19 10.5 12 2 12 2Z"/>
+      </svg>
+    </span>
+    <span class="titlewrap">
+      <span class="eyebrow2">الخطوة 2 من 4</span>
+      <span class="titletext">قدّر فاتورتك الشهرية</span>
+    </span>
+  </h2>
 
-<div class="result" aria-live="polite">
-  <div class="line"><span>تكلفة المياه</span><span id="waterOut">0.00 د</span></div>
-  <div class="line"><span>تكلفة الصرف الصحي</span><span id="sewageOut">0.00 د</span></div>
-  <div class="total">
-    <span>إجمالي الفاتورة المتوقعة</span>
-    <div>
-      <span id="totalOut">0.00 د.أ</span>
-      <small id="flatFeeHint" style="display: none; font-size: 0.8em; opacity: 0.85; margin-right: 4px;">(رسوم المقطوعية)</small>
+  <!-- حقل الاستهلاك -->
+  <label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
+  <input 
+    type="number" 
+    id="consumption" 
+    name="consumption" 
+    value="18" 
+    min="0" 
+    max="999" 
+    maxlength="3" 
+    oninput="calcAll()" 
+    placeholder="أدخل كمية الاستهلاك"
+  >
+
+  <div id="warning-message" class="alert-warning" style="display: none;"></div>
+
+  <div class="result" aria-live="polite">
+    <div class="line"><span>تكلفة المياه</span><span id="waterOut">0.00 د.أ</span></div>
+    <div class="line"><span>تكلفة الصرف الصحي</span><span id="sewageOut">0.00 د.أ</span></div>
+    <div class="total">
+      <span>إجمالي الفاتورة المتوقعة</span>
+      <div>
+        <span id="totalOut">0.00 د.أ</span>
+        <small id="flatFeeHint" style="display: none; font-size: 0.8em; opacity: 0.85; margin-right: 4px;">(رسوم المقطوعية)</small>
+      </div>
     </div>
   </div>
-</div>
-<div id="statusBadge" role="status" aria-live="polite"></div>
-<p class="hint" id="marginalHint">أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.</p>
 
-<!-- حقول الصهريج -->
-<div>
-  <label for="tankerPrice">تكلفة صهريج المياه (د.أ)</label>
-  <input 
-    type="number" 
-    id="tankerPrice" 
-    name="tankerPrice" 
-    min="1" 
-    max="999" 
-    maxlength="3" 
-    placeholder="مثال: 25 (دينار)"
-  >
-</div>
-<div>
-  <label for="tankerQty">سعة الصهريج (م³)</label>
-  <input 
-    type="number" 
-    id="tankerQty" 
-    name="tankerQty" 
-    min="1" 
-    max="999" 
-    maxlength="3" 
-    placeholder="مثال: 3 (م³)"
-  >
-</div>
-      <p class="hint">صهريج المياه: مركبة متنقلة تعبئ الماء من الآبار أو الينابيع وتوصله لمنزلك عند نقص التزويد أو الانقطاع.</p>
-      <div class="compare">
-        <div class="box" id="boxNetwork">
-          <div class="lbl">متر إضافي من العداد</div>
-          <div class="val" id="networkMarginal">-</div>
-        </div>
-        <div class="box" id="boxTanker">
-          <div class="lbl">متر واحد من الصهريج</div>
-          <div class="val" id="tankerMarginal">-</div>
-        </div>
-      </div>
-      <p class="hint" id="recommendHint">أدخل سعر وسعة الصهريج للمقارنة مع العداد.</p>
+  <div id="statusBadge" role="status" aria-live="polite"></div>
+  <p class="hint" id="marginalHint">أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.</p>
+</div> <!-- إغلاق الخطوة 2 -->
+
+
+<!-- ---------- الخطوة 3: مقارنة تكلفة الصهريج ---------- -->
+<div class="card fade-in">
+  <h2>
+    <span class="icn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="3" width="15" height="13"></rect>
+        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+      </svg>
+    </span>
+    <span class="titlewrap">
+      <span class="eyebrow2">الخطوة 3 من 4</span>
+      <span class="titletext">قارن مع صهريج المياه</span>
+    </span>
+  </h2>
+
+  <!-- حقول الصهريج أفقياً -->
+  <div class="tanker-inputs-group" style="display: flex; gap: 12px; margin-bottom: 12px;">
+    <div style="flex: 1;">
+      <label for="tankerCap">سعة الصهريج (م³)</label>
+      <input 
+        type="number" 
+        id="tankerCap" 
+        name="tankerCap" 
+        min="1" 
+        max="999" 
+        maxlength="3" 
+        oninput="calcAll()" 
+        placeholder="مثال: 12"
+      >
     </div>
+    <div style="flex: 1;">
+      <label for="tankerPrice">تكلفة الصهريج (د.أ)</label>
+      <input 
+        type="number" 
+        id="tankerPrice" 
+        name="tankerPrice" 
+        min="1" 
+        max="999" 
+        maxlength="3" 
+        oninput="calcAll()" 
+        placeholder="مثال: 25"
+      >
+    </div>
+  </div>
 
+  <p class="hint">صهريج المياه: مركبة متنقلة تعبئ الماء من الآبار أو الينابيع وتوصله لمنزلك عند نقص التزويد أو الانقطاع.</p>
+
+  <div class="compare">
+    <div class="box" id="boxNetwork">
+      <div class="lbl">متر إضافي من العداد</div>
+      <div class="val" id="networkMarginal">-</div>
+    </div>
+    <div class="box" id="boxTanker">
+      <div class="lbl">متر واحد من الصهريج</div>
+      <div class="val" id="tankerMarginal">-</div>
+    </div>
+  </div>
+
+  <p class="hint" id="recommendHint">أدخل سعر وسعة الصهريج للمقارنة مع العداد.</p>
+</div> <!-- إغلاق الخطوة 3 -->
     <!-- ---------- الخطوة 4: نصائح عملية ---------- -->
 <div class="card fade-in">
   <h2>
