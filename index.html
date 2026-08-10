@@ -225,53 +225,7 @@
     </div>
 
 <div class="card fade-in">
-  <!-- الخطوة 2: كمية الاستهلاك الشهرية -->
-<div class="card fade-in">
-  <div class="step-header">
-     <span class="titlewrap">
-      <span class="eyebrow2">الخطوة 2 من 3</span>
-      <span class="titletext">كمية الاستهلاك الشهرية</span>
-
-  </div>
-  
-  <div class="input-field">
-    <label for="consumption">الاستهلاك بالمتر المكعب (م³)</label>
-    <input 
-      type="number" 
-      id="consumption" 
-      name="consumption" 
-      min="0" 
-      max="999" 
-      maxlength="3" 
-      oninput="calcAll()" 
-      placeholder="أدخل كمية الاستهلاك (مثال: 15)"
-    >
-  </div>
-
-  <!-- تنبيه التجاوز -->
-  <div id="warning-message" class="alert-warning" style="display: none;"></div>
-
- <!-- بطاقة مخرجات النتائج لـ (الخطوة 2) -->
-<div class="result">
-  <div class="line">
-    <span>أجور المياه:</span>
-    <span id="waterOut">-</span>
-  </div>
-  <div class="line">
-    <span>أجور الصرف الصحي:</span>
-    <span id="sewageOut">-</span>
-  </div>
-  <div class="total">
-    <span>المجموع الكلي:</span>
-    <span id="totalOut">-</span>
-  </div>
-</div>
-
-  <!-- الشارات والتلميحات -->
-  <div id="statusBadge" class="badge-container"></div>
-  <p class="hint" id="flatFeeHint" style="display: none;">تنبيه: تطبيق شريحة المقطوعية للاستهلاك المنخفض.</p>
-  <p class="hint" id="marginalHint">أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.</p>
-</div>
+كمية الاستهلاك الشهرية
 <!-- ---------- الخطوة 3: مقارنة تكلفة الصهريج ---------- -->
 <div class="card fade-in">
   <h2>
