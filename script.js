@@ -458,7 +458,6 @@ function exportSettings() {
     alert('تعذّر تصدير الإعدادات.');
   }
 }
-
 /**
  * importSettings
  * يقرأ ملف JSON اختاره المستخدم، ويستعيد منه الإعدادات (الوضع، وتعديلات
@@ -487,6 +486,12 @@ function importSettings(event) {
         renderTariffTable();
       }
       calcAll();
+    } catch (e) {
+      logClientError(e.message, 'importSettings');
+      alert('ملف الإعدادات غير صالح.');
+    }
+  };
+  reader.readAsText(file);
 }
 
 
