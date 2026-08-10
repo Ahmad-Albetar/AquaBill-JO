@@ -279,92 +279,69 @@ function calcTankerOnly() {
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
+  // --- 1. التحقق وضبط الحدود العليا والدنيا للمدخلات ---
   const consumptionInput = document.getElementById('consumption');
+  if (consumptionInput && parseFloat(consumptionInput.value) > 500) {
+    consumptionInput.value = 500;
+  }
+
   const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
+  if (tankerCapInput && parseFloat(tankerCapInput.value) > 30) {
+    tankerCapInput.value = 30;
+  }
+
   const tankerPriceInput = document.getElementById('tankerPrice');
-  const warningElem = document.getElementById('warning-message');
+  if (tankerPriceInput && parseFloat(tankerPriceInput.value) > 150) {
+    tankerPriceInput.value = 150;
+  }
 
-  // 1. تقييد الإدخال بـ 5 خانات
-  [consumptionInput, tankerCapInput, tankerPriceInput].forEach(input => {
-    if (input && input.value && input.value.length > 5) {
-      input.value = input.value.slice(0, 5);
-    }
-  });
-
+  // --- 2. قراءة المدخلات ---
   const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
 
-  // 2. حالة الحقل الفارغ
-  if (rawInput === '') {
-    if (warningElem) warningElem.style.display = 'none';
-
-    document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
-    document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
+  // في حال كان المربع فارغاً تماماً (عند إفراغ الحقل)
+  if (!rawInput) {
+    document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
     document.getElementById('totalOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
 
     const flatFeeHint = document.getElementById('flatFeeHint');
     if (flatFeeHint) flatFeeHint.style.display = 'none';
 
-    document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
+    document.getElementById('marginalHint').textContent = '';
 
     const badge = document.getElementById('statusBadge');
     if (badge) badge.innerHTML = '';
-
-    document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
-    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
-    return;
+    
+    document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    return; // التوقف عن باقي الحسابات
   }
 
-  const consumptionVal = parseFloat(rawInput);
-
-  // 3. التحقق من الحد الأقصى (500 م³)
-  if (isNaN(consumptionVal) || consumptionVal > 500) {
-    if (warningElem) {
-      warningElem.textContent = '⚠️ تنبيه: الحد الأقصى المسموح لحساب الاستهلاك هو 500 م³.';
-      warningElem.style.display = 'block';
-    }
-
-    document.getElementById('waterOut').textContent = '-';
-    document.getElementById('sewageOut').textContent = '-';
-    document.getElementById('totalOut').textContent = '-';
-
-    const flatFeeHint = document.getElementById('flatFeeHint');
-    if (flatFeeHint) flatFeeHint.style.display = 'none';
-
-    document.getElementById('marginalHint').textContent = 'القيمة المدخلة تتجاوز النطاق المغطى في الحاسبة (500 م³).';
-
-    const badge = document.getElementById('statusBadge');
-    if (badge) {
-      badge.innerHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً يتجاوز 500 م³!</span>';
-    }
-
-    return;
-  } else {
-    if (warningElem) warningElem.style.display = 'none';
-  }
-
-  // 4. الحسابات الطبيعية
+  // --- 3. تحويل المدخل ورقم الحساب ---
   const n = sanitizeNumber(rawInput, 0);
+
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
   const total = water + sewage;
 
-  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
-  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+  document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
+  document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
   document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
 
   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
+    // يظهر التنبيه فقط إذا كانت القيمة المدخلة من 0 حتى 6
     flatFeeHint.style.display = (n <= 6) ? 'inline-block' : 'none';
   }
 
   const nextWater = costFor(n + 1, 'water') - water;
   const nextSewage = costFor(n + 1, 'sewage') - sewage;
   const marginal = nextWater + nextSewage;
-
+  
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
-  // 5. شارات تقييم الاستهلاك
+  // --- 4. شارة تقييم الاستهلاك ---
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
@@ -381,34 +358,26 @@ function calcAll() {
     } else {
       newHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً! افحص العداد والتسريبات فوراً</span>';
     }
-    badge.innerHTML = newHTML;
+
+    if (badge.innerHTML !== newHTML) {
+      badge.innerHTML = newHTML;
+    }
   }
 
-  // 6. مقارنة الصهريج
-  document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+  // --- 5. صهريج المياه مقارنة بالعداد ---
+  document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
-  const tankerPrice = parseFloat(tankerPriceInput?.value) || 0;
+  const tankerPrice = parseFloat(document.getElementById('tankerPrice')?.value) || 0;
   const tankerQty = parseFloat(tankerCapInput?.value) || 0;
+  const tankerPerM3 = (tankerPrice > 0 && tankerQty > 0) ? (tankerPrice / tankerQty) : 0;
+
+  document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 
+    ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}` 
+    : `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
 
   const boxNetwork = document.getElementById('boxNetwork');
   const boxTanker = document.getElementById('boxTanker');
   const recommendHint = document.getElementById('recommendHint');
-
-  if (tankerPrice > 500 || tankerQty > 100) {
-    document.getElementById('tankerMarginal').textContent = '-';
-    boxNetwork?.classList.remove('win');
-    boxTanker?.classList.remove('win');
-    if (recommendHint) {
-      recommendHint.textContent = '⚠️ قيم الصهريج المدخلة غير منطقية (السعر الأقصى 500 د، السعة القصوى 100 م³).';
-    }
-    return;
-  }
-
-  const tankerPerM3 = (tankerPrice > 0 && tankerQty > 0) ? (tankerPrice / tankerQty) : 0;
-
-  document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 
-    ? `${tankerPerM3.toFixed(2)} ${APP_CONFIG.currencyLabelAr}` 
-    : `0.00 ${APP_CONFIG.currencyLabelAr}`;
 
   if (tankerPerM3 > 0) {
     if (marginal < tankerPerM3) {
