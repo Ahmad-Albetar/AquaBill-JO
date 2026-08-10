@@ -121,27 +121,39 @@ header p{
   position: relative;
 }
 
-/* شارات الثقة الثلاث تحت وصف الترويسة */
-.trust-badges{
-  list-style: none;
+/* --- الشارات المحدثة (Hero Badges) --- */
+.hero-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: .5rem .7rem;
-  margin: .9rem 0 0;
-  padding: 0;
-  position: relative;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
 }
-.trust-badges li{
+
+.badge-pill {
   display: inline-flex;
   align-items: center;
-  gap: .3rem;
-  font-size: .72rem;
-  font-weight: 500;
-  color: #CFE6E0;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 4px 12px;
   border-radius: 20px;
-  padding: .3rem .65rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cfe6e0;
+  backdrop-filter: blur(4px);
+  transition: var(--transition-fast, all 0.2s ease);
+}
+
+.badge-pill:hover {
+  border-color: #7fd9c4;
+  transform: translateY(-1px);
+}
+
+/* ضبط التباين في حال استخدامها خارج الترويسة في الوضع الفاتح */
+:root[data-theme="light"] .badge-pill {
+  background-color: rgba(0, 0, 0, 0.04);
+  border-color: var(--border);
+  color: var(--ink);
 }
 .trust-badges svg{ width: 12px; height: 12px; flex: none; color: #7FD9C4; }
 
