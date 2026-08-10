@@ -1089,13 +1089,23 @@ main > .card:first-of-type table.tariff th {
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
 }
 
-/* شارة الرسالة التحذيرية أسفل الحقل */
+/* شارة الرسالة التحذيرية أسفل الحقل - الوضع الفاتح الافتراضي */
 .warning-badge {
   margin-top: 6px;
   padding: 6px 12px;
   font-size: 0.8rem;
-  color: #fca5a5;
-  background-color: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #991b1b; /* أحمر داكن عالي التباين وقابل للقراءة بوضوح */
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 8px;
+}
+
+/* شارة الرسالة التحذيرية أسفل الحقل - الوضع الداكن (Dark Mode) */
+:root[data-theme="dark"] .warning-badge,
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .warning-badge {
+    color: #fca5a5; /* أحمر وردي مريح ومضيء في الظلام */
+    background-color: rgba(239, 68, 68, 0.18);
+    border-color: rgba(239, 68, 68, 0.4);
+  }
 }
