@@ -278,7 +278,6 @@ function calcTankerOnly() {
 }
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
-// --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
   // قراءة حقل الاستهلاك وقيمته
   const consumptionInput = document.getElementById('consumption');
@@ -317,7 +316,7 @@ function calcAll() {
   const nextWater = costFor(n + 1, 'water') - water;
   const nextSewage = costFor(n + 1, 'sewage') - sewage;
   const marginal = nextWater + nextSewage;
-  
+
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
@@ -348,6 +347,7 @@ function calcAll() {
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
   const tankerPrice = parseFloat(document.getElementById('tankerPrice')?.value) || 0;
+  const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
   const tankerQty = parseFloat(tankerCapInput?.value) || 0;
   const tankerPerM3 = (tankerPrice > 0 && tankerQty > 0) ? (tankerPrice / tankerQty) : 0;
 
