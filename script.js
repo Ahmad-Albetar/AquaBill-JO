@@ -279,9 +279,26 @@ function calcTankerOnly() {
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
-  const rawInput = document.getElementById('consumption').value.trim();
+  // --- 1. التحقق وضبط الحدود العليا والدنيا للمدخلات ---
+  const consumptionInput = document.getElementById('consumption');
+  if (consumptionInput && parseFloat(consumptionInput.value) > 500) {
+    consumptionInput.value = 500;
+  }
 
-  // 1. في حال كان المربع فارغاً تماماً (عند فتح الصفحة أول مرة)
+  const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
+  if (tankerCapInput && parseFloat(tankerCapInput.value) > 30) {
+    tankerCapInput.value = 30;
+  }
+
+  const tankerPriceInput = document.getElementById('tankerPrice');
+  if (tankerPriceInput && parseFloat(tankerPriceInput.value) > 150) {
+    tankerPriceInput.value = 150;
+  }
+
+  // --- 2. قراءة المدخلات ---
+  const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
+
+  // في حال كان المربع فارغاً تماماً (عند إفراغ الحقل)
   if (!rawInput) {
     document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
     document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
@@ -294,10 +311,13 @@ function calcAll() {
 
     const badge = document.getElementById('statusBadge');
     if (badge) badge.innerHTML = '';
-    return; // التوقف عن الحساب والتحديث
+    
+    document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
+    return; // التوقف عن باقي الحسابات
   }
 
-  // 2. إذا قام المستخدم بإدخال رقم (بدء الحسابات الحالية)
+  // --- 3. تحويل المدخل ورقم الحساب ---
   const n = sanitizeNumber(rawInput, 0);
 
   const water = costFor(n, 'water');
@@ -320,7 +340,8 @@ function calcAll() {
   
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
- // --- شارة تقييم الاستهلاك ---
+
+  // --- 4. شارة تقييم الاستهلاك ---
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
@@ -343,11 +364,11 @@ function calcAll() {
     }
   }
 
-  // --- الخطوة 3: صهريج المياه ---
+  // --- 5. صهريج المياه مقارنة بالعداد ---
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
-  const tankerPrice = parseFloat(document.getElementById('tankerPrice').value) || 0;
-  const tankerQty = parseFloat(document.getElementById('tankerQty').value) || 0;
+  const tankerPrice = parseFloat(document.getElementById('tankerPrice')?.value) || 0;
+  const tankerQty = parseFloat(tankerCapInput?.value) || 0;
   const tankerPerM3 = (tankerPrice > 0 && tankerQty > 0) ? (tankerPrice / tankerQty) : 0;
 
   document.getElementById('tankerMarginal').textContent = tankerPerM3 > 0 
@@ -360,21 +381,20 @@ function calcAll() {
 
   if (tankerPerM3 > 0) {
     if (marginal < tankerPerM3) {
-      boxNetwork.classList.add('win');
-      boxTanker.classList.remove('win');
-      recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
+      boxNetwork?.classList.add('win');
+      boxTanker?.classList.remove('win');
+      if (recommendHint) recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
     } else {
-      boxTanker.classList.add('win');
-      boxNetwork.classList.remove('win');
-      recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
+      boxTanker?.classList.add('win');
+      boxNetwork?.classList.remove('win');
+      if (recommendHint) recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
     }
   } else {
-    boxNetwork.classList.remove('win');
-    boxTanker.classList.remove('win');
-    recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
+    boxNetwork?.classList.remove('win');
+    boxTanker?.classList.remove('win');
+    if (recommendHint) recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
   }
 }
-
 /* ==========================================================================
    7. THEME TOGGLE — التبديل اليدوي بين الوضع الفاتح والداكن
    ------------------------------------------------------------------------
