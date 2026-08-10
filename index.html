@@ -248,21 +248,21 @@
   <!-- تنبيه التجاوز -->
   <div id="warning-message" class="alert-warning" style="display: none;"></div>
 
-  <!-- مخرجات نتائج العداد -->
-  <div class="results-grid">
-    <div class="res-item">
-      <span class="lbl">أجور المياه:</span>
-      <span class="val" id="waterOut">-</span>
-    </div>
-    <div class="res-item">
-      <span class="lbl">أجور الصرف الصحي:</span>
-      <span class="val" id="sewageOut">-</span>
-    </div>
-    <div class="res-item total">
-      <span class="lbl">إجمالي الفاتورة المتوقعة:</span>
-      <span class="val" id="totalOut">-</span>
-    </div>
+ <!-- بطاقة مخرجات النتائج لـ (الخطوة 2) -->
+<div class="result">
+  <div class="line">
+    <span>أجور المياه:</span>
+    <span id="waterOut">-</span>
   </div>
+  <div class="line">
+    <span>أجور الصرف الصحي:</span>
+    <span id="sewageOut">-</span>
+  </div>
+  <div class="total">
+    <span>المجموع الكلي:</span>
+    <span id="totalOut">-</span>
+  </div>
+</div>
 
   <!-- الشارات والتلميحات -->
   <div id="statusBadge" class="badge-container"></div>
