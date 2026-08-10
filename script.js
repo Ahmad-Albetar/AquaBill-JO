@@ -590,7 +590,7 @@ function initFadeInCards() {
   }
 
   renderTariffTable();
-  calcAll();
+  // calcAll();
   initScrollProgress();
   initFadeInCards();
 
