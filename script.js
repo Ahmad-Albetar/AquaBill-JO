@@ -279,47 +279,26 @@ function calcTankerOnly() {
 
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
-  // --- 1. التحقق وضبط الحدود العليا والدنيا للمدخلات ---
+  // قراءة حقل الاستهلاك وقيمته
   const consumptionInput = document.getElementById('consumption');
-  if (consumptionInput && parseFloat(consumptionInput.value) > 500) {
-    consumptionInput.value = 500;
+  const rawInput = consumptionInput?.value || '';
+  const consumptionVal = parseFloat(rawInput) || 0;
+
+  // إظهار أو إخفاء التنبيه عند تجاوز 500 م³ دون تغيير القيمة
+  const warningElem = document.getElementById('warning-message');
+  if (consumptionVal > 500) {
+    if (warningElem) {
+      warningElem.textContent = '⚠️ تنبيه: الاستهلاك المدخل مرتفع جداً (أعلى من 500 م³).';
+      warningElem.style.display = 'block';
+    }
+  } else {
+    if (warningElem) {
+      warningElem.style.display = 'none';
+    }
   }
 
-  const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
-  if (tankerCapInput && parseFloat(tankerCapInput.value) > 30) {
-    tankerCapInput.value = 30;
-  }
-
-  const tankerPriceInput = document.getElementById('tankerPrice');
-  if (tankerPriceInput && parseFloat(tankerPriceInput.value) > 150) {
-    tankerPriceInput.value = 150;
-  }
-
-  // --- 2. قراءة المدخلات ---
-  const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
-
-  // في حال كان المربع فارغاً تماماً (عند إفراغ الحقل)
-  if (!rawInput) {
-    document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-    document.getElementById('sewageOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-    document.getElementById('totalOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr}`;
-
-    const flatFeeHint = document.getElementById('flatFeeHint');
-    if (flatFeeHint) flatFeeHint.style.display = 'none';
-
-    document.getElementById('marginalHint').textContent = '';
-
-    const badge = document.getElementById('statusBadge');
-    if (badge) badge.innerHTML = '';
-    
-    document.getElementById('networkMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-    document.getElementById('tankerMarginal').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
-    return; // التوقف عن باقي الحسابات
-  }
-
-  // --- 3. تحويل المدخل ورقم الحساب ---
+  // --- 3. تحويل المدخل والحسابات ---
   const n = sanitizeNumber(rawInput, 0);
-
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
   const total = water + sewage;
