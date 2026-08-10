@@ -284,7 +284,7 @@ function calcAll() {
   const tankerPriceInput = document.getElementById('tankerPrice');
   const warningElem = document.getElementById('warning-message');
 
-  // 1. قص المدخلات فوراً إذا تجاوزت 5 خانات في كافة الحقول
+  // 1. اقتطاع أي إدخال يتجاوز 5 خانات فوراً أثناء الكتابة
   [consumptionInput, tankerCapInput, tankerPriceInput].forEach(input => {
     if (input && input.value.length > 5) {
       input.value = input.value.slice(0, 5);
@@ -293,8 +293,8 @@ function calcAll() {
 
   const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
 
-  // 2. معالجة الحقل الفارغ أو الأصفار المتكررة فقط (0000) دون حظر رقم 0 الصريح
-  if (rawInput === '' || /^0{2,}$/.test(rawInput)) {
+  // 2. حالة حقل الاستهلاك فارغ تماماً
+  if (rawInput === '') {
     if (warningElem) warningElem.style.display = 'none';
 
     document.getElementById('waterOut').textContent = `0.00 ${APP_CONFIG.currencyLabelAr[0]}`;
@@ -316,7 +316,7 @@ function calcAll() {
 
   const consumptionVal = parseFloat(rawInput);
 
-  // 3. التحقق من المنطقية للاستهلاك (حتى 500 م³)
+  // 3. التحقق من الحد الأقصى للاستهلاك (حتى 500 م³)
   if (consumptionVal > 500) {
     if (warningElem) {
       warningElem.textContent = '⚠️ تنبيه: الحد الأقصى المسموح لحساب الاستهلاك هو 500 م³.';
@@ -337,12 +337,14 @@ function calcAll() {
       badge.innerHTML = '<span class="badge critical">💥 تحذير: استهلاك مرتفع جداً يتجاوز 500 م³!</span>';
     }
 
+    document.getElementById('networkMarginal').textContent = '-';
+    document.getElementById('tankerMarginal').textContent = '-';
     return;
   } else {
     if (warningElem) warningElem.style.display = 'none';
   }
 
-  // 4. الحسابات الاعتيادية للعداد
+  // 4. الحسابات الأساسية للعداد
   const n = sanitizeNumber(rawInput, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
@@ -364,7 +366,7 @@ function calcAll() {
   document.getElementById('marginalHint').textContent =
     `المتر القادم (رقم ${Math.ceil(n) + 1}) سيكلفك تقريباً ${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr} إضافية.`;
 
-  // 5. شارات حالة الاستهلاك
+  // 5. شارة تقييم الاستهلاك
   const badge = document.getElementById('statusBadge');
   if (badge) {
     let newHTML = '';
@@ -387,7 +389,7 @@ function calcAll() {
     }
   }
 
-  // 6. التحقق من منطقية الصهريج (السعة حتى 100 م³ والسعر حتى 500 دينار)
+  // 6. معالجة مدخلات الصهريج والمقارنة
   document.getElementById('networkMarginal').textContent = `${marginal.toFixed(2)} ${APP_CONFIG.currencyLabelAr[0]}`;
 
   const tankerPrice = parseFloat(tankerPriceInput?.value) || 0;
@@ -397,12 +399,13 @@ function calcAll() {
   const boxTanker = document.getElementById('boxTanker');
   const recommendHint = document.getElementById('recommendHint');
 
+  // التحقق من منطقية الصهريج (سعر حتى 500 د، وسعة حتى 100 م³)
   if (tankerPrice > 500 || tankerQty > 100) {
     document.getElementById('tankerMarginal').textContent = '-';
     boxNetwork?.classList.remove('win');
     boxTanker?.classList.remove('win');
     if (recommendHint) {
-      recommendHint.textContent = '⚠️ قيم الصهريج غير منطقية (الحد الأقصى للسعر 500 د والسعة 100 م³).';
+      recommendHint.textContent = '⚠️ قيم الصهريج المدخلة غير منطقية (السعر الأقصى 500 د، السعة القصوى 100 م³).';
     }
     return;
   }
