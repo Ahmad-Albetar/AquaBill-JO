@@ -1114,16 +1114,16 @@ main > .card:first-of-type table.tariff th {
   white-space: nowrap; /* يمنع نزول العبارة لسطر جديد */
   display: inline-block;
 }
-
-/* ضبط محاذاة القيمة بداخل بوكس المجموع */
+/*  */
+/* تنسيق صندوق المجموع الكلي: أصغر حجمًا وأفقي بالكامل */
 .res-item.total .val {
   display: flex;
-  align-items: baseline;
-  justify-content: flex-end;
-  gap: 4px;
-  flex-wrap: nowrap;
+  align-items: baseline; /* محاذاة النص على السطر الأساسي للرقم */
+  justify-content: flex-end; /* النص لليمين */
+  gap: 2px; /* تقليل المسافة بين العناصر */
+  flex-wrap: nowrap; /* يمنع نزول النص لسطر جديد */
 }
-
+/*  */
 
 /* ============================================================
    2. تنسيق الرسائل التحذيرية أسفل الحقول (Input Warnings)
