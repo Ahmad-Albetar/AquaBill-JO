@@ -343,19 +343,20 @@ function calcAll() {
     if (warningElem) warningElem.style.display = 'none';
   }
 
-  // 5. الحسابات الطبيعية للعداد (من 0 إلى 500 م³)
+  // 4. الحسابات الطبيعية للعداد (من 0 إلى 500 م³)
   const n = sanitizeNumber(rawInput, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
   const total = water + sewage;
 
-  // وسم المقطوعية بجانب المجموع في حال كان الاستهلاك من 0 إلى 6 م³
-  const flatFeeTag = (n >= 0 && n <= 6) ? ' <small style="font-size: 0.85em; opacity: 0.85;">(مقطوعية)</small>' : '';
+  // إضافة عبارة (رسوم مقطوعية) بخط أبيض باهت بجانب السعر عند الاستهلاك المنخفض (0-6 م³)
+  const flatFeeTag = (n >= 0 && n <= 6) ? ' <span class="flat-tag">(رسوم مقطوعية)</span>' : '';
 
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+  
+  // عرض المجموع الكلي مع النص المضاف بنفس السطر
   document.getElementById('totalOut').innerHTML = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}${flatFeeTag}`;
-
   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
     flatFeeHint.style.display = (n <= 6) ? 'inline-block' : 'none';
