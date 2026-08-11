@@ -2424,13 +2424,6 @@ main,
 
 /* ============================================================
    1. تنسيق صندوق المجموع الكلي وشارة (رسوم مقطوعية)
-   ============================================================ */
-/* ============================================================
-   تنسيق صندوق المجموع الكلي وشارة (رسوم مقطوعية)
-   ============================================================ */
-
-/* حاوية السطر: توزيع العناصر بين اليمين واليسار بالـ RTL */
-/* ============================================================
    ضبط لون شارة (رسوم مقطوعية) للوضع الفاتح (Light Mode)
    ============================================================ */
 
@@ -2482,7 +2475,7 @@ div.res-item.total span.val {
   font-weight: bold !important;
 }
 /* ============================================================
-   تنسيقات الوضع الفاتح وتوازن البطاقات (كود موحد وشامل)
+   تنسيقات الوضع الفاتح وفصل جميع البطاقات (كود موحد وشامل)
    ============================================================ */
 
 /* 1. الترويسة (Header) بالوضع الفاتح */
@@ -2543,29 +2536,23 @@ body.light-theme svg.wave path {
   fill: var(--bg, #F2F6F5) !important;
 }
 
-/* 3. توحيد المسافات وفصل خلفيات البطاقات عن بعضها */
-main, 
-.app-container, 
-body > .container,
-.wrap {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 1.8rem !important; /* مسافة فاصلة بين كل كارت واخر */
-  padding-top: 1.5rem !important;
-}
-
+/* 3. فرض الهامش السفلي على جميع البطاقات لضمان انفصال البطاقات 2 و3 و4 */
 .card {
   margin-top: 0 !important;
-  margin-bottom: 0 !important;
+  margin-bottom: 1.75rem !important; /* فاصل واضح ومضمون بين كل بطاقة والتي تليها */
   border-radius: 16px !important;
   box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04) !important;
 }
 
 .card:first-of-type {
-  margin-top: 0.5rem !important;
+  margin-top: 0.5rem !important; /* إبعاد البطاقة الأولى عن الترويسة */
 }
 
-/* دمج جدول الأسعار داخل خلفية البطاقة الأولى بصرياً */
+.card:last-of-type {
+  margin-bottom: 0 !important;
+}
+
+/* دمج جدول الأسعار داخل خلفية البطاقة الأولى */
 .card:first-of-type table,
 .card:first-of-type .table-responsive,
 .card:first-of-type .tier-table {
@@ -2582,7 +2569,7 @@ body.light-theme .card:first-of-type table {
   border-color: rgba(0, 0, 0, 0.08) !important;
 }
 
-/* 4. رسائل التحذير */
+/* 4. رسالة التحذير أسفل حقل الإدخال */
 .warning-badge, 
 #warning-message {
   margin-top: 12px !important;
@@ -2600,15 +2587,10 @@ body.light-theme .card:first-of-type table {
   border-color: rgba(239, 68, 68, 0.4) !important;
 }
 
-/* 5. استجابة الهواتف المحمولة */
+/* 5. استجابة شاشات الهاتف المحمول */
 @media (max-width: 600px) {
-  main, 
-  .app-container, 
-  body > .container,
-  .wrap {
-    gap: 1.25rem !important;
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
+  .card {
+    margin-bottom: 1.25rem !important;
   }
 
   .card:first-of-type {
