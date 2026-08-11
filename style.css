@@ -1110,7 +1110,7 @@ main > .card:first-of-type table.tariff th {
   color: rgba(255, 255, 255, 0.65); /* أبيض باهت ومريح للعين */
   font-size: 0.65em;
   font-weight: normal;
-  margin-right: 6px;
+  margin-right: 3px;
   white-space: nowrap; /* يمنع نزول العبارة لسطر جديد */
   display: inline-block;
 }
