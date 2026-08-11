@@ -320,7 +320,8 @@ function calcAll() {
   // 4. فحص تجاوز الـ 500 م³
   if (isNaN(consumptionVal) || consumptionVal > 500) {
     if (warningElem) {
-      warningElem.textContent = '⚠️ تنبيه: الاستهلاك المدخل أعلى من 500 م³، هذا رقم كبير جداً خلال شهر واحد!';
+      warningElem.textContent = 
+       '⚠️ تنبيه: الاستهلاك المدخل أعلى من 500 م³، هذا رقم كبير جداً خلال شهر واحد!';
       warningElem.style.display = 'block';
     }
 
