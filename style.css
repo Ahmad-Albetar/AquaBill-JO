@@ -1124,7 +1124,7 @@ main > .card:first-of-type table.tariff th {
   white-space: nowrap !important;
 }
 
-/* تنسيق عبارة (رسوم مقطوعية) باللون الأبيض الباهت */
+/* لون وحجم عبارة (رسوم مقطوعية) باللون الأبيض الباهت */
 .flat-tag {
   color: rgba(255, 255, 255, 0.60) !important;
   font-size: 0.75em !important;
