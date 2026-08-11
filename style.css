@@ -1084,10 +1084,10 @@ main > .card:first-of-type table.tariff th {
 .hero-badge svg,
 header svg,
 main svg {
-  max-width: 28px !important;
-  max-height: 28px !important;
-  width: 28px !important;
-  height: 28px !important;
+  max-width: 25px !important;
+  max-height: 25px !important;
+  width: 25px !important;
+  height: 25px !important;
   flex-shrink: 0 !important;
 }
 
