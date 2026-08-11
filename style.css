@@ -1103,6 +1103,31 @@ main > .card:first-of-type table.tariff th {
   border-color: #ef4444 !important;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
 }
+/* ============================================================
+   1. تنسيق شارة (رسوم مقطوعية) باللون الأبيض الباهت
+   ============================================================ */
+.flat-tag {
+  color: rgba(255, 255, 255, 0.65); /* أبيض باهت ومريح للعين */
+  font-size: 0.65em;
+  font-weight: normal;
+  margin-right: 6px;
+  white-space: nowrap; /* يمنع نزول العبارة لسطر جديد */
+  display: inline-block;
+}
+
+/* ضبط محاذاة القيمة بداخل بوكس المجموع */
+.res-item.total .val {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+
+/* ============================================================
+   2. تنسيق الرسائل التحذيرية أسفل الحقول (Input Warnings)
+   ============================================================ */
 
 /* شارة الرسالة التحذيرية أسفل الحقل - الوضع الفاتح الافتراضي */
 .warning-badge {
