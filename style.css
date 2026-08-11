@@ -459,26 +459,6 @@ h2 .icn-tip {
 /* ============================================================
    فصل البطاقات عن بعضها على الجوال وحل التداخل
    ============================================================ */
-.card {
-  margin-top: 1.2rem !important; /* مسافة فاصلة علوية بدلاً من التراكب السالب */
-}
-
-/* البطاقة الأولى فقط تتداخل خفيفاً مع الترويسة */
-.card:first-of-type {
-  margin-top: -1.5rem !important;
-}
-
-@media (max-width: 600px) {
-  .card {
-    margin-top: 1rem !important;
-    padding: 1rem !important; /* تقليل الحشوة قليلاً لشاشات الجوال */
-  }
-  
-  .card:first-of-type {
-    margin-top: -1rem !important;
-  }
-}
-
 
 /* ==========================================================================
    6. BUTTONS — أزرار القفل، تبديل الوضع، المشاركة، وتثبيت PWA
@@ -1202,6 +1182,47 @@ div.res-item.total span.val {
   font-size: 1.15rem !important;
   white-space: normal !important;
   font-weight: bold !important;
+}
+/* ============================================================
+   طبقة تحسين توازن البطاقات والمساحات (تنسيق إضافي بدون تعديل الأصل)
+   ============================================================ */
+
+/* 1. ضبط الحاوية الرئيسية للبطاقات لضمان التدفق والتباعد المتناسق */
+main, 
+.container, 
+.app-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important; /* مسافة ثابتة ومتناسقة بين جميع الكروت */
+}
+
+/* 2. تصحيح الهوامش الخاصة بالبطاقات لمنع التراكب والتداخل */
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05),
+              0 2px 6px -1px rgba(0, 0, 0, 0.03) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* 3. التعامل الخاص مع البطاقة الأولى برفق لربطها بالهيدر دون تداخل */
+.card:first-of-type {
+  margin-top: 0.5rem !important;
+}
+
+/* 4. استجابة مخصصة لشاشات الجوال لراحة العين وتناسق الحواف */
+@media (max-width: 600px) {
+  main, 
+  .container, 
+  .app-container {
+    gap: 1.2rem !important; /* تقليل المسافة قليلاً لتناسب الشاشات الصغيرة */
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .card {
+    border-radius: 12px !important;
+  }
 }
 /* ============================================================
    تحسين ألوان العناوين والوسوم في الوضع الفاتح (Light Mode)
