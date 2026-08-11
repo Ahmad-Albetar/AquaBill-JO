@@ -388,6 +388,10 @@ h2 .icn-tip {
 }
 
 /* --- تحسين وتجميل بطاقة النتيجة (الخطوة 2) --- */
+/* ==========================================================================
+   نتائج الفاتورة وصندوق المجموع الكلي
+   ========================================================================== */
+
 .result {
   background: var(--teal-light);
   border: 1px solid rgba(11, 79, 69, 0.12);
@@ -396,6 +400,7 @@ h2 .icn-tip {
   margin-top: 1rem;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
 }
+
 .result .line {
   display: flex;
   justify-content: space-between;
@@ -403,24 +408,34 @@ h2 .icn-tip {
   padding: .3rem 0;
   color: var(--ink-soft);
 }
-.result .total {
+
+/* --- تعديل وتصغير صندوق المجموع الكلي --- */
+.result .total,
+.res-item.total {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   border-top: 1.5px dashed rgba(11, 79, 69, 0.2);
-  margin-top: .6rem;
-  padding-top: .75rem;
+  margin-top: 8px;          /* تقليل المسافة العلويّة */
+  padding: 8px 12px;        /* تقليل الحشوة الداخلية للصندوق */
+  font-size: 1.05rem;       /* حجم الخط النصي الرئيسي */
 }
-.result .total span:first-child { 
+
+/* عنوان "المجموع الكلي:" */
+.result .total span:first-child,
+.res-item.total .lbl { 
   font-weight: 700; 
   font-size: 1rem; 
   color: var(--accent-strong); 
 }
-.result .total span:last-child { 
-  font-weight: 900; 
-  font-size: 1.75rem; /* تكبير خط إجمالي الفاتورة ليكون واضحاً وجذاباً */
+
+/* القيمة الرقمية للمجموع (السعر) */
+.result .total span:last-child,
+.res-item.total .val { 
+  font-weight: 800; 
+  font-size: 1.35rem;       /* تصغير حجم رقم السعر ليكون متناسقاً وأنيقاً */
   color: var(--accent-strong); 
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
 }
 
 /* صناديق مقارنة العداد بالصهريج (الخطوة 3) */
