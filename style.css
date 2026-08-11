@@ -175,8 +175,13 @@ h2 .titletext{ font-size: 1.04rem; font-weight: 700; color: var(--accent-strong)
 /* ==========================================================================
    4. LAYOUT — الحاوية الرئيسية، الترويسة، المحتوى، التذييل
    ========================================================================== */
-
+:root[data-theme="light"] header, body.light-theme header { ... }
+:root[data-theme="light"] header h1, body.light-theme header h1 { ... }
+:root[data-theme="light"] header p, body.light-theme header p { ... }
+:root[data-theme="light"] svg.wave path, body.light-theme svg.wave path { ... } 
+/* #########################################################################################                                                                     #########1111111
 /* الحاوية الرئيسية: تحدد أقصى عرض للمحتوى وتوسطه بالصفحة */
+
 .wrap{
   max-width: 640px;
   margin: 0 auto;
@@ -187,6 +192,7 @@ h2 .titletext{ font-size: 1.04rem; font-weight: 700; color: var(--accent-strong)
 /* ملاحظة: خلفية الترويسة ثابتة دائماً بلون العلامة التجارية الداكن،
    بغض النظر عن الوضع الفاتح/الداكن العام للصفحة، فلا تتأثر بتبديل الوضع */
 /* ---------- الترويسة المحدثة (Header) ---------- */
+
 header {
   background: linear-gradient(135deg, #083932 0%, #0B4F45 50%, #0E5D51 100%);
   color: #fff;
@@ -307,6 +313,18 @@ footer a{ color: var(--accent-strong); }
 /* ==========================================================================
    5. CARDS — بطاقات الأقسام الأربعة
    ========================================================================== */
+
+
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 1.75rem !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.08) !important;
+}
+.card:first-of-type { margin-top: 0.5rem !important; }
+.card:last-of-type { margin-bottom: 0 !important; }
+/* /* #########################################################################################                                                                     #########2222222 */
+
 
 .card {
   background: var(--card);
@@ -533,6 +551,17 @@ input[type=number]:focus{
 /* ==========================================================================
    8. TABLES — جدول التعرفة
    ========================================================================== */
+.card:first-of-type table,
+.card:first-of-type .table-responsive,
+.card:first-of-type .tier-table {
+  background: transparent !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-top: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+/* /* #########################################################################################                                                                     #########333333333 */
+
 table.tariff{
   width: 100%;
   border-collapse: collapse;
@@ -582,6 +611,12 @@ table.tariff input[readonly]{
   header{ border-radius: 20px; }
   .card{ margin-top: 1.1rem; }
   .card:first-of-type{ margin-top: 1.1rem; }
+}
+/* /* #########################################################################################                                                                     #########5555555555*/
+
+@media (max-width: 600px) {
+  .card { margin-bottom: 1.25rem !important; }
+  .card:first-of-type { margin-top: 0.25rem !important; }
 }
 
 
@@ -744,6 +779,10 @@ ul.tips li{ margin-bottom: .55rem; }
   opacity: .7;
   margin-top: 1rem;
 }
+/* /* #########################################################################################                                                                     #########444444444*/
+
+.warning-badge, #warning-message { ... }
+:root[data-theme="dark"] .warning-badge { ... }
 
 
 /* ==========================================================================
