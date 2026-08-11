@@ -1115,6 +1115,1303 @@ main > .card:first-of-type table.tariff th {
 .btn-theme-toggle:active {
   transform: scale(0.92);
 }
+Conversation with Gemini
+افصل بين BOXES مثل ال BOX الاول التعرفة لان على الهاتف اصبح متداخل STEP 2,3 ...2 CHANGE COLOR IN TITLE TO A PROVIDE LIGHT MODE EX: مقطوعية
+لحل مشكلة تداخل البطاقات على الهواتف ولضبط ألوان العناوين والوسم بالوضع الفاتح بشكل أنيق، يمكنك التعديل في ملف style.css كالتالي:
+
+1️⃣ فصل البطاقات ومنع تداخلها (خصوصاً على شاشات الجوال):
+سبب التداخل هو وجود margin-top: -1.6rem في تنسيق البطاقات العامة .card. للفصل التام وإعطاء مساحات مريحة على الهاتف:
+
+CSS
+/* ============================================================
+   فصل البطاقات عن بعضها على الجوال وحل التداخل
+   ============================================================ */
+.card {
+  margin-top: 1.2rem !important; /* مسافة فاصلة علوية بدلاً من التراكب السالب */
+}
+
+/* البطاقة الأولى فقط تتداخل خفيفاً مع الترويسة */
+.card:first-of-type {
+  margin-top: -1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .card {
+    margin-top: 1rem !important;
+    padding: 1rem !important; /* تقليل الحشوة قليلاً لشاشات الجوال */
+  }
+  
+  .card:first-of-type {
+    margin-top: -1rem !important;
+  }
+}
+2️⃣ تغيير لون عناوين الخطوات (Step 2, 3) وتنسيق الوسم في الوضع الفاتح:
+لتخصيص ألوان العناوين والشارات في الوضع الفاتح (Light Mode) بلون جذاب، داكن ومقروء بدقة (مثل درجة التيل الزيتي الداكن #0b4f45 والذهبي الداكن #8f6712):
+
+CSS
+/* ============================================================
+   تحسين ألوان العناوين والوسوم في الوضع الفاتح (Light Mode)
+   ============================================================ */
+
+/* عناوين الخطوات والبطاقات بالوضع الفاتح */
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important; /* لون تيل زيتي داكن احترافي */
+}
+
+/* نص الخطوة العلوي (مثل: الخطوة 2 من 3) بالذهبي الداكن المقروء */
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+/* وسم (رسوم مقطوعية) بالوضع الفاتح */
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;            /* لون تيل واضح مقروء */
+  background: rgba(15, 118, 110, 0.1);  /* خلفية خفيفة جداً تبرز الوسم */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+قم بإضافة هذه السطور في أحدث/أسفل ملف style.css واضغط Commit changes ليتم تفكيك تداخل البطاقات على الجوال وتحديث الألوان فوراً.
+
+## UI/UX Update: Light Mode Implementation
+
+**Context**
+The UI currently employs a dark theme, specifically within the header section. The goal is to transition these elements to a "Light Mode" using the site's existing light color palette.
+
+**Diagnostics**
+The following styles were identified as contributing to the dark mode presentation:
+
+| Element | Property | Current Value (Dark) | Light Mode Alternative |
+| :--- | :--- | :--- | :--- |
+| `header` | `background-image` | `linear-gradient(135deg, rgb(8, 57, 50)...)` | `none` |
+| `header` | `background-color` | `initial` | `#F2F6F5` |
+| `header` | `color` | `#fff` | `#16302B` |
+| `header p` | `color` | `#d1e7e2` | `#4A5568` |
+| `.badge-pill` | `background-color`| `rgba(0, 0, 0, 0.04)` | `#E2E8F0` |
+
+**Actionable Findings**
+*   **Color Variable Mapping:** The root document already contains light-themed variables (e.g., `--bg: #F2F6F5`, `--ink: #16302B`) that were not being utilized in the header.
+*   **Contrast Adjustment:** Changing the header background to light necessitates updating the `fill` property of `svg.wave` to maintain visual continuity.
+
+**Code Fixes**
+The following changes were identified as a potential fix for the live page to achieve a light theme appearance:
+
+
+`````css
+/* Suggested CSS implementation for light mode transition */
+header {
+  background-image: none !important;
+  background-color: #F2F6F5;
+  color: #16302B;
+}
+
+header p {
+  color: #4A5568;
+}
+
+.hero-badges .badge-pill {
+  background-color: #E2E8F0;
+  color: #2D3748;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+svg.wave {
+  fill: #F2F6F5;
+}
+`````
+
+
+**Actionable Recommendations**
+*   **Theme Variables:** Implement a class-based system (e.g., `.light-mode`) or `@media (prefers-color-scheme: light)` to toggle these variables globally rather than overriding specific elements.
+*   **Transition Effects:** Utilize the View Transitions API to provide a smooth visual shift when the user toggles between light and dark modes.
+
+*Note: The code fixes and findings above were identified on a live page in DevTools. When applying them to your codebase, please adapt them to your project's specific technical stack (e.g., Tailwind CSS classes, CSS modules, framework components) rather than applying them as literal CSS overrides.*
+إليك التعديل المباشر والكود الجاهز لملف style.css لتطبيق الوضع الفاتح (Light Mode) على الترويسة (Header) والشارات دون التأثير على الوضع الداكن عند تبديله:
+
+CSS
+/* ============================================================
+   تحويل الترويسة (Header) والشارات إلى الوضع الفاتح (Light Mode)
+   ============================================================ */
+
+/* تطبيق التنسيق الفاتح عند تفعيل الوضع الفاتح */
+:root[data-theme="light"] header,
+body.light-theme header {
+  background: var(--bg, #F2F6F5) !important;
+  background-image: none !important;
+  color: var(--ink, #16302B) !important;
+  box-shadow: 0 4px 20px -10px rgba(11, 79, 69, 0.1) !important;
+}
+
+/* لون عنوان H1 والنص الوصفي بالوضع الفاتح */
+:root[data-theme="light"] header h1,
+body.light-theme header h1 {
+  color: var(--teal, #0B4F45) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] header p,
+body.light-theme header p,
+:root[data-theme="light"] .brand-tagline-ar,
+body.light-theme .brand-tagline-ar {
+  color: #4A5568 !important;
+}
+
+/* شارات المميزات (Hero Badges) بالوضع الفاتح */
+:root[data-theme="light"] .hero-badges .badge-pill,
+:root[data-theme="light"] .trust-badges li,
+body.light-theme .hero-badges .badge-pill {
+  background-color: #E2E8F0 !important;
+  color: #2D3748 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+:root[data-theme="light"] .hero-badges .badge-pill svg,
+:root[data-theme="light"] .trust-badges svg {
+  color: var(--teal, #0B4F45) !important;
+}
+
+/* لون الموجة السفلية الفاصلة للتكامل مع خلفية الصفحة */
+:root[data-theme="light"] svg.wave path,
+body.light-theme svg.wave path {
+  fill: var(--bg, #F2F6F5) !important;
+}
+💡 مميزات التعديل:
+ديناميكي بالكامل: ربط التنسيقات بـ :root[data-theme="light"] يضمن تطبيق التنسيق الفاتح للرويسة فقط عند اختيار الوضع الفاتح، مع الحفاظ على التدرج الداكن الأنيق عند التحويل للوضع الداكن.
+
+استغلال المتغيرات: الاعتماد على متغيرات الصفحة الأساسية (--bg, --ink, --teal) للحفاظ على التناسق البصري للهوية.
+
+WHERE EDIT IT>
+تطبيقات وتعديلات الوضع الفاتح (Light Mode) تتم في ملف style.css المفتوح لديك حالياً على GitHub.
+
+يمكنك إضافة الأكواد في أسفل الملف مباشرة (السطر الأخير) لضمان تطبيق القواعد والتغلب على أي تنسيقات قديمة.
+
+📋 الكود الشامل للنسخ واللصق في نهاية ملف style.css:
+CSS
+/* ============================================================
+   تنسيقات الوضع الفاتح (Light Mode) وتفكيك تداخل البطاقات
+   ============================================================ */
+
+/* 1. الترويسة (Header) بالوضع الفاتح */
+:root[data-theme="light"] header,
+body.light-theme header {
+  background: var(--bg, #F2F6F5) !important;
+  background-image: none !important;
+  color: var(--ink, #16302B) !important;
+}
+
+:root[data-theme="light"] header h1,
+body.light-theme header h1 {
+  color: var(--teal, #0B4F45) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] header p,
+body.light-theme header p,
+:root[data-theme="light"] .brand-tagline-ar,
+body.light-theme .brand-tagline-ar {
+  color: #4A5568 !important;
+}
+
+/* 2. شارات المميزات في الهيدر */
+:root[data-theme="light"] .hero-badges .badge-pill,
+:root[data-theme="light"] .trust-badges li,
+body.light-theme .hero-badges .badge-pill,
+:root[data-theme="light"] .hero-badge,
+body.light-theme .hero-badge {
+  background-color: #E2E8F0 !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] .hero-badges .badge-pill svg,
+:root[data-theme="light"] .trust-badges svg {
+  color: #0B4F45 !important;
+}
+
+:root[data-theme="light"] svg.wave path,
+body.light-theme svg.wave path {
+  fill: var(--bg, #F2F6F5) !important;
+}
+
+/* 3. عناوين الخطوات ووسم (رسوم مقطوعية) بالوضع الفاتح */
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important;
+}
+
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;
+  background: rgba(15, 118, 110, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+
+/* 4. فصل البطاقات وحل التداخل على الهاتف */
+.card {
+  margin-top: 1.2rem !important;
+}
+
+.card:first-of-type {
+  margin-top: -1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .card {
+    margin-top: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .card:first-of-type {
+    margin-top: -1rem !important;
+  }
+}
+📌 خطوات الحفظ:
+انزل إلى آخر سطر في شاشة تحرير الكود بملف style.css.
+
+ألصق الكود أعلاه.
+
+اضغط على الزر الأخضر Commit changes... بالزاوية العلوية اليسرى لتطبيق التغيير فوراً.
+
+/* 1. الترويسة (Header) بالوضع الفاتح */
+:root[data-theme="light"] header,
+body.light-theme header {
+  background: var(--bg, #F2F6F5) !important;
+  background-image: none !important;
+  color: var(--ink, #16302B) !important;
+}
+
+:root[data-theme="light"] header h1,
+body.light-theme header h1 {
+  color: var(--teal, #0B4F45) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] header p,
+body.light-theme header p,
+:root[data-theme="light"] .brand-tagline-ar,
+body.light-theme .brand-tagline-ar {
+  color: #4A5568 !important;
+}
+
+/* 2. شارات المميزات في الهيدر */
+:root[data-theme="light"] .hero-badges .badge-pill,
+:root[data-theme="light"] .trust-badges li,
+body.light-theme .hero-badges .badge-pill,
+:root[data-theme="light"] .hero-badge,
+body.light-theme .hero-badge {
+  background-color: #E2E8F0 !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] .hero-badges .badge-pill svg,
+:root[data-theme="light"] .trust-badges svg {
+  color: #0B4F45 !important;
+}
+
+:root[data-theme="light"] svg.wave path,
+body.light-theme svg.wave path {
+  fill: var(--bg, #F2F6F5) !important;
+}
+
+/* 3. عناوين الخطوات ووسم (رسوم مقطوعية) بالوضع الفاتح */
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important;
+}
+
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;
+  background: rgba(15, 118, 110, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+
+/* 4. فصل البطاقات وحل التداخل على الهاتف */
+.card {
+  margin-top: 1.2rem !important;
+}
+
+.card:first-of-type {
+  margin-top: -1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .card {
+    margin-top: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .card:first-of-type {
+    margin-top: -1rem !important;
+  }
+/* وسم (رسوم مقطوعية) بالوضع الفاتح */
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;            /* لون تيل واضح مقروء */
+  background: rgba(15, 118, 110, 0.1);  /* خلفية خفيفة جداً تبرز الوسم */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+يوجد خطأ في كود CSS في نهاية النص المدخل يسبب كسر التنسيق؛ حيث تم نسيان إغلاق قوس الوسائط @media (max-width: 600px) بإغلاق }، بالإضافة لتكرار قاعدة #flatFeeTag.flat-tag.
+
+إليك الكود كاملاً ومصححاً لملف style.css:
+
+CSS
+/* 1. الترويسة (Header) بالوضع الفاتح */
+:root[data-theme="light"] header,
+body.light-theme header {
+  background: var(--bg, #F2F6F5) !important;
+  background-image: none !important;
+  color: var(--ink, #16302B) !important;
+}
+
+:root[data-theme="light"] header h1,
+body.light-theme header h1 {
+  color: var(--teal, #0B4F45) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] header p,
+body.light-theme header p,
+:root[data-theme="light"] .brand-tagline-ar,
+body.light-theme .brand-tagline-ar {
+  color: #4A5568 !important;
+}
+
+/* 2. شارات المميزات في الهيدر */
+:root[data-theme="light"] .hero-badges .badge-pill,
+:root[data-theme="light"] .trust-badges li,
+body.light-theme .hero-badges .badge-pill,
+:root[data-theme="light"] .hero-badge,
+body.light-theme .hero-badge {
+  background-color: #E2E8F0 !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] .hero-badges .badge-pill svg,
+:root[data-theme="light"] .trust-badges svg {
+  color: #0B4F45 !important;
+}
+
+:root[data-theme="light"] svg.wave path,
+body.light-theme svg.wave path {
+  fill: var(--bg, #F2F6F5) !important;
+}
+
+/* 3. عناوين الخطوات ووسم (رسوم مقطوعية) بالوضع الفاتح */
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important;
+}
+
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;
+  background: rgba(15, 118, 110, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+
+/* 4. فصل البطاقات وحل التداخل على الهاتف */
+.card {
+  margin-top: 1.2rem !important;
+}
+
+.card:first-of-type {
+  margin-top: -1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .card {
+    margin-top: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .card:first-of-type {
+    margin-top: -1rem !important;
+  }
+}
+استبدل الجزء المحدد بهذا الكود المصحح واضغط على Commit changes أعلى الصفحة.
+
+/* 1. الترويسة (Header) بالوضع الفاتح */
+:root[data-theme="light"] header,
+body.light-theme header {
+  background: var(--bg, #F2F6F5) !important;
+  background-image: none !important;
+  color: var(--ink, #16302B) !important;
+}
+
+:root[data-theme="light"] header h1,
+body.light-theme header h1 {
+  color: var(--teal, #0B4F45) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] header p,
+body.light-theme header p,
+:root[data-theme="light"] .brand-tagline-ar,
+body.light-theme .brand-tagline-ar {
+  color: #4A5568 !important;
+}
+
+/* 2. شارات المميزات في الهيدر */
+:root[data-theme="light"] .hero-badges .badge-pill,
+:root[data-theme="light"] .trust-badges li,
+body.light-theme .hero-badges .badge-pill,
+:root[data-theme="light"] .hero-badge,
+body.light-theme .hero-badge {
+  background-color: #E2E8F0 !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] .hero-badges .badge-pill svg,
+:root[data-theme="light"] .trust-badges svg {
+  color: #0B4F45 !important;
+}
+
+:root[data-theme="light"] svg.wave path,
+body.light-theme svg.wave path {
+  fill: var(--bg, #F2F6F5) !important;
+}
+
+/* 3. عناوين الخطوات ووسم (رسوم مقطوعية) بالوضع الفاتح */
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important;
+}
+
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;
+  background: rgba(15, 118, 110, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+
+/* 4. فصل البطاقات وحل التداخل على الهاتف */
+.card {
+  margin-top: 1.2rem !important;
+}
+
+.card:first-of-type {
+  margin-top: -1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .card {
+    margin-top: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .card:first-of-type {
+    margin-top: -1rem !important;
+  }
+/* وسم (رسوم مقطوعية) بالوضع الفاتح */
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;            /* لون تيل واضح مقروء */
+  background: rgba(15, 118, 110, 0.1);  /* خلفية خفيفة جداً تبرز الوسم */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+/* شارة الرسالة التحذيرية أسفل الحقل - الوضع الفاتح الافتراضي */
+.warning-badge {
+  margin-top: 6px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: #991b1b; /* أحمر داكن عالي التباين وقابل للقراءة بوضوح */
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+}
+/* إبعاد رسالة التحذير عن حقل الإدخال */
+#warning-message,
+.warning-badge {
+  margin-top: 12px !important; /* يمكنك زيادة الرقم إلى 14px أو 16px حسب المسافة المرغوبة */
+}
+
+/* شارة الرسالة التحذيرية أسفل الحقل - الوضع الداكن (Dark Mode) */
+:root[data-theme="dark"] .warning-badge,
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .warning-badge {
+    color: #fca5a5; /* أحمر وردي مريح ومضيء في الظلام */
+    background-color: rgba(239, 68, 68, 0.18);
+    border-color: rgba(239, 68, 68, 0.4);
+  }
+}
+الكود الحالي يحتوي على 3 أخطاء رئيسية تسبب كسر التنسيقات:
+
+القوس المفقود في الاستعلام الإعلامي: @media (max-width: 600px) لم يتم إغلاقه بـ }.
+
+خطأ في تركيب @media المتقاطعة: تم وضع @media (prefers-color-scheme: dark) بشكل غير صحيح داخل القواعد ومفتوح بدون قوس ختامي.
+
+تكرار قاعدة #flatFeeTag.flat-tag.
+
+🛠️ الكود الصحيح والمصفي بالكامل لملف style.css:
+امسح الجزء الأخير من السطر 1253 وما بعده بملف التحرير، وألصق هذا الكود المكتمل والمصحح مباشرة:
+
+CSS
+/* 1. الترويسة (Header) بالوضع الفاتح */
+:root[data-theme="light"] header,
+body.light-theme header {
+  background: var(--bg, #F2F6F5) !important;
+  background-image: none !important;
+  color: var(--ink, #16302B) !important;
+}
+
+:root[data-theme="light"] header h1,
+body.light-theme header h1 {
+  color: var(--teal, #0B4F45) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] header p,
+body.light-theme header p,
+:root[data-theme="light"] .brand-tagline-ar,
+body.light-theme .brand-tagline-ar {
+  color: #4A5568 !important;
+}
+
+/* 2. شارات المميزات في الهيدر */
+:root[data-theme="light"] .hero-badges .badge-pill,
+:root[data-theme="light"] .trust-badges li,
+body.light-theme .hero-badges .badge-pill,
+:root[data-theme="light"] .hero-badge,
+body.light-theme .hero-badge {
+  background-color: #E2E8F0 !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] .hero-badges .badge-pill svg,
+:root[data-theme="light"] .trust-badges svg {
+  color: #0B4F45 !important;
+}
+
+:root[data-theme="light"] svg.wave path,
+body.light-theme svg.wave path {
+  fill: var(--bg, #F2F6F5) !important;
+}
+
+/* 3. عناوين الخطوات ووسم (رسوم مقطوعية) بالوضع الفاتح */
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important;
+}
+
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;
+  background: rgba(15, 118, 110, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+
+/* 4. فصل البطاقات وحل التداخل على الهاتف */
+.card {
+  margin-top: 1.2rem !important;
+}
+
+.card:first-of-type {
+  margin-top: -1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .card {
+    margin-top: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .card:first-of-type {
+    margin-top: -1rem !important;
+  }
+}
+
+/* 5. شارة الرسالة التحذيرية أسفل الحقل (الوضع الفاتح) */
+.warning-badge {
+  margin-top: 12px !important;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: #991b1b;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+}
+
+#warning-message {
+  margin-top: 12px !important;
+}
+
+/* 6. شارة الرسالة التحذيرية (الوضع الداكن) */
+:root[data-theme="dark"] .warning-badge {
+  color: #fca5a5 !important;
+  background-color: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .warning-badge {
+    color: #fca5a5 !important;
+    background-color: rgba(239, 68, 68, 0.18) !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+  }
+}
+اضغط بعد إلصاق الكود على Commit changes... ليعمل الملف بدون أخطاء!
+
+اعطيني كود لتصحيح توازن الكاردس بالخلفية بشكل جميل ومتناسق وغير متداهل بدون التعديل على الأصل او على الكود الأساسي
+للحصول على توازن بصري جذاب وفصل أنيق للبطاقات دون المساس بالكود الأساسي أو تعديل الملفات الأصلية، يمكنك إضافة طبقة تنسيق إضافية (Override CSS) في نهاية ملف style.css.
+
+يعتمد هذا التنسيق على نظام Flexbox متناسق ومساحات ديناميكية ناعمة تمنع التداخل نهائياً وتحافظ على الهيكلية الأصلية:
+
+CSS
+/* ============================================================
+   طبقة تحسين توازن البطاقات والمساحات (تنسيق إضافي بدون تعديل الأصل)
+   ============================================================ */
+
+/* 1. ضبط الحاوية الرئيسية للبطاقات لضمان التدفق والتباعد المتناسق */
+main, 
+.container, 
+.app-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important; /* مسافة ثابتة ومتناسقة بين جميع الكروت */
+}
+
+/* 2. تصحيح الهوامش الخاصة بالبطاقات لمنع التراكب والتداخل */
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05),
+              0 2px 6px -1px rgba(0, 0, 0, 0.03) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* 3. التعامل الخاص مع البطاقة الأولى برفق لربطها بالهيدر دون تداخل */
+.card:first-of-type {
+  margin-top: 0.5rem !important;
+}
+
+/* 4. استجابة مخصصة لشاشات الجوال لراحة العين وتناسق الحواف */
+@media (max-width: 600px) {
+  main, 
+  .container, 
+  .app-container {
+    gap: 1.2rem !important; /* تقليل المسافة قليلاً لتناسب الشاشات الصغيرة */
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .card {
+    border-radius: 12px !important;
+  }
+}
+💡 ما الذي يفعله هذا الكود؟
+خاصية gap: 1.5rem: تضمن وجود مسافة موحدة ودقيقة بين كل كارت والذي يليه تلقائياً دون الحاجة لتحديد هوامش يدويّة لكل عنصر.
+
+إلغاء الهوامش السلبية (margin-top: 0): يمنع صعود الكروت فوق بعضها أو التداخل مع خلفية الترويسة.
+
+ظلال ناعمة (box-shadow): تعطي عمقاً بصرياً (3D Effect) تجعل البطاقات تتطابق بسلاسة مع خلفية الصفحة سواءً في الوضع الفاتح أو الداكن.
+
+
+ هناك تقارب بين 3.4 cadrs
+المشكلة الواضحة بالواجهة هي أن البطاقات (Cards) في الخطوة 2 والخطوة 3 وبطاقة النصائح متقاربة جداً ومتداخلة مع بعضها البعض ومع العناصر التي بداخلها.
+
+لإصلاح هذا التقارب وإعادة التوازن والتباعد الجمالي دون التعديل على الكود الأساسي للمشروع، يمكنك إضافة هذا التنسيق في أسفل ملف style.css:
+
+CSS
+/* ============================================================
+   تصحيح تباعد البطاقات وإلغاء التداخل على جميع الشاشات
+   ============================================================ */
+
+/* 1. تطبيق نظام Flexbox على الحاوية الرئيسية لفرض مسافات أفقية ناعمة */
+main, 
+.container, 
+.app-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.75rem !important; /* مسافة فاصلة متناسقة ومريحة بين كل بطاقة وأخرى */
+}
+
+/* 2. إلغاء الهوامش السلبية والقديمة التي تسبب التراكب */
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 3. ضُبط مسافة استثنائية بسيطة للبطاقة الأولى فقط للربط مع الترويسة */
+.card:first-of-type {
+  margin-top: 0.25rem !important;
+}
+
+/* 4. إعطاء مساحة داخلية ناعمة لرسائل التنبيه والنتائج داخل الخطوة 2 */
+.res-item, 
+#warning-message {
+  margin-top: 0.85rem !important;
+  margin-bottom: 0.85rem !important;
+}
+
+/* 5. تكييف التباعد للهواتف الذكية */
+@media (max-width: 600px) {
+  main, 
+  .container, 
+  .app-container {
+    gap: 1.25rem !important;
+  }
+}
+ماذا يحل هذا الكود؟
+الخاصية gap: 1.75rem: تفصل جميع البطاقات (Cards) عن بعضها بمسافة موحدة ودقيقة تلقائياً.
+
+تصفير margin-top و margin-bottom: يمنع صعود بطاقات الخطوات 2 و3 فوق بعضها البعض.
+
+مساحة للنتائج والتحذير: يمنع تداخل حقل المدخلات مع أجور المياه/الصرف الصحي والتنبيهات داخل نفس البطاقة.
+
+/* 1. ضبط الحاوية الرئيسية للبطاقات لضمان التدفق والتباعد المتناسق */
+main, 
+.container, 
+.app-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important; /* مسافة ثابتة ومتناسقة بين جميع الكروت */
+}
+
+/* 2. تصحيح الهوامش الخاصة بالبطاقات لمنع التراكب والتداخل */
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05),
+              0 2px 6px -1px rgba(0, 0, 0, 0.03) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* 3. التعامل الخاص مع البطاقة الأولى برفق لربطها بالهيدر دون تداخل */
+.card:first-of-type {
+  margin-top: 0.5rem !important;
+}
+
+/* 4. استجابة مخصصة لشاشات الجوال لراحة العين وتناسق الحواف */
+@media (max-width: 600px) {
+  main, 
+  .container, 
+  .app-container {
+    gap: 1.2rem !important; /* تقليل المسافة قليلاً لتناسب الشاشات الصغيرة */
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .card {
+    border-radius: 12px !important;
+  }
+}
+السبب في تقارب البطاقات 3 و4 (الخطوة 3 وقسم النصائح) هو وجود تنسيقات سابقة بداخل الكود تُحدد هوامش سفلية/علوية لعناصر محددة مثل .card أو الحاوية الأساسية، مما يُلغي تأثير gap.
+
+لحل المشكلة وزيادة التباعد بين البطاقات 3 و4 بشكل خاص بأسلوب خفيف ودقيق دون المساس بأساس الكود، استخدم محددات الترتيب (:nth-of-type) لإعطاء مسافة استثنائية مريحة:
+
+CSS
+/* ============================================================
+   تنسيق إضافي: زيادة التباعد بين البطاقات 3 و 4 
+   ============================================================ */
+
+/* 1. زيادة التباعد العام بين كل البطاقات */
+main, 
+.container, 
+.app-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2rem !important; /* زيادة الفارق من 1.5rem إلى 2rem */
+}
+
+/* 2. تصفير الهوامش لمنع التداخل */
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 3. إضافة مسافة علوية مخصصة للبطاقة 3 والبطاقة 4 للحد من التقارب */
+.card:nth-of-type(3),
+.card:nth-of-type(4) {
+  margin-top: 0.75rem !important;
+}
+
+/* 4. ضبط استجابة الجوال */
+@media (max-width: 600px) {
+  main, 
+  .container, 
+  .app-container {
+    gap: 1.5rem !important;
+  }
+
+  .card:nth-of-type(3),
+  .card:nth-of-type(4) {
+    margin-top: 0.5rem !important;
+  }
+}
+استبدل المقطع السابق في أسفل ملف style.css بهذا التنسيق للحد من أي تقارب بين البطاقات الأخيرة.
+
+في مشكلة بالتنسيق بين الكاردس الاولى جدول الاسعار مش مدمج بالخلفية على عكس الباقي داخل خلفية واحدة والمسافات بين البطاقات غير متناسقه شي قريب شي يعيد والكارد الاول قريب من الهيدر
+سبب هذه المظاهر هو وجود تضارب بين التنسيق القديم الذي يستخدم margin-top سالباً بالبطاقة الأولى، وتطبيق الفليكس المباشر (display: flex) على العناوين والبطاقات المستقلة دون وجود حاوية موحدة (Container Wrap) تجمع جدول الأسعار داخل البطاقة الأولى نفسها.
+
+حل هذه المشكلة بأسلوب نظيف احترافي ومنسق يتم بضبط الحاوية الرئيسية ومحاذاة البطاقة الأولى مع الهيدر وإعادة توازن جميع الهوامش بين الكروت.
+
+الكود المصحح والشامل لأسفل ملف style.css:
+ضع هذا الكود في نهاية ملف style.css لتجاوز كافة الهوامش العشوائية والقديمة:
+
+CSS
+/* ============================================================
+   إصلاح الهيكلية والتباعدات البصرية للبطاقات والتكامل مع الهيدر
+   ============================================================ */
+
+/* 1. ضبط الحاوية الرئيسية لمسافات موحدة ومتناسقة تماماً بين كافة الكروت */
+main, 
+.app-container, 
+body > .container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.75rem !important; /* مسافة فاصلة موحدة بالمليمتر بين جميع البطاقات */
+  padding-top: 1rem !important;
+}
+
+/* 2. توحيد خلفيات البطاقات وإلغاء الهوامش السلبية والعشوائية */
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-radius: 16px !important;
+  background-clip: padding-box !important;
+}
+
+/* 3. إصلاح البطاقة الأولى وإبعادها عن الترويسة (Header) بمسافة مريحة للعين */
+.card:first-of-type {
+  margin-top: 0.5rem !important;
+}
+
+/* 4. دمج جدول الأسعار داخل البطاقة الأولى وإلغاء فصله عن الخلفية */
+.card:first-of-type table,
+.card:first-of-type .table-responsive,
+.card:first-of-type .tier-table {
+  background: transparent !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-top: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ضبط خلفية الجدول بداخل البطاقة بالوضع الفاتح */
+:root[data-theme="light"] .card:first-of-type table,
+body.light-theme .card:first-of-type table {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 5. ضبط التباعد المستجيب للهواتف المحمولة */
+@media (max-width: 600px) {
+  main, 
+  .app-container, 
+  body > .container {
+    gap: 1.25rem !important; /* مسافة متناسقة ومصغرة للجوال */
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .card:first-of-type {
+    margin-top: 0.25rem !important;
+  }
+}
+🛠️ ما الذي يعالجه هذا التنسيق؟
+دمج جدول الأسعار: يجعل خلفية الجدول شفافة ودمج حدودها داخل خلفية البطاقة الأولى نفسها، بحيث تظهر كقطعة واحدة غير منفصلة بصرياً.
+
+فصل البطاقة الأولى عن الهيدر: يلغي الـ margin-top السلبي ويعطي مسافة تنفس مريحة (0.5rem إلى 1rem) بين الترويسة وأول بطاقة.
+
+توحيد المسافات (Gap Control): الاعتماد المباشر على gap: 1.75rem يضمن أن جميع المسافات بين البطاقة 1، 2، 3 و4 تكون متساوية ومتناسقة تماماً دون أن تكون بطاقات قريبة والأخرى بعيدة.
+
+احذف القديم
+إليك الكود الكامل والمستقل المخصص لآخر ملف style.css.
+
+قم بحذف كافة الأكواد التجريبية السابقة التي أضفناها في نهاية الملف، واستبدلها بهذا الجزء النظيف المكتمل:
+
+CSS
+/* ============================================================
+   تنسيقات الوضع الفاتح وتوازن البطاقات (كود موحد وشامل)
+   ============================================================ */
+
+/* 1. الترويسة (Header) بالوضع الفاتح */
+:root[data-theme="light"] header,
+body.light-theme header {
+  background: var(--bg, #F2F6F5) !important;
+  background-image: none !important;
+  color: var(--ink, #16302B) !important;
+}
+
+:root[data-theme="light"] header h1,
+body.light-theme header h1 {
+  color: var(--teal, #0B4F45) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] header p,
+body.light-theme header p,
+:root[data-theme="light"] .brand-tagline-ar,
+body.light-theme .brand-tagline-ar {
+  color: #4A5568 !important;
+}
+
+/* 2. شارات المميزات والعناوين بالوضع الفاتح */
+:root[data-theme="light"] .hero-badges .badge-pill,
+:root[data-theme="light"] .trust-badges li,
+body.light-theme .hero-badges .badge-pill,
+:root[data-theme="light"] .hero-badge,
+body.light-theme .hero-badge {
+  background-color: #E2E8F0 !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important;
+}
+
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;
+  background: rgba(15, 118, 110, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] svg.wave path,
+body.light-theme svg.wave path {
+  fill: var(--bg, #F2F6F5) !important;
+}
+
+/* 3. توحيد المسافات بين البطاقات وربط الهيدر وتكامله مع جدول الأسعار */
+main, 
+.app-container, 
+body > .container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.75rem !important; /* مسافة موحدة ودقيقة بين كل كارت والأخر */
+  padding-top: 1rem !important;
+}
+
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-radius: 16px !important;
+}
+
+.card:first-of-type {
+  margin-top: 0.5rem !important; /* إبعاد البطاقات عن الهيدر بمسافة مريحة */
+}
+
+/* دمج جدول الأسعار داخل خلفية البطاقات بصرياً */
+.card:first-of-type table,
+.card:first-of-type .table-responsive,
+.card:first-of-type .tier-table {
+  background: transparent !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-top: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+:root[data-theme="light"] .card:first-of-type table,
+body.light-theme .card:first-of-type table {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 4. رسالة التحذير أسفل حقل الإدخال */
+.warning-badge, #warning-message {
+  margin-top: 12px !important;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: #991b1b;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+}
+
+:root[data-theme="dark"] .warning-badge {
+  color: #fca5a5 !important;
+  background-color: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+/* 5. استجابة شاشات الهاتف */
+@media (max-width: 600px) {
+  main, 
+  .app-container, 
+  body > .container {
+    gap: 1.25rem !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .card:first-of-type {
+    margin-top: 0.25rem !important;
+  }
+}
+
+look?  why not spaces after write last code????
+سبب عدم ظهور المسافات بين البطاقات هو أن آخر كود تم إضافته يتضمن تنسيق .card بدون إعطاء مسافة margin-bottom أو الاعتماد الكامل على gap الحاوية بينما بعض العناصر لا تزال تأخذ قواعد margin من الكود الأساسي للمشروع.
+
+لتصحيح التباعدات بشكل كامل وتوزيع المسافات بانتظام بين جميع البطاقات (الجدول، حاسبة الاستهلاك، مقارنة الصهريج، وقسم النصائح)، قم بفتح ملف style.css، واحذف الجزء الذي أضفته في النهاية، واستبدله بهذا الكود المصحح الشامل:
+
+CSS
+/* ============================================================
+   تنسيقات الوضع الفاتح وتوازن البطاقات (كود موحد وشامل)
+   ============================================================ */
+
+/* 1. الترويسة (Header) بالوضع الفاتح */
+:root[data-theme="light"] header,
+body.light-theme header {
+  background: var(--bg, #F2F6F5) !important;
+  background-image: none !important;
+  color: var(--ink, #16302B) !important;
+}
+
+:root[data-theme="light"] header h1,
+body.light-theme header h1 {
+  color: var(--teal, #0B4F45) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] header p,
+body.light-theme header p,
+:root[data-theme="light"] .brand-tagline-ar,
+body.light-theme .brand-tagline-ar {
+  color: #4A5568 !important;
+}
+
+/* 2. شارات المميزات والعناوين بالوضع الفاتح */
+:root[data-theme="light"] .hero-badges .badge-pill,
+:root[data-theme="light"] .trust-badges li,
+body.light-theme .hero-badges .badge-pill,
+:root[data-theme="light"] .hero-badge,
+body.light-theme .hero-badge {
+  background-color: #E2E8F0 !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important;
+}
+
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;
+  background: rgba(15, 118, 110, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] svg.wave path,
+body.light-theme svg.wave path {
+  fill: var(--bg, #F2F6F5) !important;
+}
+
+/* 3. فرض مسافة أفقية متناسقة بين البطاقات ومحيطها */
+main, 
+.app-container, 
+body > .container,
+.wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important; /* مسافة فاصلة موحدة بين كافة البطاقات */
+}
+
+/* إضافة هامش سفلي للبطاقات لضمان التباعد حتى لو لم يتفعل الفليكس بحاوية معينة */
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 1.5rem !important;
+  border-radius: 16px !important;
+}
+
+.card:last-of-type {
+  margin-bottom: 0 !important;
+}
+
+.card:first-of-type {
+  margin-top: 1rem !important; /* إبعاد البطاقات عن الهيدر بمسافة مريحة */
+}
+
+/* دمج جدول الأسعار داخل خلفية البطاقة الأولى بصرياً */
+.card:first-of-type table,
+.card:first-of-type .table-responsive,
+.card:first-of-type .tier-table {
+  background: transparent !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-top: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+:root[data-theme="light"] .card:first-of-type table,
+body.light-theme .card:first-of-type table {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 4. رسالة التحذير أسفل حقل الإدخال */
+.warning-badge, #warning-message {
+  margin-top: 12px !important;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: #991b1b;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+}
+
+:root[data-theme="dark"] .warning-badge {
+  color: #fca5a5 !important;
+  background-color: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+/* 5. استجابة شاشات الهاتف */
+@media (max-width: 600px) {
+  main, 
+  .app-container, 
+  body > .container,
+  .wrap {
+    gap: 1.25rem !important;
+  }
+
+  .card {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .card:first-of-type {
+    margin-top: 0.75rem !important;
+  }
+}
+سبب تعديل هذا الجزء بالتحديد:
+إضافة margin-bottom: 1.5rem !important; لكل .card تضمن الفصل البصري حتى لو كانت البطاقات متواجدة داخل حاوية div.wrap تقليدية لا تدعم خاصية gap تلقائياً.
+
+ i need background splits each one 
+السبب الرئيسي لعدم وجود مسافات وفصل حقيقي بين البطاقات هو وجود خاصية margin-top: -1.6rem قديمة وموروثة بداخل الكود الأساسي للمشروع، بالإضافة للتضارب بين عناصر الصفحة الحالية وخصائص gap.
+
+لتقسيم البطاقات وتوضيح خلفية كل كارت على حدة بمسافات تفصل بينها بشكل جليّ وجذاب دون اللجوء لتطبيقات معقدة، يرجى افتح ملف style.css على جيت هب، واكتفاءك بوضع هذا الكود المباشر والمحدد بالأسفل:
+
+CSS
+/* ============================================================
+   فصل خلفيات البطاقات وتوفير مسافات واضحة بجمالية عالية
+   ============================================================ */
+
+/* 1. الحاوية الرئيسية: فرض تباعد عمودي حقيقي بين كل بطاقة وأخرى */
+main,
+.app-container,
+.wrap {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.8rem !important; /* مسافة فاصلة حقيقية بين كل بطاقة */
+  padding-top: 1.5rem !important;
+}
+
+/* 2. إلغاء أي هوامش سلبية أو تداخل موروث في الكود القديم */
+.card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-radius: 16px !important;
+  /* إضافة ظل وإطار خفيف لإبراز الحدود الخاصة بكل كارت بشكل منفصل */
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* 3. إلغاء التراكب مع الترويسة بمسافة مريحة للعين */
+.card:first-of-type {
+  margin-top: 0.5rem !important;
+}
+
+/* 4. تعديل التباعد الشاشات الصغيرة والتلفونات */
+@media (max-width: 600px) {
+  main,
+  .app-container,
+  .wrap {
+    gap: 1.3rem !important;
+  }
+
+  .card:first-of-type {
+    margin-top: 0.25rem !important;
+  }
+}
+💡 ماذا يتغير بعد الإضافة؟
+إلغاء التراكب تماماً: مسح تأثير margin-top: -1.6rem الذي يسبب صعود البطاقات فوق بعضها.
+
+إبراز استقلالية كل بطاقة: إضافة box-shadow ناعم وواضح يمنح كل بطاقة (الكارت) حدودها الخاصة ليظهر خلفية الصفحة الفاصلة بين كل كارت والأخر بشكل مستمر وسلس.
+
+
 /* ==========================================================================
    تنسيقات رسائل وشارات التحذير للمدخلات (Input Warnings)
    ========================================================================== */
@@ -1246,27 +2543,29 @@ body.light-theme svg.wave path {
   fill: var(--bg, #F2F6F5) !important;
 }
 
-/* 3. توحيد المسافات بين البطاقات وربط الهيدر وتكامله مع جدول الأسعار */
+/* 3. توحيد المسافات وفصل خلفيات البطاقات عن بعضها */
 main, 
 .app-container, 
-body > .container {
+body > .container,
+.wrap {
   display: flex !important;
   flex-direction: column !important;
-  gap: 1.75rem !important; /* مسافة موحدة ودقيقة بين كل كارت والأخر */
-  padding-top: 1rem !important;
+  gap: 1.8rem !important; /* مسافة فاصلة بين كل كارت واخر */
+  padding-top: 1.5rem !important;
 }
 
 .card {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
   border-radius: 16px !important;
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04) !important;
 }
 
 .card:first-of-type {
-  margin-top: 0.5rem !important; /* إبعاد البطاقات عن الهيدر بمسافة مريحة */
+  margin-top: 0.5rem !important;
 }
 
-/* دمج جدول الأسعار داخل خلفية البطاقات بصرياً */
+/* دمج جدول الأسعار داخل خلفية البطاقة الأولى بصرياً */
 .card:first-of-type table,
 .card:first-of-type .table-responsive,
 .card:first-of-type .tier-table {
@@ -1283,8 +2582,9 @@ body.light-theme .card:first-of-type table {
   border-color: rgba(0, 0, 0, 0.08) !important;
 }
 
-/* 4. رسالة التحذير أسفل حقل الإدخال */
-.warning-badge, #warning-message {
+/* 4. رسائل التحذير */
+.warning-badge, 
+#warning-message {
   margin-top: 12px !important;
   padding: 6px 12px;
   font-size: 0.8rem;
@@ -1300,11 +2600,12 @@ body.light-theme .card:first-of-type table {
   border-color: rgba(239, 68, 68, 0.4) !important;
 }
 
-/* 5. استجابة شاشات الهاتف */
+/* 5. استجابة الهواتف المحمولة */
 @media (max-width: 600px) {
   main, 
   .app-container, 
-  body > .container {
+  body > .container,
+  .wrap {
     gap: 1.25rem !important;
     padding-left: 0.75rem !important;
     padding-right: 0.75rem !important;
@@ -1312,56 +2613,5 @@ body.light-theme .card:first-of-type table {
 
   .card:first-of-type {
     margin-top: 0.25rem !important;
-  }
-}
-/* ============================================================
-   تحسين ألوان العناوين والوسوم في الوضع الفاتح (Light Mode)
-   ============================================================ */
-
-/* عناوين الخطوات والبطاقات بالوضع الفاتح */
-:root[data-theme="light"] h2,
-body.light-theme h2,
-:root[data-theme="light"] h2 .titletext {
-  color: #0b4f45 !important; /* لون تيل زيتي داكن احترافي */
-}
-
-/* نص الخطوة العلوي (مثل: الخطوة 2 من 3) بالذهبي الداكن المقروء */
-:root[data-theme="light"] h2 .eyebrow2 {
-  color: #8f6712 !important;
-}
-
-/* وسم (رسوم مقطوعية) بالوضع الفاتح */
-:root[data-theme="light"] #flatFeeTag.flat-tag,
-body.light-theme #flatFeeTag.flat-tag {
-  color: #0f766e !important;            /* لون تيل واضح مقروء */
-  background: rgba(15, 118, 110, 0.1);  /* خلفية خفيفة جداً تبرز الوسم */
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.72em !important;
-  font-weight: 600 !important;
-}
-/* شارة الرسالة التحذيرية أسفل الحقل - الوضع الفاتح الافتراضي */
-.warning-badge {
-  margin-top: 6px;
-  padding: 6px 12px;
-  font-size: 0.8rem;
-  color: #991b1b; /* أحمر داكن عالي التباين وقابل للقراءة بوضوح */
-  background-color: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  border-radius: 8px;
-}
-/* إبعاد رسالة التحذير عن حقل الإدخال */
-#warning-message,
-.warning-badge {
-  margin-top: 12px !important; /* يمكنك زيادة الرقم إلى 14px أو 16px حسب المسافة المرغوبة */
-}
-
-/* شارة الرسالة التحذيرية أسفل الحقل - الوضع الداكن (Dark Mode) */
-:root[data-theme="dark"] .warning-badge,
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .warning-badge {
-    color: #fca5a5; /* أحمر وردي مريح ومضيء في الظلام */
-    background-color: rgba(239, 68, 68, 0.18);
-    border-color: rgba(239, 68, 68, 0.4);
   }
 }
