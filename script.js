@@ -358,8 +358,8 @@ function calcAll() {
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   
   // طباعة المجموع مع النص المضاف
-  document.getElementById('totalOut').innerHTML = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}${flatFeeTag}`;;
-  const flatFeeHint = document.getElementById('flatFeeHint');
+document.getElementById('totalOut').innerHTML = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr} ${flatFeeTag}`;
+   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
     flatFeeHint.style.display = (n <= 6) ? 'inline-block' : 'none';
   }
