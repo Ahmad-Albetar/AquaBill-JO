@@ -1156,6 +1156,11 @@ main > .card:first-of-type table.tariff th {
   border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 8px;
 }
+/* إبعاد رسالة التحذير عن حقل الإدخال */
+#warning-message,
+.warning-badge {
+  margin-top: 12px !important; /* يمكنك زيادة الرقم إلى 14px أو 16px حسب المسافة المرغوبة */
+}
 
 /* شارة الرسالة التحذيرية أسفل الحقل - الوضع الداكن (Dark Mode) */
 :root[data-theme="dark"] .warning-badge,
