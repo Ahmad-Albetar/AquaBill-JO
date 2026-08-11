@@ -432,8 +432,8 @@ h2 .icn-tip {
 /* القيمة الرقمية للمجموع (السعر) */
 .result .total span:last-child,
 .res-item.total .val { 
-  font-weight: 800; 
-  font-size: 1.35rem;       /* تصغير حجم رقم السعر ليكون متناسقاً وأنيقاً */
+  font-weight: 700; 
+  font-size: 1.1rem;       /* تصغير حجم رقم السعر ليكون متناسقاً وأنيقاً */
   color: var(--accent-strong); 
   letter-spacing: -0.3px;
 }
