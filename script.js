@@ -351,16 +351,14 @@ function calcAll() {
   const total = water + sewage;
 
 // إظهار أو إخفاء عبارة (رسوم مقطوعية) حسب شريحة الاستهلاك (0 - 6 م³)
-  const flatTagEl = document.getElementById('flatFeeTag');
-  if (flatTagEl) {
-    flatTagEl.style.display = (n >= 0 && n <= 6) ? 'inline-block' : 'none';
-  }
+  // إضافة (رسوم مقطوعية) تحت الرقم عند الاستهلاك بين 0 و 6 م³
+  const flatFeeTag = (n >= 0 && n <= 6) ? '<br><span class="flat-tag">(رسوم مقطوعية)</span>' : '';
 
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   
-  // طباعة السعر والعملة بشكل صافٍ
-  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
+  // طباعة السعر مع العبارة في سطر جديد أسفله
+  document.getElementById('totalOut').innerHTML = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}${flatFeeTag}`;
    const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
     flatFeeHint.style.display = (n <= 6) ? 'inline-block' : 'none';
