@@ -456,6 +456,29 @@ h2 .icn-tip {
 .compare .box .val { font-size: 1.25rem; font-weight: 900; color: var(--accent-strong); margin-top: .3rem; }
 .compare .box.win { border-color: var(--gold); background: var(--gold-light); }
 .compare .box.win .val { color: var(--gold-text); }
+/* ============================================================
+   فصل البطاقات عن بعضها على الجوال وحل التداخل
+   ============================================================ */
+.card {
+  margin-top: 1.2rem !important; /* مسافة فاصلة علوية بدلاً من التراكب السالب */
+}
+
+/* البطاقة الأولى فقط تتداخل خفيفاً مع الترويسة */
+.card:first-of-type {
+  margin-top: -1.5rem !important;
+}
+
+@media (max-width: 600px) {
+  .card {
+    margin-top: 1rem !important;
+    padding: 1rem !important; /* تقليل الحشوة قليلاً لشاشات الجوال */
+  }
+  
+  .card:first-of-type {
+    margin-top: -1rem !important;
+  }
+}
+
 
 /* ==========================================================================
    6. BUTTONS — أزرار القفل، تبديل الوضع، المشاركة، وتثبيت PWA
@@ -1179,6 +1202,32 @@ div.res-item.total span.val {
   font-size: 1.15rem !important;
   white-space: normal !important;
   font-weight: bold !important;
+}
+/* ============================================================
+   تحسين ألوان العناوين والوسوم في الوضع الفاتح (Light Mode)
+   ============================================================ */
+
+/* عناوين الخطوات والبطاقات بالوضع الفاتح */
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important; /* لون تيل زيتي داكن احترافي */
+}
+
+/* نص الخطوة العلوي (مثل: الخطوة 2 من 3) بالذهبي الداكن المقروء */
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+/* وسم (رسوم مقطوعية) بالوضع الفاتح */
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;            /* لون تيل واضح مقروء */
+  background: rgba(15, 118, 110, 0.1);  /* خلفية خفيفة جداً تبرز الوسم */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
 }
 /* شارة الرسالة التحذيرية أسفل الحقل - الوضع الفاتح الافتراضي */
 .warning-badge {
