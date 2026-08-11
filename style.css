@@ -279,7 +279,7 @@ header p {
   margin-bottom: 1rem;
 }
 
-.logomark{ width: 46px; height: 46px; flex: none; border-radius: 50%; }
+.logomark{ width: 46px; height: 46px; flex: none; border-radius: 50%; overflow: hidden; }
 
 .brandtext .eyebrow .flagchip{
   display: inline-flex;
@@ -1030,116 +1030,4 @@ main > .card:first-of-type table.tariff th {
 
 .btn-theme-toggle:active {
   transform: scale(0.92);
-}
-
-/* ======================================================================
-   FINAL CARD SEPARATION — AquaBill JO
-   Purpose: keep every step in one independent card without overlap.
-   This block is intentionally scoped to the main content and does not
-   modify JavaScript, IDs, inputs, calculations, or event handlers.
-   ====================================================================== */
-
-#mainContent {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding-top: 1.25rem;
-}
-
-#mainContent > .card {
-  width: 100%;
-  margin: 0 !important;
-  padding: 1.35rem 1.2rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  background: var(--card);
-  box-shadow: var(--shadow-card);
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-}
-
-/* Do not visually merge the cards with the header/wave. */
-#mainContent > .card:first-child {
-  margin-top: 0 !important;
-  z-index: 1;
-}
-
-/* Every card gets the same visual treatment; no special overlap. */
-#mainContent > .card + .card {
-  margin-top: 0 !important;
-}
-
-/* Keep the accent line inside each card only. */
-#mainContent > .card::before {
-  left: 1.2rem;
-  right: 1.2rem;
-  top: 0;
-  height: 2px;
-  border-radius: 2px;
-}
-
-/* The tariff table stays inside Card 1 instead of becoming another card. */
-#mainContent > .card:first-child .tariff {
-  width: 100%;
-  margin-top: .8rem;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-/* Comfortable spacing inside each step. */
-#mainContent > .card h2 {
-  margin-top: 0;
-}
-
-#mainContent > .card > .hint:last-child,
-#mainContent > .card > .tips-list:last-child {
-  margin-bottom: 0;
-}
-
-/* Mobile: clear separation and no horizontal overflow. */
-@media (max-width: 719px) {
-  #mainContent {
-    gap: 1rem;
-    padding: 1rem .85rem 0;
-  }
-
-  #mainContent > .card {
-    padding: 1rem .9rem;
-    border-radius: 14px;
-  }
-
-  #mainContent > .card:first-child {
-    margin-top: 0 !important;
-  }
-
-  #mainContent > .card + .card {
-    margin-top: 0 !important;
-  }
-
-  #mainContent > .card::before {
-    left: .85rem;
-    right: .85rem;
-  }
-}
-
-/* Desktop/tablet: slightly more breathing room between independent cards. */
-@media (min-width: 720px) {
-  #mainContent {
-    gap: 1.35rem;
-    padding: 1.35rem 1.1rem 0;
-  }
-
-  #mainContent > .card {
-    padding: 1.45rem 1.3rem;
-  }
-}
-
-/* Respect reduced-motion preference for the card hover effect. */
-@media (prefers-reduced-motion: reduce) {
-  #mainContent > .card,
-  #mainContent > .card:hover {
-    transform: none !important;
-    transition: none !important;
-  }
 }
