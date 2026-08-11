@@ -350,15 +350,17 @@ function calcAll() {
   const sewage = costFor(n, 'sewage');
   const total = water + sewage;
 
- // إضافة عبارة (رسوم مقطوعية) بجانب السعر عند الاستهلاك المنخفض (0-6 م³)
-  // تم تصغير الخط إلى 0.65em وتغيير اللون لرمادي باهت لتجربة بهوت أفضل
-  const flatFeeTag = (n >= 0 && n <= 6) ? ' <small style="font-size: 0.65em; color: #a1a1a1; margin-right: 6px; white-space: nowrap;">(رسوم مقطوعية)</small>' : '';
+// إظهار أو إخفاء عبارة (رسوم مقطوعية) حسب شريحة الاستهلاك (0 - 6 م³)
+  const flatTagEl = document.getElementById('flatFeeTag');
+  if (flatTagEl) {
+    flatTagEl.style.display = (n >= 0 && n <= 6) ? 'inline-block' : 'none';
+  }
 
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   
-  // طباعة المجموع مع النص المضاف
-document.getElementById('totalOut').innerHTML = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr} ${flatFeeTag}`;
+  // طباعة السعر والعملة بشكل صافٍ
+  document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
    const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
     flatFeeHint.style.display = (n <= 6) ? 'inline-block' : 'none';
