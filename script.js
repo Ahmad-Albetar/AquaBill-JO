@@ -291,7 +291,7 @@ function calcAll() {
     }
   });
 
-// 2. قراءة المدخل
+  // 2. قراءة المدخل
   const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
 
   // 3. حالة الحقل الفارغ
@@ -303,11 +303,11 @@ function calcAll() {
     document.getElementById('totalOut').textContent = '-';
 
     // إخفاء عبارة (رسوم مقطوعية) عند تفريغ الحقل
- // إظهار عبارة (رسوم مقطوعية) فقط إذا كانت القيمة بين 0 و 6
-  const flatTagEl = document.getElementById('flatFeeTag');
-  if (flatTagEl) {
-    flatTagEl.style.display = (consumptionVal >= 0 && consumptionVal <= 6) ? 'inline-block' : 'none';
-  }
+    const flatTagEl = document.getElementById('flatFeeTag');
+    if (flatTagEl) flatTagEl.style.display = 'none';
+
+    const flatFeeHint = document.getElementById('flatFeeHint');
+    if (flatFeeHint) flatFeeHint.style.display = 'none';
 
     document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
 
@@ -324,14 +324,16 @@ function calcAll() {
   // 4. فحص تجاوز الـ 500 م³
   if (isNaN(consumptionVal) || consumptionVal > 500) {
     if (warningElem) {
-      warningElem.textContent = 
-       '⚠️ تنبيه: الاستهلاك المدخل أعلى من 500 م³، هذا رقم كبير جداً خلال شهر واحد!';
+      warningElem.textContent = '⚠️ تنبيه: الاستهلاك المدخل أعلى من 500 م³، هذا رقم كبير جداً خلال شهر واحد!';
       warningElem.style.display = 'block';
     }
 
     document.getElementById('waterOut').textContent = '-';
     document.getElementById('sewageOut').textContent = '-';
     document.getElementById('totalOut').textContent = '-';
+
+    const flatTagEl = document.getElementById('flatFeeTag');
+    if (flatTagEl) flatTagEl.style.display = 'none';
 
     const flatFeeHint = document.getElementById('flatFeeHint');
     if (flatFeeHint) flatFeeHint.style.display = 'none';
@@ -348,23 +350,22 @@ function calcAll() {
     if (warningElem) warningElem.style.display = 'none';
   }
 
-  // 4. الحسابات الطبيعية للعداد (من 0 إلى 500 م³)
+  // 5. الحسابات الطبيعية للعداد (من 0 إلى 500 م³)
   const n = sanitizeNumber(rawInput, 0);
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
   const total = water + sewage;
 
-// إظهار أو إخفاء عبارة (رسوم مقطوعية) بجانب عنوان المجموع الكلي
-  const rawInput = document.getElementById('consumption').value.trim();
+  // إظهار أو إخفاء عبارة (رسوم مقطوعية) بجانب عنوان المجموع الكلي بدون إعادة تعريف rawInput
   const flatTagEl = document.getElementById('flatFeeTag');
   if (flatTagEl) {
-    flatTagEl.style.display = (rawInput !== '' && n >= 0 && n <= 6) ? 'inline-block' : 'none';
+    flatTagEl.style.display = (n >= 0 && n <= 6) ? 'inline-block' : 'none';
   }
 
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
-  
+
   const flatFeeHint = document.getElementById('flatFeeHint');
   if (flatFeeHint) {
     flatFeeHint.style.display = (n <= 6) ? 'inline-block' : 'none';
