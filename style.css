@@ -2463,7 +2463,7 @@ div.res-item.total span.lbl {
 /* الشارة (رسوم مقطوعية): صغيرة، أبيض باهت، ووزن عادي */
 div.res-item.total #flatFeeTag.flat-tag {
   color: rgba(255, 255, 255, 0.55) !important;
-  font-size: 0.9em !important;
+  font-size: 1.2em !important;
   font-weight: nowrap !important;
   white-space: nowrap !important;
 }
@@ -2474,8 +2474,8 @@ div.res-item.total span.val {
   white-space: normal !important;
   font-weight: bold !important;
 }
-/* ============================================================
-   تنسيقات الوضع الفاتح وفصل جميع البطاقات (كود موحد وشامل)
+* ============================================================
+   تنسيقات الوضع الفاتح وتوازن البطاقات (كود موحد وشامل)
    ============================================================ */
 
 /* 1. الترويسة (Header) بالوضع الفاتح */
@@ -2535,7 +2535,6 @@ body.light-theme #flatFeeTag.flat-tag {
 body.light-theme svg.wave path {
   fill: var(--bg, #F2F6F5) !important;
 }
-
 /* 3. فرض الهامش السفلي على جميع البطاقات لضمان انفصال البطاقات 2 و3 و4 */
 .card {
   margin-top: 0 !important;
