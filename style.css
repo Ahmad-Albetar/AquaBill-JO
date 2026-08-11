@@ -1108,6 +1108,10 @@ main > .card:first-of-type table.tariff th {
    1. تنسيق صندوق المجموع الكلي وشارة (رسوم مقطوعية)
    ============================================================ */
 
+/* ============================================================
+   1. تنسيق صندوق المجموع الكلي: أصغر حجمًا وأفقي بالكامل
+   ============================================================ */
+
 /* ضبط بوكس المجموع الكلي ليصبح أفقياً وبسطر واحد */
 .res-item.total {
   display: flex !important;
@@ -1115,6 +1119,7 @@ main > .card:first-of-type table.tariff th {
   justify-content: space-between !important;
   align-items: center !important;
   padding: 10px 14px !important;
+  flex-wrap: nowrap !important; /* يمنع الالتفاف لسطر جديد */
 }
 
 /* تنسيق القيمة والنص المضاف ليكون أفقياً بالكامل */
@@ -1124,16 +1129,16 @@ main > .card:first-of-type table.tariff th {
   flex-direction: row !important;
   align-items: baseline !important;
   gap: 6px !important;
-  white-space: nowrap !important;
+  white-space: nowrap !important; /* يمنع الالتفاف لسطر جديد */
 }
 
-/* تنسيق عبارة (رسوم مقطوعية) باللون الأبيض الباهت وبنفس السطر */
+/* تنسيق عبارة (رسوم مقطوعية) باللون الأبيض الباهت وبنفس السطر - حجم أصغر (0.5em) */
 .flat-tag {
   color: rgba(255, 255, 255, 0.60) !important;
-  font-size: 0.55em !important;
+  font-size: 0.5em !important; /* تصغير الخط أكثر */
   font-weight: normal !important;
   margin-right: 4px !important;
-  white-space: nowrap !important;
+  white-space: nowrap !important; /* يمنع نزول النص لسطر جديد */
   display: inline-block !important;
 }
 
