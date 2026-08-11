@@ -1107,32 +1107,41 @@ main > .card:first-of-type table.tariff th {
 /* ============================================================
    1. تنسيق صندوق المجموع الكلي وشارة (رسوم مقطوعية)
    ============================================================ */
-.res-item.total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  flex-wrap: nowrap;
+/* ============================================================
+   تنسيق صندوق المجموع الكلي وشارة (رسوم مقطوعية)
+   ============================================================ */
+
+/* حاوية السطر: توزيع العناصر بين اليمين واليسار بالـ RTL */
+div.res-item.total {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 8px 12px !important;
+  flex-wrap: nowrap !important;
 }
 
-.result .total span:first-child {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.9rem;
-  white-space: nowrap;
+/* النص الرئيسي والوسم بجانبه */
+div.res-item.total span.lbl {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  font-size: 0.9rem !important;
+  white-space: nowrap !important;
 }
 
-.result .total span:last-child {
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 0.7em;
-  font-weight: normal;
-  white-space: nowrap;
+/* الشارة (رسوم مقطوعية): صغيرة، أبيض باهت، ووزن عادي */
+div.res-item.total #flatFeeTag.flat-tag {
+  color: rgba(255, 255, 255, 0.55) !important;
+  font-size: 0.7em !important;
+  font-weight: normal !important;
+  white-space: nowrap !important;
 }
 
-.result .total span:last-child {
-  font-size: 1.15rem;
-  white-space: nowrap;
+/* رقم القيمة النهائي: أقصى اليسار */
+div.res-item.total span.val {
+  font-size: 1.15rem !important;
+  white-space: nowrap !important;
+  font-weight: bold !important;
 }
 /* شارة الرسالة التحذيرية أسفل الحقل - الوضع الفاتح الافتراضي */
 .warning-badge {
