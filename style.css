@@ -732,9 +732,26 @@ body.dark-mode .badge.critical,
 }
 
 /* ==========================================================================
-   12. UTILITIES — عناصر مساعدة عامة
+  ###### 12. UTILITIES — عناصر مساعدة عامة
    ========================================================================== */
+/* الوضع الفاتح (Light Mode): خلفية ناعمة مع نص تيل داكن واضح ومقروء */
+:root[data-theme="light"] .hero-badge,
+body.light-theme .hero-badge,
+.hero-badge {
+  background: rgba(15, 118, 110, 0.1) !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.25) !important;
+  font-weight: 600 !important;
+}
 
+/* الوضع الداكن (Dark Mode): نص أبيض فاتح مع خلفية شفافة */
+:root[data-theme="dark"] .hero-badge,
+body.dark-theme .hero-badge {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #e2e8f0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  font-weight: 500 !important;
+}
 /* نص تلميح صغير أسفل الحقول أو الجداول */
 .hint{ font-size: .78rem; color: var(--ink-soft); margin: .5rem 0 0; }
 
@@ -1112,6 +1129,26 @@ main > .card:first-of-type table.tariff th {
    ============================================================ */
 
 /* حاوية السطر: توزيع العناصر بين اليمين واليسار بالـ RTL */
+/* ============================================================
+   ضبط لون شارة (رسوم مقطوعية) للوضع الفاتح (Light Mode)
+   ============================================================ */
+
+/* بالوضع الفاتح: لون رمادي احترافي دافئ ومريح للعين */
+:root[data-theme="light"] div.res-item.total #flatFeeTag.flat-tag,
+body.light-theme div.res-item.total #flatFeeTag.flat-tag {
+  color: #5c706c !important; /* لون رمادي ناعم بدرجة التيل */
+  font-size: 0.72em !important;
+  font-weight: 500 !important;
+  opacity: 0.9 !important;
+}
+
+/* بالوضع الداكن: لون أبيض باهت أنيق */
+:root[data-theme="dark"] div.res-item.total #flatFeeTag.flat-tag,
+body.dark-theme div.res-item.total #flatFeeTag.flat-tag {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 0.72em !important;
+  font-weight: 400 !important;
+}
 div.res-item.total {
   display: flex !important;
   justify-content: space-between !important;
@@ -1132,15 +1169,15 @@ div.res-item.total span.lbl {
 /* الشارة (رسوم مقطوعية): صغيرة، أبيض باهت، ووزن عادي */
 div.res-item.total #flatFeeTag.flat-tag {
   color: rgba(255, 255, 255, 0.55) !important;
-  font-size: 0.7em !important;
-  font-weight: normal !important;
+  font-size: 0.9em !important;
+  font-weight: nowrap !important;
   white-space: nowrap !important;
 }
 
 /* رقم القيمة النهائي: أقصى اليسار */
 div.res-item.total span.val {
   font-size: 1.15rem !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
   font-weight: bold !important;
 }
 /* شارة الرسالة التحذيرية أسفل الحقل - الوضع الفاتح الافتراضي */
