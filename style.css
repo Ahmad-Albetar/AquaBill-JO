@@ -1070,3 +1070,45 @@ main > .card:first-of-type table.tariff th {
 .btn-theme-toggle:active {
   transform: scale(0.92);
 }
+
+
+/* ============================================================
+   1. إصلاح تضخم الأيقونات SVG
+   2. تنسيق شارة التنبيه أسفل الحقول
+   ============================================================ */
+
+/* تحجيم الأيقونات ومنع تضخمها */
+.hero-badges svg,
+.badge-pill svg,
+.trust-badges svg,
+.hero-badge svg,
+header svg,
+main svg {
+  max-width: 28px !important;
+  max-height: 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  flex-shrink: 0 !important;
+}
+
+/* تنسيق رسالة التنبيه المباشرة أسفل مربع الإدخال */
+.warning-badge {
+  display: none;
+  margin-top: 6px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #991b1b;
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 6px;
+  text-align: right;
+  line-height: 1.4;
+}
+
+:root[data-theme="dark"] .warning-badge,
+body.dark-theme .warning-badge {
+  color: #fca5a5 !important;
+  background-color: rgba(239, 68, 68, 0.2) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
