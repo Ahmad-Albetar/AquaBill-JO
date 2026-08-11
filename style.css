@@ -1103,27 +1103,39 @@ main > .card:first-of-type table.tariff th {
   border-color: #ef4444 !important;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
 }
+
 /* ============================================================
-   1. تنسيق شارة (رسوم مقطوعية) باللون الأبيض الباهت
+   1. تنسيق صندوق المجموع الكلي وشارة (رسوم مقطوعية)
    ============================================================ */
+
+/* ضبط بوكس المجموع الكلي ليصبح أفقياً وبسطر واحد */
+.res-item.total {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 10px 14px !important;
+}
+
+/* تنسيق القيمة والنص المضاف ليكون أفقياً بالكامل */
+.res-item.total .val,
+#totalOut {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 6px !important;
+  white-space: nowrap !important;
+}
+
+/* تنسيق عبارة (رسوم مقطوعية) باللون الأبيض الباهت وبنفس السطر */
 .flat-tag {
-  color: rgba(255, 255, 255, 0.65); /* أبيض باهت ومريح للعين */
-  font-size: 0.65em;
-  font-weight: normal;
-  margin-right: 3px;
-  white-space: nowrap; /* يمنع نزول العبارة لسطر جديد */
-  display: inline-block;
+  color: rgba(255, 255, 255, 0.60) !important;
+  font-size: 0.55em !important;
+  font-weight: normal !important;
+  margin-right: 4px !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
 }
-/*  */
-/* تنسيق صندوق المجموع الكلي: أصغر حجمًا وأفقي بالكامل */
-.res-item.total .val {
-  display: flex;
-  align-items: baseline; /* محاذاة النص على السطر الأساسي للرقم */
-  justify-content: flex-end; /* النص لليمين */
-  gap: 2px; /* تقليل المسافة بين العناصر */
-  flex-wrap: nowrap; /* يمنع نزول النص لسطر جديد */
-}
-/*  */
 
 /* ============================================================
    2. تنسيق الرسائل التحذيرية أسفل الحقول (Input Warnings)
