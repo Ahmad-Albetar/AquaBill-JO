@@ -1108,40 +1108,37 @@ main > .card:first-of-type table.tariff th {
    1. تنسيق صندوق المجموع الكلي وشارة (رسوم مقطوعية)
    ============================================================ */
 
-/* ============================================================
-   1. تنسيق صندوق المجموع الكلي: أصغر حجمًا وأفقي بالكامل
-   ============================================================ */
+/* ==========================================
+   تنسيق بوكس المجموع الكلي (للحاسوب والجوال)
+   ========================================== */
 
-/* إعادة هيكلة بوكس المجموع الكلي أفقياً */
 .res-item.total {
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
   padding: 10px 14px !important;
-  position: relative !important;
+  flex-wrap: nowrap !important;
 }
 
-/* محاذاة العنونة (المجموع الكلي) جهة اليمين */
 .res-item.total .lbl {
-  margin: 0 !important;
-  white-space: nowrap !important;
-}
-
-/* تجميع الرقم والوسم أفقياً جهة اليسار */
-.res-item.total .val,
-#totalOut {
   display: flex !important;
-  align-items: baseline !important;
+  align-items: center !important;
   gap: 6px !important;
-  direction: ltr !important; /* لترتيب الرقم ثم العملة ثم النص بشكل صحيح */
+  font-size: 0.95rem !important;
+  white-space: nowrap !important;
 }
 
 /* تنسيق عبارة (رسوم مقطوعية) باللون الأبيض الباهت */
 .flat-tag {
   color: rgba(255, 255, 255, 0.60) !important;
-  font-size: 0.6em !important;
+  font-size: 0.75em !important;
   font-weight: normal !important;
-  direction: rtl !important;
+  white-space: nowrap !important;
+}
+
+/* الرقم الصافي جهة اليسار بسطر واحد */
+.res-item.total .val {
+  font-size: 1.2rem !important;
   white-space: nowrap !important;
 }
 /* ============================================================
