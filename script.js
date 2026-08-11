@@ -291,7 +291,7 @@ function calcAll() {
     }
   });
 
-  // 2. قراءة المدخل
+// 2. قراءة المدخل
   const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
 
   // 3. حالة الحقل الفارغ
@@ -302,8 +302,12 @@ function calcAll() {
     document.getElementById('sewageOut').textContent = '-';
     document.getElementById('totalOut').textContent = '-';
 
-    const flatFeeHint = document.getElementById('flatFeeHint');
-    if (flatFeeHint) flatFeeHint.style.display = 'none';
+    // إخفاء عبارة (رسوم مقطوعية) عند تفريغ الحقل
+ // إظهار عبارة (رسوم مقطوعية) فقط إذا كانت القيمة بين 0 و 6
+  const flatTagEl = document.getElementById('flatFeeTag');
+  if (flatTagEl) {
+    flatTagEl.style.display = (consumptionVal >= 0 && consumptionVal <= 6) ? 'inline-block' : 'none';
+  }
 
     document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
 
