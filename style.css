@@ -1107,7 +1107,7 @@ main > .card:first-of-type table.tariff th {
 /* ============================================================
    1. تنسيق صندوق المجموع الكلي وشارة (رسوم مقطوعية)
    ============================================================ */
-/.res-item.total {
+.res-item.total {
   display: flex;
   justify-content: space-between;
   align-items: center;
