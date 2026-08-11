@@ -1185,45 +1185,133 @@ div.res-item.total span.val {
   font-weight: bold !important;
 }
 /* ============================================================
-   طبقة تحسين توازن البطاقات والمساحات (تنسيق إضافي بدون تعديل الأصل)
+   تنسيقات الوضع الفاتح وتوازن البطاقات (كود موحد وشامل)
    ============================================================ */
 
-/* ============================================================
-   تنسيق إضافي: زيادة التباعد بين البطاقات 3 و 4 
-   ============================================================ */
-
-/* 1. زيادة التباعد العام بين كل البطاقات */
-main, 
-.container, 
-.app-container {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 2rem !important; /* زيادة الفارق من 1.5rem إلى 2rem */
+/* 1. الترويسة (Header) بالوضع الفاتح */
+:root[data-theme="light"] header,
+body.light-theme header {
+  background: var(--bg, #F2F6F5) !important;
+  background-image: none !important;
+  color: var(--ink, #16302B) !important;
 }
 
-/* 2. تصفير الهوامش لمنع التداخل */
+:root[data-theme="light"] header h1,
+body.light-theme header h1 {
+  color: var(--teal, #0B4F45) !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme="light"] header p,
+body.light-theme header p,
+:root[data-theme="light"] .brand-tagline-ar,
+body.light-theme .brand-tagline-ar {
+  color: #4A5568 !important;
+}
+
+/* 2. شارات المميزات والعناوين بالوضع الفاتح */
+:root[data-theme="light"] .hero-badges .badge-pill,
+:root[data-theme="light"] .trust-badges li,
+body.light-theme .hero-badges .badge-pill,
+:root[data-theme="light"] .hero-badge,
+body.light-theme .hero-badge {
+  background-color: #E2E8F0 !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] h2,
+body.light-theme h2,
+:root[data-theme="light"] h2 .titletext {
+  color: #0b4f45 !important;
+}
+
+:root[data-theme="light"] h2 .eyebrow2 {
+  color: #8f6712 !important;
+}
+
+:root[data-theme="light"] #flatFeeTag.flat-tag,
+body.light-theme #flatFeeTag.flat-tag {
+  color: #0f766e !important;
+  background: rgba(15, 118, 110, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.72em !important;
+  font-weight: 600 !important;
+}
+
+:root[data-theme="light"] svg.wave path,
+body.light-theme svg.wave path {
+  fill: var(--bg, #F2F6F5) !important;
+}
+
+/* 3. توحيد المسافات بين البطاقات وربط الهيدر وتكامله مع جدول الأسعار */
+main, 
+.app-container, 
+body > .container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.75rem !important; /* مسافة موحدة ودقيقة بين كل كارت والأخر */
+  padding-top: 1rem !important;
+}
+
 .card {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+  border-radius: 16px !important;
 }
 
-/* 3. إضافة مسافة علوية مخصصة للبطاقة 3 والبطاقة 4 للحد من التقارب */
-.card:nth-of-type(3),
-.card:nth-of-type(4) {
-  margin-top: 0.75rem !important;
+.card:first-of-type {
+  margin-top: 0.5rem !important; /* إبعاد البطاقات عن الهيدر بمسافة مريحة */
 }
 
-/* 4. ضبط استجابة الجوال */
+/* دمج جدول الأسعار داخل خلفية البطاقات بصرياً */
+.card:first-of-type table,
+.card:first-of-type .table-responsive,
+.card:first-of-type .tier-table {
+  background: transparent !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-top: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+:root[data-theme="light"] .card:first-of-type table,
+body.light-theme .card:first-of-type table {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 4. رسالة التحذير أسفل حقل الإدخال */
+.warning-badge, #warning-message {
+  margin-top: 12px !important;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: #991b1b;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+}
+
+:root[data-theme="dark"] .warning-badge {
+  color: #fca5a5 !important;
+  background-color: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+/* 5. استجابة شاشات الهاتف */
 @media (max-width: 600px) {
   main, 
-  .container, 
-  .app-container {
-    gap: 1.5rem !important;
+  .app-container, 
+  body > .container {
+    gap: 1.25rem !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
   }
 
-  .card:nth-of-type(3),
-  .card:nth-of-type(4) {
-    margin-top: 0.5rem !important;
+  .card:first-of-type {
+    margin-top: 0.25rem !important;
   }
 }
 /* ============================================================
