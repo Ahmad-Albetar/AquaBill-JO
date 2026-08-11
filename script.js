@@ -351,15 +351,15 @@ function calcAll() {
   const total = water + sewage;
 
 // إظهار أو إخفاء عبارة (رسوم مقطوعية) بجانب عنوان المجموع الكلي
+ // إظهار أو إخفاء عبارة (رسوم مقطوعية) بجانب عنوان المجموع الكلي
   const flatTagEl = document.getElementById('flatFeeTag');
   if (flatTagEl) {
     flatTagEl.style.display = (n >= 0 && n <= 6) ? 'inline-block' : 'none';
   }
 
+  // طباعة أجور المياه والصرف الصحي والمجموع الكلي بشكل صافٍ
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
-  
-  // طباعة الرقم والعملة بشكل صافٍ بدون دمج HTML
   document.getElementById('totalOut').textContent = `${total.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
 
   const flatFeeHint = document.getElementById('flatFeeHint');
