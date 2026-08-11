@@ -1107,35 +1107,34 @@ main > .card:first-of-type table.tariff th {
 /* ============================================================
    1. تنسيق صندوق المجموع الكلي وشارة (رسوم مقطوعية)
    ============================================================ */
-
-/* ==========================================
- /* إرجاع بوكس المجموع للتنسيق العمودي الأصلي */
+/* تنسيق سطر المجموع الكلي أفقياً */
 .res-item.total {
   display: flex !important;
-  flex-direction: column !important;
+  justify-content: space-between !important;
   align-items: center !important;
-  text-align: center !important;
-  padding: 12px 16px !important;
+  padding: 10px 14px !important;
+  flex-wrap: nowrap !important;
 }
 
 .res-item.total .lbl {
-  font-size: 1.1rem !important;
-  margin-bottom: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.95rem !important;
+  white-space: nowrap !important;
+}
+
+/* تنسيق عبارة (رسوم مقطوعية) باللون الأبيض الباهت */
+.flat-tag {
+  color: rgba(255, 255, 255, 0.60) !important;
+  font-size: 0.75em !important;
+  font-weight: normal !important;
+  white-space: nowrap !important;
 }
 
 .res-item.total .val {
-  font-size: 1.8rem !important;
-  font-weight: bold !important;
-  line-height: 1.2 !important;
-}
-
-/* تنسيق عبارة (رسوم مقطوعية) بخط أبيض باهت وتحت الرقم */
-.flat-tag {
-  color: rgba(255, 255, 255, 0.65) !important;
-  font-size: 0.6em !important;
-  font-weight: normal !important;
-  display: block !important;
-  margin-top: 4px !important;
+  font-size: 1.2rem !important;
+  white-space: nowrap !important;
 }
 /* ============================================================
    2. تنسيق الرسائل التحذيرية أسفل الحقول (Input Warnings)
