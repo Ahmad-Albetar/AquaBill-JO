@@ -1112,36 +1112,38 @@ main > .card:first-of-type table.tariff th {
    1. تنسيق صندوق المجموع الكلي: أصغر حجمًا وأفقي بالكامل
    ============================================================ */
 
-/* ضبط بوكس المجموع الكلي ليصبح أفقياً وبسطر واحد */
+/* إعادة هيكلة بوكس المجموع الكلي أفقياً */
 .res-item.total {
   display: flex !important;
-  flex-direction: row !important;
   justify-content: space-between !important;
   align-items: center !important;
   padding: 10px 14px !important;
-  flex-wrap: nowrap !important; /* يمنع الالتفاف لسطر جديد */
+  position: relative !important;
 }
 
-/* تنسيق القيمة والنص المضاف ليكون أفقياً بالكامل */
+/* محاذاة العنونة (المجموع الكلي) جهة اليمين */
+.res-item.total .lbl {
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* تجميع الرقم والوسم أفقياً جهة اليسار */
 .res-item.total .val,
 #totalOut {
-  display: inline-flex !important;
-  flex-direction: row !important;
+  display: flex !important;
   align-items: baseline !important;
   gap: 6px !important;
-  white-space: nowrap !important; /* يمنع الالتفاف لسطر جديد */
+  direction: ltr !important; /* لترتيب الرقم ثم العملة ثم النص بشكل صحيح */
 }
 
-/* تنسيق عبارة (رسوم مقطوعية) باللون الأبيض الباهت وبنفس السطر - حجم أصغر (0.5em) */
+/* تنسيق عبارة (رسوم مقطوعية) باللون الأبيض الباهت */
 .flat-tag {
   color: rgba(255, 255, 255, 0.60) !important;
-  font-size: 0.5em !important; /* تصغير الخط أكثر */
+  font-size: 0.6em !important;
   font-weight: normal !important;
-  margin-right: 4px !important;
-  white-space: nowrap !important; /* يمنع نزول النص لسطر جديد */
-  display: inline-block !important;
+  direction: rtl !important;
+  white-space: nowrap !important;
 }
-
 /* ============================================================
    2. تنسيق الرسائل التحذيرية أسفل الحقول (Input Warnings)
    ============================================================ */
