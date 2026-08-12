@@ -874,11 +874,42 @@ input:focus-visible {
     transition-duration: 0.001ms !important;
   }
    /* شارة تنبيه الاستهلاك المرتفع - مسافة مريحة أسفل صندوق الإدخال */
+   /* شارة تنبيه برتقالية تحذيرية مستوحاة من مثلثات الخطر */
 .warning-badge {
-  display: none; /* مخفية افتراضياً */
-  margin-top: 16px !important;    /* إبعاد التنبيه عن صندوق الإدخال */
-  margin-bottom: 10px !important; /* مسافة مريحة من الأسفل */
+  display: none; /* مخفية وتظهر عند تجاوز 500 */
+  margin-top: 14px !important;
+  margin-bottom: 12px !important;
   padding: 10px 14px !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  color: #D97706 !important; /* لون برتقالي تحذيري داكن للنص */
+  background-color: rgba(245, 158, 11, 0.12) !important; /* خلفية برتقالية خفيفة */
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  border-right: 4px solid #F59E0B !important; /* شريط جانبي برتقالي عريض للتنبيه */
+  border-radius: 8px !important;
+  text-align: right !important;
+  line-height: 1.5 !important;
+}
+
+.warning-badge .warning-icon {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 1.05rem;
+}
+
+/* التوافق مع الوضع الداكن */
+[data-theme="dark"] .warning-badge,
+body.dark-theme .warning-badge {
+  color: #FBBF24 !important; /* برتقالي ذهبي زاهي للوضع الداكن */
+  background-color: rgba(245, 158, 11, 0.18) !important;
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  border-right-color: #F59E0B !important;
+}
+/* .warning-badge {
+  display: none; /* مخفية افتراضياً */
+  /* margin-top: 16px !important;    /* إبعاد التنبيه عن صندوق الإدخال */ 
+  /* margin-bottom: 10px !important; /* مسافة مريحة من الأسفل */ 
+  /* padding: 10px 14px !important;
   font-size: 0.83rem !important;
   font-weight: 600 !important;
   color: #dc2626 !important;
@@ -887,13 +918,13 @@ input:focus-visible {
   border-radius: 8px !important;
   text-align: right !important;
   line-height: 1.5 !important;
-}
+} */
 
 /* التوافق مع الوضع الداكن */
-[data-theme="dark"] .warning-badge,
+/* [data-theme="dark"] .warning-badge,
 body.dark-theme .warning-badge {
   color: #fca5a5 !important;
   background-color: rgba(239, 68, 68, 0.2) !important;
   border-color: rgba(239, 68, 68, 0.4) !important;
 }
-}
+} */
