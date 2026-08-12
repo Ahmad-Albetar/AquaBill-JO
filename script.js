@@ -293,41 +293,9 @@ function calcAll() {
 
   // 2. قراءة المدخل
   const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
-   // 3. حالة الحقل الفارغ
-  if (rawInput === '') {
-    if (warningElem) warningElem.style.display = 'none';
-
-    // وضع الشرطة للمخرجات الرئيسية
-    document.getElementById('waterOut').textContent = '-';
-    document.getElementById('sewageOut').textContent = '-';
-    document.getElementById('totalOut').textContent = '-';
-
-    // 🔴 التعديل هنا: وضع الشرطة لرسم المقطوعية والإجمالي (تأكد من مطابقة الـ ID)
-    const fixedChargeEl = document.getElementById('fixed-charge-display') || document.getElementById('flatFeeOut');
-    if (fixedChargeEl) fixedChargeEl.textContent = '-';
-
-    const totalBillEl = document.getElementById('total-bill-display');
-    if (totalBillEl) totalBillEl.textContent = '-';
-
-    // إخفاء عبارة (رسوم مقطوعية) والتنبيهات
-    const flatTagEl = document.getElementById('flatFeeTag');
-    if (flatTagEl) flatTagEl.style.display = 'none';
-
-    const flatFeeHint = document.getElementById('flatFeeHint');
-    if (flatFeeHint) flatFeeHint.style.display = 'none';
-
-    document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
-
-    const badge = document.getElementById('statusBadge');
-    if (badge) badge.innerHTML = '';
-
-    document.getElementById('networkMarginal').textContent = '-';
-    document.getElementById('tankerMarginal').textContent = '-';
-    return; // إيقاف الحساب فوراً حتى لا تُحسب المقطوعية
-  }
-
+   
   // 3. حالة الحقل الفارغ
-  /* if (rawInput === '') {
+if (rawInput === '') {
     if (warningElem) warningElem.style.display = 'none';
 
     document.getElementById('waterOut').textContent = '-';
@@ -350,7 +318,6 @@ function calcAll() {
     document.getElementById('tankerMarginal').textContent = '-';
     return;
   }
-*/
   const consumptionVal = parseFloat(rawInput);
 
   // 4. فحص تجاوز الـ 500 م³
