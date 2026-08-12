@@ -187,47 +187,6 @@ function costFor(n, field) {
 }
 
 
-/* ==========================================================================
-   5. UI RENDERING — بناء جدول التعرفة وتحديث نتائج الواجهة
-   ========================================================================== */
-
-/**
- * renderTariffTable
- * يبني صفوف جدول التعرفة داخل <tbody> ديناميكياً من مصفوفة tiers.
- */
-function renderTariffTable() {
-  const tbody = document.querySelector('#tariffTable tbody');
-  tbody.innerHTML = tiers.map((t, i) => `
-    <tr>
-      <td>${t.label}</td>
-      <td><input type="number" class="tariff-input" data-tier="${i}" data-field="water" value="${t.water}" step="0.01" min="0" readonly></td>
-      <td><input type="number" class="tariff-input" data-tier="${i}" data-field="sewage" value="${t.sewage}" step="0.01" min="0" readonly></td>
-    </tr>`
-  ).join('');
-}
-
-/**
- * onTariffEdit
- * يُستدعى عند تعديل قيمة بجدول التعرفة يدوياً (بعد فتح القفل). يحدّث
- * مصفوفة tiers، يحفظها كإعداد مخصص، ثم يعيد حساب النتائج فوراً.
- * @param {HTMLInputElement} el - حقل الإدخال الذي تم تعديله
- */
-function onTariffEdit(el) {
-  const i = +el.dataset.i;
-  const f = el.dataset.f;
-  tiers[i][f] = sanitizeNumber(el.value, tiers[i][f]);
-  updateSetting('tariffOverride', tiers);
-  calcAll();
-}
-
-/**
- * calcAll
- * الدالة الرئيسية: تُستدعى عند أي تغيير بالمدخلات (oninput)، وتحدّث كل نتائج الصفحة:
- *   - تكلفة المياه والصرف الصحي والإجمالي
- *   - تكلفة المتر القادم (الهامشية)
- *   - شارة حالة الاستهلاك (آمن / متوسط / مرتفع)
- *   - مقارنة العداد بصهريج المياه والتوصية الأوفر
- */
 // --- 1. دالة حساب الصهريج فقط (الخطوة 3) ---
 function calcTankerOnly() {
   const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
@@ -492,76 +451,6 @@ function toggleTheme() {
   themeBtn.textContent = newTheme === 'dark' ? '🌞' : '🌙';
   }
 }
-/* ==========================================================================
-   8. EXPORT / IMPORT — تصدير واستيراد الإعدادات كملف JSON
-   ------------------------------------------------------------------------
-   يسمح بحفظ نسخة احتياطية من الإعدادات الحالية (الوضع، تعديلات التعرفة
-   إن وُجدت) كملف JSON على الجهاز، واستعادتها لاحقاً أو نقلها لجهاز آخر.
-   ========================================================================== */
-
-/**
- * exportSettings
- * ينشئ ملف JSON يحتوي كل الإعدادات الحالية، ويبدأ تحميله تلقائياً بالمتصفح.
- */
-function exportSettings() {
-  try {
-    const settings = loadSettings();
-    const payload = {
-      app: APP_CONFIG.appName,
-      version: APP_CONFIG.version,
-      exportedAt: new Date().toISOString(),
-      settings,
-    };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'aquabill-settings.json';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  } catch (e) {
-    logClientError(e.message, 'exportSettings');
-    alert('تعذّر تصدير الإعدادات.');
-  }
-}
-/**
- * importSettings
- * يقرأ ملف JSON اختاره المستخدم، ويستعيد منه الإعدادات (الوضع، وتعديلات
- * التعرفة إن وُجدت)، ثم يعيد رسم الواجهة فوراً بالقيم المستوردة.
- * @param {Event} event - حدث اختيار الملف من <input type="file">
- */
-function importSettings(event) {
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const parsed = JSON.parse(reader.result);
-      const settings = { ...DEFAULT_SETTINGS, ...(parsed.settings || {}) };
-      saveSettings(settings);
-
-      if (settings.theme) {
-        document.documentElement.setAttribute('data-theme', settings.theme);
-      }
-      if (Array.isArray(settings.tariffOverride) && settings.tariffOverride.length === tiers.length) {
-        settings.tariffOverride.forEach((t, i) => {
-          tiers[i].water = sanitizeNumber(t.water, tiers[i].water);
-          tiers[i].sewage = sanitizeNumber(t.sewage, tiers[i].sewage);
-        });
-        renderTariffTable();
-      }
-      calcAll();
-    } catch (e) {
-      logClientError(e.message, 'importSettings');
-      alert('ملف الإعدادات غير صالح.');
-    }
-  };
-  reader.readAsText(file);
-}
-
 
 /* ==========================================================================
    9. SCROLL EFFECTS — شريط التقدم والظهور التدريجي للبطاقات
@@ -637,8 +526,6 @@ function initFadeInCards() {
       tiers[i].sewage = sanitizeNumber(t.sewage, tiers[i].sewage);
     });
   }
-
-  renderTariffTable();
   // calcAll();
   initScrollProgress();
   initFadeInCards();
