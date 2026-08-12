@@ -177,11 +177,11 @@ h2 .titletext { font-size: 1.04rem; font-weight: 700; color: var(--accent-strong
   margin: 0 auto;
   padding: 0 0 3rem;
 }
-
+/*****************************/
 header {
   background: linear-gradient(135deg, #083932 0%, #0B4F45 50%, #0E5D51 100%);
   color: #fff;
-  padding: 2.2rem 1.4rem 3.4rem;
+  padding: 1.8rem 1.4rem 3.4rem;
   position: relative;
   overflow: hidden;
   border-bottom-left-radius: 24px;
