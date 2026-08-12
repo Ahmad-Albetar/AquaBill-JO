@@ -9,75 +9,75 @@
   <meta name="author" content="Ahmad Albetar">
   <meta name="application-name" content="AquaBill JO">
 
-  <!-- ===================== سياسة الأمان ===================== -->
+  <!-- ============================================================
+       رؤوس أمان عبر Meta (أقصى ما يمكن تطبيقه على استضافة ثابتة بلا خادم
+       مثل GitHub Pages، التي لا تدعم رؤوس HTTP مخصصة إطلاقاً).
+       ⚠️ ملاحظة صادقة: X-Frame-Options وX-Content-Type-Options وStrict-
+       Transport-Security لا يمكن ضبطها إطلاقاً عبر وسم Meta بأي متصفح —
+       تتجاهلها المتصفحات كلياً إن وُضعت هنا، وتتطلب رأس HTTP حقيقي من
+       الخادم. راجعوا SECURITY.md لبديل Netlify (ملف _headers) إن أردتم
+       هذه الحماية الإضافية. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none';">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
-  <!-- ===================== الإعدادات المركزية (config) ===================== -->
-  <script>
-    /* config.js — ملف البيانات والإعدادات المركزي */
-    const APP_CONFIG = {
-      version: "1.0.0",
-      storageKeys: {
-        settings: "aquabill_settings"
-      },
-      // جدول التعرفة الرسمية الصادر عن الموارد المائية في الأردن
-      // يشمل المياه، الصرف الصحي، و المقطوعية
-      tariffTiers: [
-        { min: 0,  max: 6,   waterRate: 0.15, sewageRate: 0.05, flatFee: 2.50 },
-        { min: 7,  max: 12,  waterRate: 0.25, sewageRate: 0.08, flatFee: 2.50 },
-        { min: 13, max: 18,  waterRate: 0.45, sewageRate: 0.15, flatFee: 2.50 },
-        { min: 19, max: 24,  waterRate: 0.75, sewageRate: 0.25, flatFee: 2.50 },
-        { min: 25, max: 30,  waterRate: 1.10, sewageRate: 0.40, flatFee: 2.50 },
-        { min: 31, max: 40,  waterRate: 1.60, sewageRate: 0.65, flatFee: 2.50 },
-        { min: 41, max: Infinity, waterRate: 2.20, sewageRate: 0.95, flatFee: 2.50 }
-      ],
-      defaultFlatFee: 2.50
-    };
-  </script>
+  <!-- ملف الإعدادات المركزي (اسم التطبيق، الإصدار، جدول التعرفة، مفاتيح التخزين).
+       يُحمَّل مبكراً وبشكل غير مؤجل (بدون defer) لأنه صغير جداً، ولأن سكربت
+       منع الوميض أدناه يحتاجه فوراً قبل رسم الصفحة. -->
+  <script src="config.js"></script>
 
-  <!-- ===================== تطبيق الثيم الأولي لمنع الوميض ===================== -->
+  <!-- تطبيق فوري للوضع الفاتح/الداكن المحفوظ مسبقاً (إن وُجد) قبل رسم الصفحة،
+       لتفادي "وميض" ظهور الوضع الافتراضي ثم تبديله. لا علاقة له بالحسابات. -->
   <script>
     (function () {
       try {
-        const raw = localStorage.getItem(APP_CONFIG.storageKeys.settings);
-        const settings = raw ? JSON.parse(raw) : null;
+        var raw = localStorage.getItem(APP_CONFIG.storageKeys.settings);
+        var settings = raw ? JSON.parse(raw) : null;
         if (settings && (settings.theme === 'dark' || settings.theme === 'light')) {
           document.documentElement.setAttribute('data-theme', settings.theme);
         }
-      } catch (e) { /* يُتجاهل بصمت */ }
+      } catch (e) { /* يُتجاهل بصمت — لن يمنع عرض الصفحة بالوضع الافتراضي */ }
     })();
   </script>
 
   <!-- ===================== العنوان والوصف ===================== -->
   <title>AquaBill JO — حاسبة فاتورة المياه الأردنية</title>
-  <meta name="description" content="AquaBill JO: أداة مستقلة لحساب فاتورة المياه الأردنية بدقة حسب الشرائح الرسمية، ومقارنة العداد بصهريج المياه.">
+  <meta name="description" content="AquaBill JO: أداة مستقلة لحساب فاتورة المياه الأردنية بدقة، ومقارنة العداد بصهريج المياه، مع نصائح لتوفير المال دون انقطاع.">
 
-  <!-- ===================== الروابط الأساسية ووسوم المشاركة ===================== -->
+  <!-- ============================================================
+       ✅ رابط الموقع مضبوط على: https://ahmadalbetar295.github.io/Water-Bill-Calculator/
+       (Canonical وOpen Graph وTwitter Card وJSON-LD — 5 مواضع، كلها محدَّثة).
+       إن غيّرتم اسم المستودع على GitHub مستقبلاً، حدّثوا هذا الرابط بكل
+       المواضع الخمسة ليطابق الرابط الفعلي الجديد.
+       ============================================================ -->
+
+  <!-- ===================== رابط أساسي (Canonical) ===================== -->
   <link rel="canonical" href="https://ahmad-albetar.github.io/AquaBill-JO/">
 
+  <!-- ===================== Open Graph (فيسبوك / واتساب / تيليجرام) ===================== -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AquaBill JO">
   <meta property="og:title" content="AquaBill JO — حاسبة فاتورة المياه الأردنية">
-  <meta property="og:description" content="احسب فاتورة المياه والحرص على إدارة استهلاكك بدقة وحساب تكلفة الصهريج بسهولة.">
+  <meta property="og:description" content="احسب فاتورة المياه بدقة، وقارن العداد بصهريج المياه، بأداة مجانية ومستقلة تعمل من هاتفك مباشرة.">
   <meta property="og:url" content="https://ahmad-albetar.github.io/AquaBill-JO/">
-  <meta property="og:image" content="https://ahmad-albetar.github.io/AquaBill-JO/images/icon-512.png">
-  <meta property="og:image:width" content="512">
-  <meta property="og:image:height" content="512">
+  <meta property="og:image" content="https://ahmad-albetar.github.io/AquaBill-JO/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:locale" content="ar_AR">
 
+  <!-- ===================== Twitter Card ===================== -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AquaBill JO — حاسبة فاتورة المياه الأردنية">
   <meta name="twitter:description" content="احسب فاتورة المياه بدقة، وقارن العداد بصهريج المياه، بأداة مجانية ومستقلة تعمل من هاتفك مباشرة.">
-  <meta name="twitter:image" content="https://ahmad-albetar.github.io/AquaBill-JO/images/icon-512.png">
+  <meta name="twitter:image" content="https://ahmad-albetar.github.io/AquaBill-JO/images/og-image.png">
 
-  <!-- ===================== Favicon & PWA ===================== -->
+  <!-- ===================== أيقونات المتصفح (Favicon) ===================== -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
 
+  <!-- ===================== إعدادات تطبيق الويب التقدمي (PWA) ===================== -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0B4F45">
   <meta name="mobile-web-app-capable" content="yes">
@@ -85,493 +85,265 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="AquaBill JO">
 
-  <!-- ===================== الخطوط ===================== -->
+  <!-- ===================== الخطوط (Google Fonts: Tajawal) ===================== -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-  <!-- ===================== ملف الأنماط (style) ===================== -->
-  <style>
-    /* style.css — التنسيقات الأساسية والمتغيرة */
+  <!-- ===================== ملف الأنماط ===================== -->
+  <link rel="stylesheet" href="style.css">
 
-    :root {
-      --bg-color: #F2F6F5;
-      --card-bg: #FFFFFF;
-      --text-main: #2D3748;
-      --text-muted: #718096;
-      --primary: #0B4F45;
-      --primary-accent: #0883FE;
-      --border-color: #E2E8F0;
-      --accent-gold: #D4A93B;
-      --warning-bg: #FFFBEB;
-      --warning-text: #92400E;
-      --warning-border: #FBBF24;
-      --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      --font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  <!-- ===================== بيانات منظّمة (JSON-LD) لمحركات البحث ===================== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AquaBill JO",
+    "alternateName": "حاسبة فاتورة المياه الأردنية",
+    "description": "أداة مدنية مستقلة تساعدك على حساب فاتورة المياه الأردنية بدقة حسب نظام الشرائح الرسمي، ومقارنة العداد بصهريج المياه.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any (Web/PWA)",
+    "url": "https://ahmadalbetar295-dotcom.github.io/Aqua-Bill---JO/",
+    "inLanguage": "ar",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JOD"
     }
-
-    [data-theme="dark"] {
-      --bg-color: #1A202C;
-      --card-bg: #2D3748;
-      --text-main: #F7FAFC;
-      --text-muted: #A0AEC0;
-      --primary: #2C7A7B;
-      --primary-accent: #3182CE;
-      --border-color: #4A5568;
-      --warning-bg: rgba(146, 64, 14, 0.2);
-      --warning-text: #FBBF24;
-      --warning-border: #F59E0B;
-      --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    }
-
-    * {
-      box-sizing: border-color: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: var(--font-family);
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      direction: rtl;
-      line-height: 1.6;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .skip-link {
-      position: absolute;
-      top: -40px;
-      right: 0;
-      background: var(--primary);
-      color: white;
-      padding: 8px;
-      z-index: 100;
-      transition: top 0.3s;
-    }
-    .skip-link:focus { top: 0; }
-
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      right: 0;
-      height: 4px;
-      background: var(--primary-accent);
-      width: 0%;
-      z-index: 1000;
-    }
-
-    .wrap {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 15px;
-    }
-
-    header {
-      text-align: center;
-      position: relative;
-      padding: 20px 0 30px;
-    }
-
-    .brandrow {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .logomark {
-      width: 60px;
-      height: 60px;
-      flex-shrink: 0;
-      background-color: #ffffff !important;
-      border-radius: 50%;
-    }
-
-    .brandtext h1 {
-      font-size: 1.6rem;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .jo-badge {
-      background: #CE1126;
-      color: white;
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-
-    .eyebrow, .brand-tagline-ar {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .flagchip {
-      vertical-align: middle;
-    }
-
-    .btn-theme-toggle {
-      background: transparent;
-      border: 1px solid var(--border-color);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      font-size: 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s;
-    }
-    .btn-theme-toggle:hover {
-      background-color: rgba(0,0,0,0.05);
-    }
-
-    .hero-badges {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 15px;
-      margin-bottom: 15px;
-    }
-
-    .badge-pill {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.8rem;
-      color: var(--primary);
-      background: rgba(11, 79, 69, 0.08);
-      padding: 5px 10px;
-      border-radius: 100px;
-    }
-    .badge-pill svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    .wave {
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 100%;
-      height: 30px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border-color);
-    }
-
-    .card h2 {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      color: var(--primary);
-    }
-
-    .card h2 .icn {
-      width: 24px;
-      height: 24px;
-    }
-    .titlewrap {
-      display: flex;
-      flex-direction: column;
-    }
-    .eyebrow2 {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
-
-    table.tariff {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 10px;
-      font-size: 0.9rem;
-    }
-
-    table.tariff th, table.tariff td {
-      border: 1px solid var(--border-color);
-      padding: 8px 12px;
-      text-align: center;
-    }
-
-    table.tariff th {
-      background-color: rgba(0,0,0,0.03);
-      font-weight: 700;
-    }
-
-    .input-field {
-      margin-bottom: 15px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-      font-size: 0.95rem;
-    }
-
-    input[type="number"] {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background-color: var(--card-bg);
-      color: var(--text-main);
-      font-size: 1rem;
-    }
-    input[type="number"]:focus {
-      outline: none;
-      border-color: var(--primary-accent);
-      box-shadow: 0 0 0 3px rgba(8, 131, 254, 0.1);
-    }
-
-    .alert-warning {
-      background-color: var(--warning-bg);
-      color: var(--warning-text);
-      border: 1px solid var(--warning-border);
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      margin-bottom: 15px;
-    }
-
-    .result {
-      background: rgba(8, 131, 254, 0.05);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin: 10px 0;
-    }
-
-    .result .line {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      font-size: 0.95rem;
-    }
-
-    .res-item.total {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-      font-size: 1.1rem;
-      border-top: 1px dashed var(--border-color);
-      padding-top: 8px;
-      color: var(--primary);
-    }
-
-    .flat-tag {
-      font-size: 0.7rem;
-      opacity: 0.8;
-      font-weight: 400;
-    }
-
-    .box-marginal {
-      background: rgba(0,0,0,0.02);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-top: 8px;
-    }
-
-    .tanker-inputs-group {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .compare {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 15px 0;
-    }
-
-    .compare .box {
-      background-color: rgba(0,0,0,0.015);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-    }
-
-    .compare .lbl {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .compare .val {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .tips-list {
-      padding-right: 20px;
-      font-size: 0.95rem;
-      color: var(--text-muted);
-    }
-
-    .tips-list li {
-      margin-bottom: 10px;
-    }
-
-    .tips-list strong {
-      color: var(--text-main);
-    }
-
-    .hint {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 6px;
-      line-height: 1.4;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px 0;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      border-top: 1px solid var(--border-color);
-      margin-top: 20px;
-    }
-
-    .footer-logo {
-      margin-bottom: 10px;
-    }
-
-    .social-share-group {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 15px 0;
-    }
-
-    .social-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-decoration: none;
-      transition: transform 0.2s;
-    }
-    .social-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .social-btn.whatsapp { background-color: #25D366; }
-    .social-btn.facebook { background-color: #1877F2; }
-    .social-btn.instagram { background-color: #E4405F; }
-
-    .social-btn svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .app-version {
-      font-size: 0.75rem;
-      margin-top: 10px;
-    }
-
-    .pwa-toast {
-      position: fixed;
-      bottom: -120px;
-      left: 15px;
-      right: 15px;
-      max-width: 500px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow);
-      padding: 15px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-      z-index: 999;
-      font-size: 0.95rem;
-    }
-
-    .pwa-toast.show {
-      bottom: 20px;
-    }
-
-    .pwa-toast-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
-    .pwa-toast-actions button {
-      padding: 8px 16px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-family: var(--font-family);
-      font-size: 0.9rem;
-    }
-
-    .pwa-toast-actions button.btn-install {
-      background: var(--primary);
-      color: white;
-    }
-    .pwa-toast-actions button.btn-later {
-      background: rgba(0,0,0,0.05);
-      color: var(--text-main);
-    }
-
-    /* أنيميشن */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in {
-      animation: fadeIn 0.5s ease forwards;
-    }
-
-    @media (max-width: 480px) {
-      .brandrow { flex-direction: column; text-align: center; gap: 8px; }
-      .compare { grid-template-columns: 1fr; }
-      .tanker-inputs-group { flex-direction: column; gap: 8px; }
-    }
-  </style>
+  }
+  </script>
+  <!-- وسوم معاينة المشاركة للواتساب وفيسبوك (Open Graph) -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://ahmad-albetar.github.io/AquaBill-JO/" />
+<meta property="og:title" content="AquaBill JO — حاسبة فاتورة المياه الأردنية" />
+<meta property="og:description" content="احسب فاتورة المياه والحرص على إدارة استهلاكك بدقة وحساب تكلفة الصهريج بسهولة." />
+<meta property="og:image" content="https://ahmad-albetar.github.io/AquaBill-JO/images/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
 </head>
 <body>
 <a class="skip-link" href="#mainContent">تخطَّ إلى المحتوى الرئيسي</a>
-
-<!-- شريط تقدّم التمرير صعوداً ونزولاً -->
+<!-- شريط تقدّم رفيع يعكس موضعك الحالي بالصفحة أثناء التمرير صعوداً ونزولاً -->
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-
 <div class="wrap">
 
-  <!-- ===================== الترويسة ===================== -->
+  <!-- ===================== الترويسة: الشعار والعنوان ===================== -->
   <header>
     <div class="brandrow">
-      <!-- الشعار -->
-      <svg class="logomark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="شعار AquaBill JO">
-        <circle cx="256" cy="256" r="256" fill="#fff"/>
-        <circle cx="256" cy="256" r="238" fill="#fff" stroke="#D4A93B" stroke-width="6"/>
+      <!-- الشعار كـ SVG مضمّن (نفس التصميم متوفر كملف صورة بـ images/logo.png لأي استخدام خارج الصفحة).
+           svg متداخل يحافظ على النسب الأصلية للشعار الجديد (قطرة + آلة حاسبة) بدقة كاملة. -->
+<svg class="logomark" style="background-color: #ffffff !important; border-radius: 50%;" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="شعار AquaBill JO">      <circle cx="256" cy="256" r="256" fill="#fff"/>
+      <circle cx="256" cy="256" r="238" fill="#fff" stroke="#D4A93B" stroke-width="6"/>
         <svg x="106" y="106" width="300" height="300" viewBox="-138 64 700 700" preserveAspectRatio="xMidYMid meet">
-          <path fill="#0883fe" d="M211.05026,99.50412c4.71069,0.5799 32.49468,21.3064 38.22433,25.67192c73.44513,55.63467 134.27863,126.18777 178.50469,207.01902c30.86755,55.26016 62.38061,132.37088 63.94906,196.37863c0.37878,20.25116 -2.2033,40.44897 -7.66087,59.94791c-12.48893,43.58054 -39.30731,77.03016 -73.10903,106.27057c-10.21627,8.83454 -23.72416,19.55763 -35.54089,26.09817c0.55483,-12.11015 0.11737,-28.36549 0.12804,-40.82241l0.016,-79.0094c33.75371,-36.4905 38.26701,-68.57439 25.10055,-116.51885c-23.18,-84.39815 -72.89564,-163.86794 -131.92595,-227.90557c-16.25001,-17.63067 -37.04532,-33.89775 -56.13882,-48.47795c-1.24836,-0.16858 -5.66563,3.17265 -6.81796,4.03369c-76.16324,57.16204 -132.13828,140.97976 -167.54367,228.50787c-17.8302,44.08202 -35.40592,99.23388 -5.4357,141.89149c4.63973,6.60457 10.13358,11.97678 14.77812,18.36262l0.41292,0.5815l-0.02134,118.97823c-34.19971,-20.67261 -64.31397,-49.87568 -86.03649,-83.3093c-55.41861,-85.29921 -25.10962,-185.77611 15.97206,-270.40953c51.49855,-106.09132 132.74699,-203.83251 233.14494,-267.28863z M132.49753,398.57203c7.68328,-0.41185 20.72436,0.20112 28.87871,0.24114l60.8239,0.06242c13.11311,-0.01921 26.49829,-0.14884 39.62207,-0.17658c25.8421,-0.05442 61.59105,-6.21939 61.87914,31.03186c0.05335,6.8217 0.18139,13.77836 0.06402,20.623c-0.2454,14.53752 2.35801,31.6411 -8.50911,43.21777c-6.6099,6.93533 -15.071,8.38108 -24.10827,8.42376c-10.00288,0.38945 -22.25707,-0.00533 -32.52669,-0.02667h-64.21367l-40.54767,0.24007c-13.77943,0.10136 -31.87317,2.05926 -43.17455,-7.39946c-12.60043,-10.86713 -10.25788,-29.44847 -10.35338,-44.16737c-0.17712,-27.46604 -2.47111,-50.16963 32.16552,-52.06991zM190.71908,478.36192l72.08474,-0.09603c9.90685,-0.05335 19.84571,0.18139 29.73655,-0.09603c8.11967,-0.2294 8.14634,-9.46939 8.07166,-15.40176l-0.3521,-21.67557c-0.04268,-5.65549 1.13633,-12.72793 -2.52873,-17.39007c-6.1511,-3.2484 -55.55198,-1.63674 -64.95735,-1.61433l-62.73218,0.18139c-7.69021,0.00373 -38.06215,-0.64765 -43.63975,1.18541c-1.29317,1.66608 -1.73917,3.28788 -2.01978,5.37221c-1.155,8.58434 -0.07309,18.31514 -0.03734,27.02164c0.02081,4.94009 -0.5687,10.11491 -0.06882,15.00698c0.18085,1.76584 0.5703,4.08651 2.12541,5.16949c5.30233,3.69173 53.88964,2.31533 64.3177,2.33667z M258.82401,534.60743c8.14634,-0.31476 17.53571,0.29342 25.81543,0.37878c6.09242,0.05868 13.54523,0.13871 19.52562,0.96028c2.82748,0.38945 5.48958,1.55778 7.57551,3.50501c4.89207,4.58265 5.5536,8.88789 5.68697,15.34308c0.18139,8.81854 0.24007,17.78112 0.16005,26.61566c-0.41612,7.01535 0.73621,14.87361 -0.85891,21.76093c-2.67277,11.52332 -13.27849,12.92105 -22.80656,13.10777l-29.3151,-0.12804c-5.45757,-0.02134 -11.73138,0.28275نعم، سأقوم بدمج الكودين الآن.
+          <path fill="#0883fe" d="M211.05026,99.50412c4.71069,0.5799 32.49468,21.3064 38.22433,25.67192c73.44513,55.63467 134.27863,126.18777 178.50469,207.01902c30.86755,55.26016 62.38061,132.37088 63.94906,196.37863c0.37878,20.25116 -2.2033,40.44897 -7.66087,59.94791c-12.48893,43.58054 -39.30731,77.03016 -73.10903,106.27057c-10.21627,8.83454 -23.72416,19.55763 -35.54089,26.09817c0.55483,-12.11015 0.11737,-28.36549 0.12804,-40.82241l0.016,-79.0094c33.75371,-36.4905 38.26701,-68.57439 25.10055,-116.51885c-23.18,-84.39815 -72.89564,-163.86794 -131.92595,-227.90557c-16.25001,-17.63067 -37.04532,-33.89775 -56.13882,-48.47795c-1.24836,-0.16858 -5.66563,3.17265 -6.81796,4.03369c-76.16324,57.16204 -132.13828,140.97976 -167.54367,228.50787c-17.8302,44.08202 -35.40592,99.23388 -5.4357,141.89149c4.63973,6.60457 10.13358,11.97678 14.77812,18.36262l0.41292,0.5815l-0.02134,118.97823c-34.19971,-20.67261 -64.31397,-49.87568 -86.03649,-83.3093c-55.41861,-85.29921 -25.10962,-185.77611 15.97206,-270.40953c51.49855,-106.09132 132.74699,-203.83251 233.14494,-267.28863z M132.49753,398.57203c7.68328,-0.41185 20.72436,0.20112 28.87871,0.24114l60.8239,0.06242c13.11311,-0.01921 26.49829,-0.14884 39.62207,-0.17658c25.8421,-0.05442 61.59105,-6.21939 61.87914,31.03186c0.05335,6.8217 0.18139,13.77836 0.06402,20.623c-0.2454,14.53752 2.35801,31.6411 -8.50911,43.21777c-6.6099,6.93533 -15.071,8.38108 -24.10827,8.42376c-10.00288,0.38945 -22.25707,-0.00533 -32.52669,-0.02667h-64.21367l-40.54767,0.24007c-13.77943,0.10136 -31.87317,2.05926 -43.17455,-7.39946c-12.60043,-10.86713 -10.25788,-29.44847 -10.35338,-44.16737c-0.17712,-27.46604 -2.47111,-50.16963 32.16552,-52.06991zM190.71908,478.36192l72.08474,-0.09603c9.90685,-0.05335 19.84571,0.18139 29.73655,-0.09603c8.11967,-0.2294 8.14634,-9.46939 8.07166,-15.40176l-0.3521,-21.67557c-0.04268,-5.65549 1.13633,-12.72793 -2.52873,-17.39007c-6.1511,-3.2484 -55.55198,-1.63674 -64.95735,-1.61433l-62.73218,0.18139c-7.69021,0.00373 -38.06215,-0.64765 -43.63975,1.18541c-1.29317,1.66608 -1.73917,3.28788 -2.01978,5.37221c-1.155,8.58434 -0.07309,18.31514 -0.03734,27.02164c0.02081,4.94009 -0.5687,10.11491 -0.06882,15.00698c0.18085,1.76584 0.5703,4.08651 2.12541,5.16949c5.30233,3.69173 53.88964,2.31533 64.3177,2.33667z M258.82401,534.60743c8.14634,-0.31476 17.53571,0.29342 25.81543,0.37878c6.09242,0.05868 13.54523,0.13871 19.52562,0.96028c2.82748,0.38945 5.48958,1.55778 7.57551,3.50501c4.89207,4.58265 5.5536,8.88789 5.68697,15.34308c0.18139,8.81854 0.24007,17.78112 0.16005,26.61566c-0.41612,7.01535 0.73621,14.87361 -0.85891,21.76093c-2.67277,11.52332 -13.27849,12.92105 -22.80656,13.10777l-29.3151,-0.12804c-5.45757,-0.02134 -11.73138,0.28275 -17.03423,-0.57083c-6.7166,-1.20568 -12.56895,-7.78891 -12.82502,-14.64955c-0.60284,-15.95659 -0.94961,-32.67607 0.02667,-48.58998c0.90159,-14.59086 11.60334,-17.02356 24.04959,-17.7331z M251.21649,647.64262c15.63116,-1.02963 34.93272,-0.24007 50.60656,0.30409c20.74197,1.4991 15.7432,30.36073 16.13798,44.50347c0.48014,17.18895 1.92589,33.70036 -19.07749,35.87165c-4.88674,0.26674 -11.1392,-0.02134 -16.24467,0.03734c-11.1392,-0.03201 -45.96522,3.9478 -47.65104,-13.40119c-1.31238,-13.48655 -1.0403,-39.07257 0.1067,-53.43404c0.61884,-7.7729 8.75985,-12.83036 16.12197,-13.88133z M150.90763,535.21027c18.92011,-0.90693 38.91893,-2.83281 38.35397,22.56649c-0.50788,14.27611 1.05524,31.47572 -0.73034,45.40506c-1.78878,13.95068 -23.04503,13.5559 -33.13327,12.93706c-3.61597,-0.22406 -7.37599,-0.05335 -10.94128,-0.08536c-8.1234,0.05868 -27.98458,1.48843 -33.07672,-4.73203c-8.76732,-12.63297 -4.19641,-34.72999 -5.32313,-48.96875c-2.65143,-33.50831 21.43763,-26.46095 44.85077,-27.12247z M123.79316,647.71731c14.60954,-1.29637 33.29811,-0.05335 48.03675,0.04268c20.16847,0.33076 18.28366,22.85458 17.51864,37.16803c-0.96508,18.05853 5.94304,38.83251 -16.8139,43.08439c-11.04478,0.15471 -22.09062,0.21873 -33.13647,0.19206c-23.08504,0.00533 -33.88815,0.58684 -32.91294,-27.75732c0.12003,-11.85941 -0.55109,-23.80418 0.3537,-35.64225c0.80396,-10.50969 6.78969,-15.49779 16.95421,-17.08758z"/>
+        </svg>
+      </svg>
+      <div class="brandtext">
+        <div class="eyebrow">
+          <!-- شريحة صغيرة بألوان العلم الأردني (تصميمي وليس شعاراً رسمياً) لتوضيح الهوية دون انتحال صفة حكومية -->
+          <span class="flagchip" aria-hidden="true">
+            <svg viewBox="0 0 16 11" width="16" height="11">
+              <rect width="16" height="11" fill="#fff"/>
+              <rect width="16" height="3.67" y="0" fill="#000"/>
+              <rect width="16" height="3.67" y="3.67" fill="#fff"/>
+              <rect width="16" height="3.67" y="7.33" fill="#00733E"/>
+              <path d="M0 0 L6.5 5.5 L0 11 Z" fill="#CE1126"/>
+              <!-- النجمة السباعية (7 رؤوس) داخل المثلث الأحمر -->
+              <g transform="translate(2.3,5.5) scale(0.052)">
+                <path fill="#fff" d="M0.0,-19.0 L3.5,-7.2 L14.9,-11.8 L7.8,-1.8 L18.5,4.2 L6.3,5.0 L8.2,17.1 L0.0,8.0 L-8.2,17.1 L-6.3,5.0 L-18.5,4.2 L-7.8,-1.8 L-14.9,-11.8 L-3.5,-7.2 Z"/>
+              </g>
+            </svg>
+          </span>
+          أداة مدنية مستقلة لخدمة البيوت الأردنية
+        </div>
+        <h1>AquaBill <span class="jo-badge">JO</span></h1>
+        <div class="brand-tagline-ar">حاسبة فاتورة المياه الأردنية</div>
+      </div>
+
+      <!-- زر تبديل الوضع الفاتح/الداكن يدوياً؛ منطق الحفظ والتبديل في script.js -->
+    <button type="button" class="btn-theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+  <span class="theme-icon">🌙</span>
+</button>
+    </div>
+    <p>اعرف تكلفة استهلاكك الشهري بدقة، وقارن بين خيارات توفير الماء بأفضل سعر</p>
+
+    <!-- شارات ثقة قصيرة: تعزّز مصداقية أداة مستقلة (لا جهة رسمية خلفها) بحقائق فعلية بدل شعارات -->
+    <ul class="trust-badges">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>مجاني بالكامل</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>بياناتك لا تُرسل لأي خادم</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>يعمل بدون إنترنت</li>
+    </ul>
+
+    <!-- موجة SVG فاصلة تصل بصرياً بين الترويسة وخلفية الصفحة -->
+    <svg class="wave" viewBox="0 0 640 34" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 18 Q 80 2 160 16 T 320 16 T 480 16 T 640 12 V34 H0 Z" fill="#F2F6F5"/>
+    </svg>
+  </header>
+
+  <!-- ===================== المحتوى الرئيسي: 4 خطوات ===================== -->
+  <main id="mainContent">
+
+    <!-- ---------- الخطوة 1: جدول التعرفة الرسمي ---------- -->
+    <div class="card fade-in">
+      <h2>
+        <span class="icn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>
+        </span>
+        <span class="titlewrap">
+          <span class="eyebrow2">الخطوة 1 من 4</span>
+          <span class="titletext">جدول التعرفة الرسمية</span>
+        </span>
+        
+      </h2>
+      <table class="tariff" id="tariffTable">
+        <thead>
+          <tr><th scope="col">الشريحة (م³)</th><th scope="col">مياه/م³</th><th scope="col">صرف صحي/م³</th></tr>
+        </thead>
+        <!-- تُبنى صفوف الجدول تلقائياً بواسطة renderTariffTable() في script.js -->
+        <tbody></tbody>
+      </table>
+      <p class="hint">الأسعار الموضحة ثابتة وهي التعرفة الرسمية المعتمدة من (مياهنا / اليرموك / العقبة).</p>
+
+    </div>
+
+    <!-- ---------- الخطوة 2: حاسبة الفاتورة الشهرية ---------- -->
+    <div class="card fade-in">
+      <h2>
+        <span class="icn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C12 2 5 10.5 5 15.5A7 7 0 0019 15.5C19 10.5 12 2 12 2Z"/></svg>
+        </span>
+        <span class="titlewrap">
+          <span class="eyebrow2">الخطوة 2 من 4</span>
+          <span class="titletext">قدّر فاتورتك الشهرية</span>
+        </span>
+      </h2>
+    <label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
+<input type="number" id="consumption" min="0" step="0.5" placeholder="أدخل كمية الاستهلاك" inputmode="decimal" oninput="calcAll()">
+
+<div class="result" aria-live="polite">
+  <div class="line"><span>تكلفة المياه</span><span id="waterOut">2.50 د</span></div>
+  <div class="line"><span>تكلفة الصرف الصحي</span><span id="sewageOut">0.23 د</span></div>
+  <div class="total">
+    <span>إجمالي الفاتورة المتوقعة</span>
+    <div>
+      <span id="totalOut">2.73 د.أ</span>
+      <small id="flatFeeHint" style="display: inline-block; font-size: 0.8em; opacity: 0.85; margin-right: 4px;">(رسوم المقطوعية)</small>
+    </div>
+  </div>
+</div>
+      <div id="statusBadge" role="status" aria-live="polite"></div>
+<p class="hint" id="marginalHint"></p>
+      
+</div>
+    <!-- ---------- الخطوة 3: مقارنة العداد بصهريج المياه ---------- -->
+    <div class="card fade-in">
+      <h2>
+        <span class="icn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v18M17 3v18M3 7h8M13 17h8"/></svg>
+        </span>
+        <span class="titlewrap">
+          <span class="eyebrow2">الخطوة 3 من 4</span>
+          <span class="titletext">العداد أم صهريج المياه؟</span>
+        </span>
+      </h2>
+      <div class="row">
+     <div>
+          <label for="tankerPrice">تكلفة صهريج المياه (د.أ)</label>
+          <input type="number" id="tankerPrice" min="0" step="0.5" placeholder="أدخل السعر بالدينار" inputmode="decimal" oninput="calcAll()">
+        </div>
+        <div>
+          <label for="tankerQty">سعة الصهريج (م³)</label>
+          <input type="number" id="tankerQty" min="1" step="0.5" placeholder="مثال: 3 أو 4" inputmode="decimal" oninput="calcAll()">
+        </div>
+      </div>
+      <p class="hint">صهريج المياه: مركبة متنقلة تعبئ الماء من الآبار أو الينابيع وتوصله لمنزلك عند نقص التزويد أو الانقطاع.</p>
+      <div class="compare">
+        <div class="box" id="boxNetwork">
+          <div class="lbl">متر إضافي من العداد</div>
+          <div class="val" id="networkMarginal">-</div>
+        </div>
+        <div class="box" id="boxTanker">
+          <div class="lbl">متر واحد من الصهريج</div>
+          <div class="val" id="tankerMarginal">-</div>
+        </div>
+      </div>
+      <p class="hint" id="recommendHint"></p>
+    </div>
+
+    <!-- ---------- الخطوة 4: نصائح عملية ---------- -->
+   <!-- ---------- الخطوة 4: نصائح للتوفير دون انقطاع ---------- -->
+<div class="card fade-in">
+  <h2>
+    <span class="icn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v1" /><path d="M12 21v1" /><path d="M4.22 4.22l.71.71" /><path d="M19.07 19.07l.71.71" /><path d="M1 12h1" /><path d="M21 12h1" /><path d="M4.22 19.07l.71-.71" /><path d="M19.07 4.22l.71-.71" /><path d="M9 16a5 5 0 1 1 6 0 3 3 0 0 0-3 3" />
+      </svg>
+    </span>
+    <span class="titlewrap">
+      <span class="eyebrow2">الخطوة 4 من 4</span>
+      <span class="titletext">نصائح للتوفير دون انقطاع</span>
+    </span>
+  </h2>
+
+  <ul class="tips-list">
+    <li> اقرأ العداد أسبوعيًا بدلًا من انتظار الفاتورة، لتكتشف مبكرًا اقتراب استهلاكك من حدود الشريحة التالية.</li>
+    <li><strong>النظام تصاعدي وليس قفزة حادة:</strong> تجاوز الشريحة بمتر أو مترين لن يضاعف فاتورتك، ويمكنك استخدام الأداة لمعرفة التكلفة الفعلية بدقة.</li>
+    <li> قبل طلب صهريج مياه، قارن تكلفة المتر المكعب من الصهريج مع تكلفة المتر الإضافي من شبكة المياه، ففي كثير من الحالات تكون مياه الشبكة أقل تكلفة.</li>
+    <li> إذا كان لديك خزان أو بئر، فاستغل فترات ضخ المياه لتخزين كمية احتياطية تساعدك عند الانقطاعات.</li>
+    <li> شارك الأداة مع عائلتك وأصدقائك وجيرانك، فلكل منزل نمط استهلاك مختلف، والأداة تساعد على إدارة الاستهلاك بطريقة أوضح وأكثر وعيًا.</li>
+  </ul>
+</div>
+
+  </main>
+
+  <!-- ===================== التذييل: إخلاء المسؤولية والمشاركة ===================== -->
+  <footer>
+    <svg class="footer-logo" width="28" height="28" viewBox="0 0 512 512">
+      <circle cx="256" cy="256" r="256" fill="#ffffff"/>
+      <svg x="80" y="70" width="352" height="352" viewBox="-138 64 700 700" preserveAspectRatio="xMidYMid meet">
+        <path fill="#0883fe" d="M211.05026,99.50412c4.71069,0.5799 32.49468,21.3064 38.22433,25.67192c73.44513,55.63467 134.27863,126.18777 178.50469,207.01902c30.86755,55.26016 62.38061,132.37088 63.94906,196.37863c0.37878,20.25116 -2.2033,40.44897 -7.66087,59.94791c-12.48893,43.58054 -39.30731,77.03016 -73.10903,106.27057c-10.21627,8.83454 -23.72416,19.55763 -35.54089,26.09817c0.55483,-12.11015 0.11737,-28.36549 0.12804,-40.82241l0.016,-79.0094c33.75371,-36.4905 38.26701,-68.57439 25.10055,-116.51885c-23.18,-84.39815 -72.89564,-163.86794 -131.92595,-227.90557c-16.25001,-17.63067 -37.04532,-33.89775 -56.13882,-48.47795c-1.24836,-0.16858 -5.66563,3.17265 -6.81796,4.03369c-76.16324,57.16204 -132.13828,140.97976 -167.54367,228.50787c-17.8302,44.08202 -35.40592,99.23388 -5.4357,141.89149c4.63973,6.60457 10.13358,11.97678 14.77812,18.36262l0.41292,0.5815l-0.02134,118.97823c-34.19971,-20.67261 -64.31397,-49.87568 -86.03649,-83.3093c-55.41861,-85.29921 -25.10962,-185.77611 15.97206,-270.40953c51.49855,-106.09132 132.74699,-203.83251 233.14494,-267.28863z M132.49753,398.57203c7.68328,-0.41185 20.72436,0.20112 28.87871,0.24114l60.8239,0.06242c13.11311,-0.01921 26.49829,-0.14884 39.62207,-0.17658c25.8421,-0.05442 61.59105,-6.21939 61.87914,31.03186c0.05335,6.8217 0.18139,13.77836 0.06402,20.623c-0.2454,14.53752 2.35801,31.6411 -8.50911,43.21777c-6.6099,6.93533 -15.071,8.38108 -24.10827,8.42376c-10.00288,0.38945 -22.25707,-0.00533 -32.52669,-0.02667h-64.21367l-40.54767,0.24007c-13.77943,0.10136 -31.87317,2.05926 -43.17455,-7.39946c-12.60043,-10.86713 -10.25788,-29.44847 -10.35338,-44.16737c-0.17712,-27.46604 -2.47111,-50.16963 32.16552,-52.06991zM190.71908,478.36192l72.08474,-0.09603c9.90685,-0.05335 19.84571,0.18139 29.73655,-0.09603c8.11967,-0.2294 8.14634,-9.46939 8.07166,-15.40176l-0.3521,-21.67557c-0.04268,-5.65549 1.13633,-12.72793 -2.52873,-17.39007c-6.1511,-3.2484 -55.55198,-1.63674 -64.95735,-1.61433l-62.73218,0.18139c-7.69021,0.00373 -38.06215,-0.64765 -43.63975,1.18541c-1.29317,1.66608 -1.73917,3.28788 -2.01978,5.37221c-1.155,8.58434 -0.07309,18.31514 -0.03734,27.02164c0.02081,4.94009 -0.5687,10.11491 -0.06882,15.00698c0.18085,1.76584 0.5703,4.08651 2.12541,5.16949c5.30233,3.69173 53.88964,2.31533 64.3177,2.33667z M258.82401,534.60743c8.14634,-0.31476 17.53571,0.29342 25.81543,0.37878c6.09242,0.05868 13.54523,0.13871 19.52562,0.96028c2.82748,0.38945 5.48958,1.55778 7.57551,3.50501c4.89207,4.58265 5.5536,8.88789 5.68697,15.34308c0.18139,8.81854 0.24007,17.78112 0.16005,26.61566c-0.41612,7.01535 0.73621,14.87361 -0.85891,21.76093c-2.67277,11.52332 -13.27849,12.92105 -22.80656,13.10777l-29.3151,-0.12804c-5.45757,-0.02134 -11.73138,0.28275 -17.03423,-0.57083c-6.7166,-1.20568 -12.56895,-7.78891 -12.82502,-14.64955c-0.60284,-15.95659 -0.94961,-32.67607 0.02667,-48.58998c0.90159,-14.59086 11.60334,-17.02356 24.04959,-17.7331z M251.21649,647.64262c15.63116,-1.02963 34.93272,-0.24007 50.60656,0.30409c20.74197,1.4991 15.7432,30.36073 16.13798,44.50347c0.48014,17.18895 1.92589,33.70036 -19.07749,35.87165c-4.88674,0.26674 -11.1392,-0.02134 -16.24467,0.03734c-11.1392,-0.03201 -45.96522,3.9478 -47.65104,-13.40119c-1.31238,-13.48655 -1.0403,-39.07257 0.1067,-53.43404c0.61884,-7.7729 8.75985,-12.83036 16.12197,-13.88133z M150.90763,535.21027c18.92011,-0.90693 38.91893,-2.83281 38.35397,22.56649c-0.50788,14.27611 1.05524,31.47572 -0.73034,45.40506c-1.78878,13.95068 -23.04503,13.5559 -33.13327,12.93706c-3.61597,-0.22406 -7.37599,-0.05335 -10.94128,-0.08536c-8.1234,0.05868 -27.98458,1.48843 -33.07672,-4.73203c-8.76732,-12.63297 -4.19641,-34.72999 -5.32313,-48.96875c-2.65143,-33.50831 21.43763,-26.46095 44.85077,-27.12247z M123.79316,647.71731c14.60954,-1.29637 33.29811,-0.05335 48.03675,0.04268c20.16847,0.33076 18.28366,22.85458 17.51864,37.16803c-0.96508,18.05853 5.94304,38.83251 -16.8139,43.08439c-11.04478,0.15471 -22.09062,0.21873 -33.13647,0.19206c-23.08504,0.00533 -33.88815,0.58684 -32.91294,-27.75732c0.12003,-11.85941 -0.55109,-23.80418 0.3537,-35.64225c0.80396,-10.50969 6.78969,-15.49779 16.95421,-17.08758z"/>
+      </svg>
+    </svg>
+    <p><strong>AquaBill JO</strong> — أداة مدنية مستقلة، غير تابعة لسلطة المياه أو أي جهة حكومية، صُنعت لمساعدتك على فهم فاتورتك.<br>
+    تحقق دائماً من فاتورتك الرسمية، أو اتصل بمركز الشكاوى الموحد <strong>117116</strong> (كما هو مذكور على الفاتورة الرسمية) لأي استفسار مباشر.</p>
+   <!-- أزرار مشاركة وسائل التواصل الأنيقة -->
+<div class="social-share-group">
+  <!-- WhatsApp -->
+  <a href="https://wa.me/?text=%D8%AC%D8%B1%D9%91%D8%A2%D8%A9%20%D9%87%D8%B0%D9%87%20%D8%A7%D9%84%D8%A3%D8%AF%D8%A7%D8%A9%20%D8%A7%D9%84%D9%85%D8%AC%D8%A7%D9%86%D9%8A%D8%A9%20%D9%84%D8%AD%D8%B3%D8%A7%D8%A8%20%D9%81%D8%A7%D8%AA%D9%88%D8%B1%D8%A9%20%D8%A7%D9%84%D9%85%D9%8A%D8%A7%D9%87%20%D8%A8%D8%AF%D9%82%D8%A9%20https://ahmad-albetar.github.io/AquaBill-JO/" 
+     target="_blank" rel="noopener" class="social-btn whatsapp" title="مشاركة عبر واتساب" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.333 4.993L2 22l5.233-1.237a9.96 9.96 0 004.779 1.217h.004c5.505 0 9.988-4.478 9.989-9.985 0-2.668-1.037-5.177-2.924-7.063C17.195 3.045 14.685 2 12.012 2zm5.82 14.156c-.244.688-1.427 1.314-1.97 1.391-.518.073-1.181.106-3.8-0.978-2.997-1.239-4.912-4.284-5.061-4.484-.149-.2-1.218-1.62-1.218-3.089 0-1.468.769-2.19 1.042-2.484.273-.294.596-.368.795-.368.199 0 .398.002.571.01.183.008.428-.069.67.511.248.596.845 2.062.919 2.212.075.15.124.324.025.523-.099.199-.149.323-.298.497-.149.174-.313.389-.447.523-.149.149-.304.312-.131.61.174.298.773 1.275 1.659 2.064 1.14 1.015 2.102 1.328 2.399 1.477.298.149.472.124.646-.075.174-.199.745-.869.943-1.167.199-.298.398-.248.67-.149.273.099 1.738.819 2.036.968.298.149.497.223.571.348.074.124.074.72-.17 1.408z"/></svg>
+  </a>
+
+  <!-- Facebook -->
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://ahmad-albetar.github.io/AquaBill-JO/" 
+     target="_blank" rel="noopener" class="social-btn facebook" title="مشاركة عبر فيسبوك" aria-label="Facebook">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.891h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+  </a>
+
+  <!-- Instagram -->
+  <a href="https://www.instagram.com/" 
+     target="_blank" rel="noopener" class="social-btn instagram" title="تابعنا على إنستغرام" aria-label="Instagram">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+  </a>
+</div>
+    <p class="app-version" id="appVersion"></p>
+  </footer>
+
+</div>
+
+<!-- ===================== إشعار تثبيت التطبيق (PWA) ===================== -->
+<div class="pwa-toast" id="pwaToast">
+  <span>ثبّت الأداة على شاشة هاتفك الرئيسية للوصول السريع؟</span>
+  <div class="pwa-toast-actions">
+    <button onclick="installApp()">تثبيت</button>
+    <button onclick="hideInstallToast()">لاحقاً</button>
+  </div>
+</div>
+
+<!-- ===================== ملف المنطق ===================== -->
+<!-- defer: يحمّل الملف بالتوازي مع تحليل الصفحة وينفّذه بعد اكتمالها، دون حجب العرض.
+     ملاحظة: config.js مُحمَّل مسبقاً برأس الصفحة (غير مؤجل) لأن script.js يعتمد عليه. -->
+<script src="script.js" defer></script>
+</body>
+</html>
