@@ -1112,3 +1112,52 @@ body.dark-theme .warning-badge {
   background-color: rgba(239, 68, 68, 0.2) !important;
   border-color: rgba(239, 68, 68, 0.4) !important;
 }
+/* ============================================================
+   إصلاح الترويسة، الموجة، الأوسمة، وشعار الأردن (AquaBill JO)
+   ============================================================ */
+
+/* 1. إصلاح الموجة أسفل الترويسة لتمتد على كامل العرض */
+svg.wave,
+header svg.wave {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* 2. تصغير الأوسمة والشارات الحالية أكثر قليلاً */
+.hero-badges .badge-pill,
+.trust-badges li,
+.hero-badge {
+  font-size: 0.72rem !important;
+  padding: 3px 8px !important;
+  gap: 4px !important;
+}
+
+/* تصغير الأيقونات داخل الأوسمة لتتناسب مع الحجم الجديد */
+.hero-badges svg,
+.badge-pill svg,
+.trust-badges svg,
+.hero-badge svg {
+  width: 16px !important;
+  height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  flex-shrink: 0 !important;
+}
+
+/* 3. استعادة ألوان شعار الأردن والأيقونات الملونة الأصلية */
+header .brand-logo svg,
+header .flag-icon svg,
+.hero-badges svg,
+svg[viewBox] {
+  fill: currentColor; /* لضمان أخذ اللون المخصص للشعار */
+}
+
+/* في حال استخدام صورة أو SVG مخصص لشعار العلم */
+header img.flag,
+header svg.flag-jordan {
+  filter: none !important;
+  opacity: 1 !important;
+}
