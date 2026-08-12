@@ -215,13 +215,13 @@ header::before {
 .wave path {
   fill: var(--bg);
 }
-
+/*************************************/
 .brandrow {
   display: flex;
   align-items: center;
   gap: .7rem;
   position: relative;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 
 .logomark { width: 46px; height: 46px; flex: none; border-radius: 50%; overflow: hidden; }
