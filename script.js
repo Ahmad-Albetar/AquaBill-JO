@@ -293,16 +293,16 @@ function calcAll() {
 
   // 2. قراءة المدخل
   const rawInput = consumptionInput ? consumptionInput.value.trim() : '';
-   
-  // 3. حالة الحقل الفارغ
-if (rawInput === '') {
+   // 3. حالة الحقل الفارغ (عند فتح الصفحة أو عند مسح الرقم)
+  if (rawInput === '') {
     if (warningElem) warningElem.style.display = 'none';
 
+    // تعيين قيم المخرجات إلى شرطة (-)
     document.getElementById('waterOut').textContent = '-';
     document.getElementById('sewageOut').textContent = '-';
     document.getElementById('totalOut').textContent = '-';
 
-    // إخفاء عبارة (رسوم مقطوعية) عند تفريغ الحقل
+    // إخفاء وسم عبارة (رسوم مقطوعية) وملاحظتها عند تفريغ الحقل
     const flatTagEl = document.getElementById('flatFeeTag');
     if (flatTagEl) flatTagEl.style.display = 'none';
 
@@ -316,8 +316,33 @@ if (rawInput === '') {
 
     document.getElementById('networkMarginal').textContent = '-';
     document.getElementById('tankerMarginal').textContent = '-';
-    return;
+    
+    return; // إيقاف تنفيذ بقية الدالة فوراً لمنع حساب وتعبئة قيم المقطوعية (2.50 / 0.23)
   }
+  // 3. حالة الحقل الفارغ
+// if (rawInput === '') {
+//     if (warningElem) warningElem.style.display = 'none';
+
+//     document.getElementById('waterOut').textContent = '-';
+//     document.getElementById('sewageOut').textContent = '-';
+//     document.getElementById('totalOut').textContent = '-';
+
+//     // إخفاء عبارة (رسوم مقطوعية) عند تفريغ الحقل
+//     const flatTagEl = document.getElementById('flatFeeTag');
+//     if (flatTagEl) flatTagEl.style.display = 'none';
+
+//     const flatFeeHint = document.getElementById('flatFeeHint');
+//     if (flatFeeHint) flatFeeHint.style.display = 'none';
+
+//     document.getElementById('marginalHint').textContent = 'أدخل كمية الاستهلاك لمعرفة تكلفة المتر القادم.';
+
+//     const badge = document.getElementById('statusBadge');
+//     if (badge) badge.innerHTML = '';
+
+//     document.getElementById('networkMarginal').textContent = '-';
+//     document.getElementById('tankerMarginal').textContent = '-';
+//     return;
+//   }
   const consumptionVal = parseFloat(rawInput);
 
   // 4. فحص تجاوز الـ 500 م³
