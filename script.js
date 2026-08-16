@@ -614,15 +614,3 @@ if (consumptionInput && warningBadge) {
     }
   });
 }
-
-
-   // ========================================== */
-  // 2. مدخلات الحساب المباشر
-  const calcInputs = ['consumption', 'tankerQty', 'tankerPrice'];
-  calcInputs.forEach((id) => {
-    const input = document.getElementById(id);
-    if (input) {
-      input.addEventListener('input', calcAll);
-    }
-  });
-});
