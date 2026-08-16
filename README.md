@@ -140,7 +140,7 @@ https://ahmad-albetar.github.io/AquaBill-JO/
 بعد أي تعديل بـ `index.html` أو `style.css` أو `script.js`، افتحوا `service-worker.js` وغيّروا رقم الإصدار حتى يُجبر المتصفح على تحميل النسخة الجديدة بدل القديمة المخزّنة مسبقاً:
 
 ```js
-const CACHE_NAME = 'aquabill-jo-v6'; // غيّروها إلى v7, v8, إلخ مع كل تحديث، ويجب أن تطابق APP_CONFIG.cacheVersion بـ config.js
+const CACHE_NAME = 'aquabill-jo-v12.0'; // غيّروها إلى v12.1, v12.2, إلخ مع كل تحديث، ويجب أن تطابق APP_CONFIG.cacheVersion بـ config.js
 ```
 
 ---
