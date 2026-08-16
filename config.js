@@ -14,7 +14,7 @@ const APP_CONFIG = {
   appName: 'AquaBill JO',
   appNameAr: 'حاسبة فاتورة المياه الأردنية',
   version: '1.0.0',
-  cacheVersion: 'aquabill-jo-v8.5',
+  cacheVersion: 'aquabill-jo-v11.9',
   buildDate: '2026-07-31',
   currency: 'JOD',
   currencyLabelAr: 'دينار',
@@ -36,7 +36,6 @@ const APP_CONFIG = {
   defaultConsumption: 0,
   defaultTankerPrice: 0,
   defaultTankerQty: 3,
-  editPin: '2580',
 
   /* ---------- مفاتيح التخزين المحلي (موحّدة بمكان واحد) ---------- */
   storageKeys: {
