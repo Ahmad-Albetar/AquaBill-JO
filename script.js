@@ -257,9 +257,9 @@ function calcAll() {
     if (warningElem) warningElem.style.display = 'none';
 
     // تعيين قيم المخرجات إلى شرطة (-)
-    document.getElementById('waterOut').textContent = '-';
-    document.getElementById('sewageOut').textContent = '-';
-    document.getElementById('totalOut').textContent = '-';
+    document.getElementById('waterOut').textContent = '0.00';
+    document.getElementById('sewageOut').textContent = '0.00';
+    document.getElementById('totalOut').textContent = '0.00';
 
     // إخفاء وسم عبارة (رسوم مقطوعية) وملاحظتها عند تفريغ الحقل
     const flatTagEl = document.getElementById('flatFeeTag');
@@ -273,8 +273,8 @@ function calcAll() {
     const badge = document.getElementById('statusBadge');
     if (badge) badge.innerHTML = '';
 
-    document.getElementById('networkMarginal').textContent = '-';
-    document.getElementById('tankerMarginal').textContent = '-';
+    document.getElementById('networkMarginal').textContent = '0.00';
+    document.getElementById('tankerMarginal').textContent = '0.00';
     
     return; // إيقاف تنفيذ بقية الدالة فوراً لمنع حساب وتعبئة قيم المقطوعية (2.50 / 0.23)
   }
