@@ -617,13 +617,6 @@ if (consumptionInput && warningBadge) {
 
 
    // ========================================== */
-document.addEventListener('DOMContentLoaded', () => {
-  // 1. زر تبديل الثيم
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', toggleTheme);
-  }
-
   // 2. مدخلات الحساب المباشر
   const calcInputs = ['consumption', 'tankerQty', 'tankerPrice'];
   calcInputs.forEach((id) => {
