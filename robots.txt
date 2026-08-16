@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ahmadalbetar295.github.io/Water-Bill-Calculator/sitemap.xml
+Sitemap: https://ahmad-albetar.github.io/AquaBill-JO/sitemap.xml
