@@ -196,8 +196,61 @@
       <span class="titletext">جدول التعرفة الرسمية</span>
     </span>
   </h2>
-  
   <table class="tariff" id="tariffTable">
+  <thead>
+    <tr>
+      <th scope="col">الشريحة (م³)</th>
+      <th scope="col">مياه/م³</th>
+      <th scope="col">صرف صحي/م³</th>
+      <th scope="col">المجموع/م³</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0 - 6 م³ (مقطوعية)</td>
+      <td>2.50 د.أ</td>
+      <td>0.23 د.أ</td>
+      <td>2.73 د.أ</td>
+    </tr>
+    <tr>
+      <td>7 - 12</td>
+      <td>0.60 د.أ</td>
+      <td>0.15 د.أ</td>
+      <td>0.75 د.أ</td>
+    </tr>
+    <tr>
+      <td>13 - 18</td>
+      <td>0.80 د.أ</td>
+      <td>0.50 د.أ</td>
+      <td>1.30 د.أ</td>
+    </tr>
+    <tr>
+      <td>19 - 24</td>
+      <td>1.10 د.أ</td>
+      <td>0.70 د.أ</td>
+      <td>1.80 د.أ</td>
+    </tr>
+    <tr>
+      <td>25 - 30</td>
+      <td>1.40 د.أ</td>
+      <td>0.85 د.أ</td>
+      <td>2.25 د.أ</td>
+    </tr>
+    <tr>
+      <td>31 - 42</td>
+      <td>1.80 د.أ</td>
+      <td>0.95 د.أ</td>
+      <td>2.75 د.أ</td>
+    </tr>
+    <tr>
+      <td>فوق 42</td>
+      <td>2.20 د.أ</td>
+      <td>1.20 د.أ</td>
+      <td>3.40 د.أ</td>
+    </tr>
+  </tbody>
+</table>
+  <!-- <table class="tariff" id="tariffTable">
     <thead>
       <tr>
         <th scope="col">الشريحة (م³)</th>
@@ -214,7 +267,7 @@
       <tr><td>31-42</td><td>1.80 د</td><td>0.95 د</td></tr>
       <tr><td>فوق 42</td><td>2.20 د</td><td>1.20 د</td></tr>
     </tbody>
-  </table>
+  </table> -->
   <p class="hint">الأسعار الموضحة ثابتة وهي التعرفة الرسمية المعتمدة من (مياهنا / اليرموك / العقبة).</p>
 </div>
 
@@ -234,7 +287,16 @@
         </span>
       </h2>
     <label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
-<input type="number" id="consumption" min="0" step="0.5" placeholder="أدخل كمية الاستهلاك" inputmode="decimal" oninput="calcAll()">
+      <input type="number" 
+       id="consumption" 
+       min="0" 
+       max="500" 
+       step="0.5" 
+       placeholder="أدخل كمية الاستهلاك" 
+       inputmode="decimal" 
+       onkeydown="if(['-', 'e', 'E', '+'].includes(event.key)) event.preventDefault();"
+       oninput="calcAll()">
+<!-- <input type="number" id="consumption" min="0" step="0.5" placeholder="أدخل كمية الاستهلاك" inputmode="decimal" oninput="calcAll()"> -->
 <div id="consumption-warning" class="warning-badge" role="alert">
   <span class="warning-icon">⚠️</span>
   هذا رقم كبير جداً للإستهلاك خلال الشهر
@@ -275,11 +337,29 @@
       <div class="row">
             <div>
           <label for="tankerQty">سعة الصهريج (م³)</label>
-          <input type="number" id="tankerQty" min="1" step="0.5" placeholder="مثال: 3 أو 4" inputmode="decimal" oninput="calcAll()">
+              <input type="number" 
+       id="tankerQty" 
+       min="1" 
+       max="100" 
+       step="0.5" 
+       placeholder="مثال: 3 أو 4" 
+       inputmode="decimal" 
+       onkeydown="if(['-', 'e', 'E', '+'].includes(event.key)) event.preventDefault();" 
+       oninput="calcAll()">
+          <!-- <input type="number" id="tankerQty" min="1" step="0.5" placeholder="مثال: 3 أو 4" inputmode="decimal" oninput="calcAll()"> -->
             </div>
      <div>
           <label for="tankerPrice">تكلفة صهريج المياه (د.أ)</label>
-          <input type="number" id="tankerPrice" min="0" step="0.5" placeholder="أدخل السعر بالدينار" inputmode="decimal" oninput="calcAll()">
+       <input type="number" 
+       id="tankerPrice" 
+       min="0" 
+       max="500" 
+       step="0.5" 
+       placeholder="أدخل السعر بالدينار" 
+       inputmode="decimal" 
+       onkeydown="if(['-', 'e', 'E', '+'].includes(event.key)) event.preventDefault();" 
+       oninput="calcAll()">
+          <!-- <input type="number" id="tankerPrice" min="0" step="0.5" placeholder="أدخل السعر بالدينار" inputmode="decimal" oninput="calcAll()"> -->
      </div>
       </div>
       <p class="hint">صهريج المياه: مركبة متنقلة تعبئ الماء من الآبار أو الينابيع وتوصله لمنزلك عند نقص التزويد أو الانقطاع.</p>
