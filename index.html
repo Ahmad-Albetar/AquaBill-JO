@@ -44,7 +44,7 @@
   <meta name="description" content="AquaBill JO: أداة مستقلة لحساب فاتورة المياه الأردنية بدقة، ومقارنة العداد بصهريج المياه، مع نصائح لتوفير المال دون انقطاع.">
 
   <!-- ============================================================
-       ✅ رابط الموقع مضبوط على: https://ahmadalbetar295.github.io/Water-Bill-Calculator/
+       ✅ رابط الموقع مضبوط على: https://ahmad-albetar.github.io/AquaBill-JO/
        (Canonical وOpen Graph وTwitter Card وJSON-LD — 5 مواضع، كلها محدَّثة).
        إن غيّرتم اسم المستودع على GitHub مستقبلاً، حدّثوا هذا الرابط بكل
        المواضع الخمسة ليطابق الرابط الفعلي الجديد.
@@ -103,7 +103,7 @@
     "description": "أداة مدنية مستقلة تساعدك على حساب فاتورة المياه الأردنية بدقة حسب نظام الشرائح الرسمي، ومقارنة العداد بصهريج المياه.",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any (Web/PWA)",
-    "url": "https://ahmadalbetar295-dotcom.github.io/Aqua-Bill---JO/",
+    "url": "https://ahmad-albetar.github.io/AquaBill-JO/",
     "inLanguage": "ar",
     "isAccessibleForFree": true,
     "offers": {
@@ -113,14 +113,6 @@
     }
   }
   </script>
-  <!-- وسوم معاينة المشاركة للواتساب وفيسبوك (Open Graph) -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://ahmad-albetar.github.io/AquaBill-JO/" />
-<meta property="og:title" content="AquaBill JO — حاسبة فاتورة المياه الأردنية" />
-<meta property="og:description" content="احسب فاتورة المياه والحرص على إدارة استهلاكك بدقة وحساب تكلفة الصهريج بسهولة." />
-<meta property="og:image" content="https://ahmad-albetar.github.io/AquaBill-JO/images/icon-512.png" />
-<meta property="og:image:width" content="512" />
-<meta property="og:image:height" content="512" />
 </head>
 <body>
 <a class="skip-link" href="#mainContent">تخطَّ إلى المحتوى الرئيسي</a>
@@ -162,10 +154,13 @@
       </div>
 
       <!-- زر تبديل الوضع الفاتح/الداكن يدوياً؛ منطق الحفظ والتبديل في script.js -->
-    <button type="button" class="btn-theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+      <button type="button" class="btn-theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
   <span class="theme-icon">🌙</span>
 </button>
-    </div>
+    <!-- <button type="button" class="btn-theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تبديل الوضع">
+  <span class="theme-icon">🌙</span>
+</button>
+    </div> -->
     <p>اعرف تكلفة استهلاكك الشهري بدقة، وقارن بين خيارات توفير الماء بأفضل سعر</p>
 
     <!-- شارات ثقة قصيرة: تعزّز مصداقية أداة مستقلة (لا جهة رسمية خلفها) بحقائق فعلية بدل شعارات -->
@@ -181,9 +176,18 @@
     </svg>
   </header>
 
+
+
+
+  
   <!-- ===================== المحتوى الرئيسي: 4 خطوات ===================== -->
   <main id="mainContent">
 
+
+
+
+
+    
     <!-- ---------- الخطوة 1: جدول التعرفة الرسمي ---------- -->
 <div class="card fade-in">
   <h2>
@@ -216,6 +220,11 @@
   </table>
   <p class="hint">الأسعار الموضحة ثابتة وهي التعرفة الرسمية المعتمدة من (مياهنا / اليرموك / العقبة).</p>
 </div>
+
+
+
+
+
     <!-- ---------- الخطوة 2: حاسبة الفاتورة الشهرية ---------- -->
     <div class="card fade-in">
       <h2>
@@ -228,8 +237,8 @@
         </span>
       </h2>
     <label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
-<input type="number" id="consumption" min="0" step="0.5" placeholder="أدخل كمية الاستهلاك" inputmode="decimal" oninput="calcAll()">
-      
+<!-- <input type="number" id="consumption" min="0" step="0.5" placeholder="أدخل كمية الاستهلاك" inputmode="decimal" oninput="calcAll()"> -->
+    <input type="number" id="consumption" min="0" step="0.5" placeholder="أدخل كمية الاستهلاك" inputmode="decimal">
 <div id="consumption-warning" class="warning-badge" role="alert">
   <span class="warning-icon">⚠️</span>
   هذا رقم كبير جداً للإستهلاك خلال الشهر
@@ -252,38 +261,10 @@
       <div id="statusBadge" role="status" aria-live="polite"></div>
 <p class="hint" id="marginalHint"></p>
 </div>
-      
-    <!-- <div class="card fade-in">
-      <h2>
-        <span class="icn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C12 2 5 10.5 5 15.5A7 7 0 0019 15.5C19 10.5 12 2 12 2Z"/></svg>
-        </span>
-        <span class="titlewrap">
-          <span class="eyebrow2">الخطوة 2 من 4</span>
-          <span class="titletext">قدّر فاتورتك الشهرية</span>
-        </span>
-      </h2>
-    <label for="consumption">الاستهلاك الشهري المتوقع (م³)</label>
-<input type="number" id="consumption" min="0" step="0.5" placeholder="أدخل كمية الاستهلاك" inputmode="decimal" oninput="calcAll()">
-      
-<div id="consumption-warning" class="warning-badge" role="alert">
-  هذا رقم كبير جداً للإستهلاك خلال الشهر
-</div>
-<div class="result" aria-live="polite">
-  <div class="line"><span>تكلفة المياه</span><span id="waterOut">2.50 د</span></div>
-  <div class="line"><span>تكلفة الصرف الصحي</span><span id="sewageOut">0.23 د</span></div>
-  <div class="total">
-    <span>إجمالي الفاتورة المتوقعة</span>
-    <div>
-      <span id="totalOut">2.73 د.أ</span>
-      <small id="flatFeeHint" style="display: inline-block; font-size: 0.8em; opacity: 0.85; margin-right: 4px;">(رسوم المقطوعية)</small>
-    </div>
-  </div>
-</div>
-      <div id="statusBadge" role="status" aria-live="polite"></div>
-<p class="hint" id="marginalHint"></p>
-      
-</div> -->
+
+
+
+    
     <!-- ---------- الخطوة 3: مقارنة العداد بصهريج المياه ---------- -->
     <div class="card fade-in">
       <h2>
@@ -298,12 +279,14 @@
       <div class="row">
             <div>
           <label for="tankerQty">سعة الصهريج (م³)</label>
-          <input type="number" id="tankerQty" min="1" step="0.5" placeholder="مثال: 3 أو 4" inputmode="decimal" oninput="calcAll()">
-        </div>
+          <!-- <input type="number" id="tankerQty" min="1" step="0.5" placeholder="مثال: 3 أو 4" inputmode="decimal" oninput="calcAll()"> -->
+           <input type="number" id="tankerQty" min="1" step="0.5" placeholder="مثال: 3 أو 4" inputmode="decimal">
+            </div>
      <div>
           <label for="tankerPrice">تكلفة صهريج المياه (د.أ)</label>
-          <input type="number" id="tankerPrice" min="0" step="0.5" placeholder="أدخل السعر بالدينار" inputmode="decimal" oninput="calcAll()">
-        </div>
+          <!-- <input type="number" id="tankerPrice" min="0" step="0.5" placeholder="أدخل السعر بالدينار" inputmode="decimal" oninput="calcAll()"> -->
+       <input type="number" id="tankerPrice" min="0" step="0.5" placeholder="أدخل السعر بالدينار" inputmode="decimal">
+     </div>
       </div>
       <p class="hint">صهريج المياه: مركبة متنقلة تعبئ الماء من الآبار أو الينابيع وتوصله لمنزلك عند نقص التزويد أو الانقطاع.</p>
       <div class="compare">
@@ -319,8 +302,10 @@
       <p class="hint" id="recommendHint"></p>
     </div>
 
-    <!-- ---------- الخطوة 4: نصائح عملية ---------- -->
-   <!-- ---------- الخطوة 4: نصائح للتوفير دون انقطاع ---------- -->
+
+    
+    
+   <!-- ---------- نصائح للتوفير دون انقطاع ---------- -->
 <div class="card fade-in">
   <h2>
     <span class="icn">
