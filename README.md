@@ -13,7 +13,7 @@
 ## 📁 هيكل المشروع
 
 ```
-Water-Bill-Calculator/
+AquaBill-JO/
 │
 ├── index.html              ← الصفحة الرئيسية (تُحمّل النسخ المُصغَّرة .min بالإنتاج)
 ├── style.css                ← ملف الأنماط المصدري (للتعديل والقراءة)
@@ -80,34 +80,41 @@ python3 -m http.server 8000
 # ثم افتحوا: http://localhost:8000
 ```
 
----
-
 ## 🚀 النشر على GitHub Pages
 
-1. أنشئوا حساباً مجانياً على [github.com](https://github.com) إن لم يكن لديكم واحد
-2. أنشئوا مستودعاً (Repository) جديداً باسم `Water-Bill-Calculator` (أو أي اسم تريدونه)
-3. ارفعوا **كل الملفات والمجلدات** بنفس الهيكل أعلاه (حافظوا على اسم `index.html` بالضبط، ومجلد `images/` بنفس الاسم)
-4. من المستودع: **Settings → Pages**
-5. تحت "Build and deployment"، اختاروا المصدر (Source): **Deploy from a branch**
-6. اختاروا الفرع `main` والمجلد `/ (root)`، ثم احفظوا
-7. خلال دقائق قليلة، سيظهر رابط موقعكم بالشكل:
+المشروع منشور حالياً على GitHub Pages عبر:
 
-```
-https://<اسم_المستخدم>.github.io/Water-Bill-Calculator/
-```
+https://ahmad-albetar.github.io/AquaBill-JO/
 
-### ✅ رابط الموقع مضبوط فعلياً
+لإعادة نشره أو تحديثه:
 
-ملف `index.html` مضبوط بالفعل على الرابط الحقيقي (وليس نصاً نائباً):
+1. ارفع الملفات إلى مستودع GitHub.
+2. افتح:
+   **Settings → Pages**
+3. اختر:
+   **Deploy from a branch**
+4. اختر الفرع:
+   `main`
+5. اختر:
+   `/ (root)`
+6. احفظ الإعدادات.
 
-```html
-<meta property="og:url" content="https://ahmad-albetar.github.io/Water-Bill-Calculator/">
-```
+بعد نشر التغييرات، قد يستغرق تحديث GitHub Pages بضع دقائق.
 
-يظهر هذا الرابط بـ5 مواضع (`canonical`، `og:url`، `og:image`، `twitter:image`، وJSON-LD). **إن غيّرتم اسم المستودع على GitHub مستقبلاً** (مثلاً لغير `Water-Bill-Calculator`)، ابحثوا عن `ahmad-albetar.github.io/Water-Bill-Calculator` بملف `index.html` وحدّثوه بكل المواضع الخمسة ليطابق الرابط الفعلي الجديد.
+### ✅ رابط الموقع الرسمي
 
-بدون هذه الخطوة، الأداة تعمل بشكل طبيعي 100%، لكن معاينة الرابط (الصورة والعنوان) عند مشاركته بواتساب أو فيسبوك قد لا تظهر بشكل صحيح.
+رابط AquaBill JO المنشور على GitHub Pages:
 
+https://ahmad-albetar.github.io/AquaBill-JO/
+
+ويجب أن تشير إعدادات المشاركة ومحركات البحث إلى هذا الرابط، بما في ذلك:
+
+- `canonical`
+- `og:url`
+- `twitter` / Social metadata
+- `JSON-LD`
+
+إذا تم تغيير اسم المستودع مستقبلاً، يجب تحديث هذه الروابط في `index.html` وملفات المشروع المرتبطة بها.
 ---
 
 ## 📱 تثبيت الأداة كتطبيق على الهاتف (PWA)
