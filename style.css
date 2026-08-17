@@ -318,7 +318,8 @@ footer a{ color: var(--accent-strong); }
   position: relative;
   transition: all .25s ease;
 }
-.card + .card { margin-top: 1.1rem; box-shadow: none; }
+.card + .card { margin-top: 1.5rem; box-shadow: none; } 
+/* *************** */
 
 /* أيقونة دائرية داخل عنوان كل بطاقة (الافتراضي: تيل العلامة التجارية) */
 h2 .icn {
@@ -399,7 +400,7 @@ h2 .icn-tip {
    ========================================================================== */
 
 /* زر قفل/فتح تعديل جدول التعرفة */
-h2 .lockbtn{
+/* h2 .lockbtn{
   margin-inline-start: auto;
   background: none;
   border: 1px solid var(--border);
@@ -413,7 +414,7 @@ h2 .lockbtn{
   flex: none;
 }
 h2 .lockbtn:hover{ background: var(--teal-light); }
-.lockbtn-icon{ width: 13px; height: 13px; vertical-align: -2px; margin-inline-end: 4px; }
+.lockbtn-icon{ width: 13px; height: 13px; vertical-align: -2px; margin-inline-end: 4px; } */
 
 /* زر تبديل الوضع الفاتح/الداكن (دائري، أعلى الترويسة) */
 .theme-toggle{
