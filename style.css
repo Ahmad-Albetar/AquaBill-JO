@@ -676,7 +676,7 @@ body.dark-mode .badge.critical,
 /* نص تلميح صغير أسفل الحقول أو الجداول */
 .hint{ font-size: .78rem; color: var(--ink-soft); margin: .5rem 0 0; }
 /* صندوق التلميح الإرشادي لآلية الحساب */
-.hint-box {
+/* .hint-box {
   background: var(--teal-light);
   border-right: 3px solid var(--accent-strong);
   border-radius: var(--radius-sm);
@@ -695,7 +695,7 @@ body.dark-mode .badge.critical,
   margin: 0;
   color: var(--ink-soft);
   line-height: 1.5;
-}
+} */
 
 /* شارات حالة الاستهلاك (آمن / تحذير متوسط / تحذير مرتفع) */
 .badge{
