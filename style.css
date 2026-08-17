@@ -308,38 +308,54 @@ footer a{ color: var(--accent-strong); }
    5. CARDS — بطاقات الأقسام الأربعة
    ========================================================================== */
 
+/* ==========================================================================
+   قسم البطاقات (Cards)
+   ========================================================================== */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.3rem 1.2rem;
-  margin-top: -1.6rem;           /* تراكب خفيف مع منحنى الترويسة */
   box-shadow: var(--shadow-card);
   position: relative;
-  transition: all .25s ease;
+  z-index: 2;
+  will-change: transform;
 }
-.card + .card { margin-top: 1.1rem; box-shadow: none; }
 
-/* أيقونة دائرية داخل عنوان كل بطاقة (الافتراضي: تيل العلامة التجارية) */
+/* تراكب البطاقة الأولى فقط مع الترويسة */
+.card:first-of-type {
+  margin-top: -1.6rem;
+}
+
+/* التباعد بين البطاقات التالية */
+.card + .card {
+  margin-top: 1.1rem;
+}
+
+/* أيقونة دائرية داخل عنوان كل بطاقة */
 h2 .icn {
   background: var(--teal-light);
   color: var(--accent-strong);
-  width: 36px; height: 36px;
+  width: 36px; 
+  height: 36px;
   border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: none;
 }
-h2 .icn svg { width: 18px; height: 18px; }
+h2 .icn svg { 
+  width: 18px; 
+  height: 18px; 
+}
 
-/* أيقونة خطوة "النصائح" (المصباح) بلون أصفر/ذهبي مميز بدل التيل العام */
+/* أيقونة خطوة النصائح بلون ذهبي */
 h2 .icn-tip {
   background: var(--gold-light);
   color: var(--gold);
 }
 
-/* --- تحسين وتجميل بطاقة النتيجة (الخطوة 2) --- */
+/* بطاقة النتيجة (الخطوة 2) */
 .result {
   background: var(--teal-light);
   border: 1px solid rgba(11, 79, 69, 0.12);
@@ -370,7 +386,7 @@ h2 .icn-tip {
 }
 .result .total span:last-child { 
   font-weight: 900; 
-  font-size: 1.75rem; /* تكبير خط إجمالي الفاتورة ليكون واضحاً وجذاباً */
+  font-size: 1.75rem; 
   color: var(--accent-strong); 
   letter-spacing: -0.5px;
 }
@@ -389,11 +405,23 @@ h2 .icn-tip {
   text-align: center;
   transition: all .2s ease;
 }
-.compare .box .lbl { font-size: .78rem; color: var(--ink-soft); }
-.compare .box .val { font-size: 1.25rem; font-weight: 900; color: var(--accent-strong); margin-top: .3rem; }
-.compare .box.win { border-color: var(--gold); background: var(--gold-light); }
-.compare .box.win .val { color: var(--gold-text); }
-
+.compare .box .lbl { 
+  font-size: .78rem; 
+  color: var(--ink-soft); 
+}
+.compare .box .val { 
+  font-size: 1.25rem; 
+  font-weight: 900; 
+  color: var(--accent-strong); 
+  margin-top: .3rem; 
+}
+.compare .box.win { 
+  border-color: var(--gold); 
+  background: var(--gold-light); 
+}
+.compare .box.win .val { 
+  color: var(--gold-text); 
+}
 /* ==========================================================================
    6. BUTTONS — أزرار القفل، تبديل الوضع، المشاركة، وتثبيت PWA
    ========================================================================== */
@@ -974,56 +1002,29 @@ main > .card:first-of-type table.tariff th {
   background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aebe6 90%);
 }
 /* --- تطبيق الثيم العصري الموحد على كافة بطاقات التطبيق --- */
+/* ==========================================================================
+   تنسيق البطاقات الأساسي والحركة (مُوحّد وسلس)
+   ========================================================================== */
 .card {
-  background: var(--card);
-  border: 1px solid rgba(11, 79, 69, 0.18);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem 1.3rem;
-  box-shadow: 0 10px 25px -10px rgba(11, 79, 69, 0.15);
-  position: relative;
-  z-index: 2;
-  transition: all 0.25s ease;
-  overflow: hidden;
-}
-
-/* التباعد بين البطاقات */
-.card + .card {
-  margin-top: 1.2rem;
-}
-
-/* خط إضاءة نيون أعلى كل بطاقة لإعطاء طابع متكامل */
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 1.2rem;
-  right: 1.2rem;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--teal), var(--gold), transparent);
-  border-radius: 2px;
-  opacity: 0.75;
-}
-
-/* تأثير التمرير الخفيف للبطاقات (Hover Effect) */
-/* تنسيق البطاقات مع تأثير حركة الماوس */
-.card {
-  /* التنسيقات الأساسية للبطاقة */
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.3s ease, 
+              border-color 0.3s ease;
   will-change: transform;
 }
 
-/* تأثير الحركة والتكبير الخفيف عند مرور الماوس فوق البطاقة */
+/* حركة الماوس الانسيابية عند التمرير (Hover) */
 .card:hover {
-  transform: translateY(-6px) scale(1.01); /* ارتجاع مريح للأعلى مع تكبير طفيف */
-  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15); /* إبراز الظل لجعل البطاقة تبدو مرتفعة */
-  border-color: rgba(14, 165, 233, 0.4); /* تغيير لون الإطار بدرجة الأزرق عند التمرير */
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 16px 30px -10px rgba(0, 0, 0, 0.18);
+  border-color: rgba(14, 165, 233, 0.6) !important;
 }
 
-/* حركة التفاعل عند الضغط بالماوس (اختياري) */
+/* تفاعل الضغط بالماوس (Active) */
 .card:active {
   transform: translateY(-2px) scale(0.998);
 }
-/* --- دعم الوضع الداكن (Dark Mode) لكل البطاقات --- */
+
+/* --- دعم الوضع الداكن (Dark Mode) --- */
 :root[data-theme="dark"] .card {
   border-color: rgba(94, 234, 212, 0.2);
   box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.45);
