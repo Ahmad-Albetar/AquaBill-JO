@@ -318,8 +318,7 @@ footer a{ color: var(--accent-strong); }
   position: relative;
   transition: all .25s ease;
 }
-.card + .card { margin-top: 1.1rem; box-shadow: none; } 
-/* *************** */
+.card + .card { margin-top: 1.1rem; box-shadow: none; }
 
 /* أيقونة دائرية داخل عنوان كل بطاقة (الافتراضي: تيل العلامة التجارية) */
 h2 .icn {
@@ -400,7 +399,7 @@ h2 .icn-tip {
    ========================================================================== */
 
 /* زر قفل/فتح تعديل جدول التعرفة */
-/* h2 .lockbtn{
+h2 .lockbtn{
   margin-inline-start: auto;
   background: none;
   border: 1px solid var(--border);
@@ -414,7 +413,7 @@ h2 .icn-tip {
   flex: none;
 }
 h2 .lockbtn:hover{ background: var(--teal-light); }
-.lockbtn-icon{ width: 13px; height: 13px; vertical-align: -2px; margin-inline-end: 4px; } */
+.lockbtn-icon{ width: 13px; height: 13px; vertical-align: -2px; margin-inline-end: 4px; }
 
 /* زر تبديل الوضع الفاتح/الداكن (دائري، أعلى الترويسة) */
 .theme-toggle{
@@ -628,16 +627,16 @@ table.tariff input[readonly]{
 
 /* ب) التبديل اليدوي الصريح (له الأولوية دائماً، بصرف النظر عن إعداد النظام) */
 :root[data-theme="dark"]{
---bg: #0E1613;
---card: #16211D;
---ink: #E7F1EE;
---ink-soft: #9FB6B0;
---teal-light: #1B3B34;
---gold: #E7C468;
---gold-text: #E7C468;
---gold-light: #2A2216;
---border: rgba(255, 255, 255, 0.09);
---accent-strong: #5EEAD4;
+  --bg: #0E1613;
+  --card: #16211D;
+  --ink: #E7F1EE;
+  --ink-soft: #9FB6B0;
+  --teal-light: #1B3B34;
+  --gold: #E7C468;
+  --gold-text: #E7C468;
+  --gold-light: #2A2216;
+  --border: rgba(255, 255, 255, 0.09);
+  --accent-strong: #5EEAD4;
 }
 
 :root[data-theme="dark"] input[type=number]{
@@ -675,27 +674,6 @@ body.dark-mode .badge.critical,
 
 /* نص تلميح صغير أسفل الحقول أو الجداول */
 .hint{ font-size: .78rem; color: var(--ink-soft); margin: .5rem 0 0; }
-/* صندوق التلميح الإرشادي لآلية الحساب */
-/* .hint-box {
-  background: var(--teal-light);
-  border-right: 3px solid var(--accent-strong);
-  border-radius: var(--radius-sm);
-  padding: 0.75rem 0.9rem;
-  margin-top: 0.8rem;
-  font-size: 0.85rem;
-}
-
-.hint-box strong {
-  color: var(--accent-strong);
-  display: block;
-  margin-bottom: 0.2rem;
-}
-
-.hint-box p.hint {
-  margin: 0;
-  color: var(--ink-soft);
-  line-height: 1.5;
-} */
 
 /* شارات حالة الاستهلاك (آمن / تحذير متوسط / تحذير مرتفع) */
 .badge{
