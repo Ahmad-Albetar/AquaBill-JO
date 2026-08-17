@@ -675,6 +675,27 @@ body.dark-mode .badge.critical,
 
 /* نص تلميح صغير أسفل الحقول أو الجداول */
 .hint{ font-size: .78rem; color: var(--ink-soft); margin: .5rem 0 0; }
+/* صندوق التلميح الإرشادي لآلية الحساب */
+.hint-box {
+  background: var(--teal-light);
+  border-right: 3px solid var(--accent-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+}
+
+.hint-box strong {
+  color: var(--accent-strong);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.hint-box p.hint {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
 
 /* شارات حالة الاستهلاك (آمن / تحذير متوسط / تحذير مرتفع) */
 .badge{
