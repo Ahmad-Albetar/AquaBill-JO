@@ -35,7 +35,7 @@ const APP_CONFIG = {
   /* ---------- إعدادات افتراضية أخرى ---------- */
   defaultConsumption: 0,
   defaultTankerPrice: 0,
-  defaultTankerQty: 3,
+  defaultTankerQty: 0,
 
   /* ---------- مفاتيح التخزين المحلي (موحّدة بمكان واحد) ---------- */
   storageKeys: {
