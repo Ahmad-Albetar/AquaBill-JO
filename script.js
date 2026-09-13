@@ -180,7 +180,7 @@ function costFor(n, field) {
       cost += units * t[field];
     }
     prevCap = cap;
-    if (n <= cap) break;
+    if (n <= cap) break;  
   }
 
   return cost;
@@ -617,8 +617,8 @@ function toggleTheme() {
   const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
   
   document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
-  
+  updateSetting('theme', newTheme);  
+   
   // التحقق من وجود الزر قبل تغييره لعدم التسبب في خطأ كود
   const themeBtn = document.querySelector('.btn-theme-toggle') || document.getElementById('themeToggle');
  // استبدل السطر الخاص بالأيقونة بهذا السطر فقط:
