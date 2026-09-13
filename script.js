@@ -721,7 +721,6 @@ function initFadeInCards() {
   // const versionEl = document.getElementById('appVersion');
   // if (versionEl) {
   //   versionEl.textContent = `${APP_CONFIG.appName} — الإصدار ${APP_CONFIG.version}`;
-  }
    document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
   document.getElementById("lockToggle")?.addEventListener("click", toggleLock);
   document.getElementById("consumption")?.addEventListener("input", calcAll);
