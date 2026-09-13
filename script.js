@@ -714,12 +714,21 @@ function initFadeInCards() {
     const isDarkNow = currentTheme ? currentTheme === 'dark' : systemPrefersDark;
     themeToggleBtn.setAttribute('aria-pressed', String(isDarkNow));
   }
-
-  // عرض رقم إصدار التطبيق بالتذييل
   const versionEl = document.getElementById('appVersion');
-  if (versionEl) {
-    versionEl.textContent = `${APP_CONFIG.appName} — الإصدار ${APP_CONFIG.version}`;
+    if (versionEl) {
+  versionEl.textContent = `${APP_CONFIG.appName} — الإصدار ${APP_CONFIG.version}`;
+  // // عرض رقم إصدار التطبيق بالتذييل
+  // const versionEl = document.getElementById('appVersion');
+  // if (versionEl) {
+  //   versionEl.textContent = `${APP_CONFIG.appName} — الإصدار ${APP_CONFIG.version}`;
   }
+   document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
+  document.getElementById("lockToggle")?.addEventListener("click", toggleLock);
+  document.getElementById("consumption")?.addEventListener("input", calcAll);
+  document.getElementById("tankerPrice")?.addEventListener("input", calcAll);
+  document.getElementById("tankerQty")?.addEventListener("input", calcAll);
+  document.getElementById("pwaInstallBtn")?.addEventListener("click", installApp);
+  document.getElementById("pwaDismissBtn")?.addEventListener("click", hideInstallToast);
 })();
 
 
@@ -773,19 +782,19 @@ function installApp() {
   });
 }
   // *******************************************************************************
-// فحص كمية الاستهلاك وإظهار التنبيه
-const consumptionInput = document.getElementById('consumption');
-const warningBadge = document.getElementById('consumption-warning');
+// // فحص كمية الاستهلاك وإظهار التنبيه
+// const consumptionInput = document.getElementById('consumption');
+// const warningBadge = document.getElementById('consumption-warning');
 
-if (consumptionInput && warningBadge) {
-  consumptionInput.addEventListener('input', function () {
-    const val = parseFloat(this.value);
+// if (consumptionInput && warningBadge) {
+//   consumptionInput.addEventListener('input', function () {
+//     const val = parseFloat(this.value);
     
-    // إظهار التنبيه فقط إذا كان الرقم أكبر من 500
-    if (val > 500) {
-      warningBadge.style.display = 'block';
-    } else {
-      warningBadge.style.display = 'none';
-    }
-  });
-}
+//     // إظهار التنبيه فقط إذا كان الرقم أكبر من 500
+//     if (val > 500) {
+//       warningBadge.style.display = 'block';
+//     } else {
+//       warningBadge.style.display = 'none';
+//     }
+//   });
+// }
