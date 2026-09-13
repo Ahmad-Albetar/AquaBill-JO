@@ -1086,15 +1086,3 @@ body.dark-theme .warning-badge {
   background-color: rgba(239, 68, 68, 0.18) !important;
   border-color: rgba(239, 68, 68, 0.4) !important;
 }
-/* تنسيق نص إخلاء المسؤولية الرسمي في التذييل */
-.disclaimer-text {
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: var(--text-muted, #666);
-  background-color: rgba(11, 79, 69, 0.05);
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-md, 8px);
-  border-right: 3px solid var(--accent-strong, #0b4f45);
-  margin-top: 0.8rem;
-  text-align: center;
-}
