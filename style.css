@@ -279,7 +279,14 @@ header p {
   margin-bottom: 1.5rem;
 }
 
-.logomark{ width: 46px; height: 46px; flex: none; border-radius: 50%; overflow: hidden; }
+.logomark{ width: 46px; height: 46px; flex: none; border-radius: 50%; overflow: hidden; background-color: #ffffff; }
+
+#flatFeeHint {
+  display: none;
+  font-size: 0.8em;
+  opacity: 0.85;
+  margin-right: 4px;
+}
 
 .brandtext .eyebrow .flagchip{
   display: inline-flex;

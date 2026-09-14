@@ -7,7 +7,7 @@
 /* رقم إصدار الكاش — يجب أن يطابق APP_CONFIG.cacheVersion بملف config.js.
    غيّروا القيمتين معاً عند أي تحديث مستقبلي للملفات، حتى يُجبر المتصفح على
    تحميل النسخة الجديدة بدل القديمة المخزّنة. */
-const CACHE_NAME = 'aquabill-jo-v12.1';
+const CACHE_NAME = 'aquabill-jo-v12.2';
 
 /* قائمة كل الملفات المطلوبة لعمل الأداة بدون إنترنت.
    ملاحظة: نخزّن النسخ المُصغَّرة (.min) لأنها الملفات الفعلية التي يحمّلها
@@ -18,6 +18,7 @@ const ASSETS_TO_CACHE = [
   './index.html',
   './style.css',
   './config.js',
+  './theme-init.js',
   './script.js',
   './manifest.webmanifest',
   './favicon.ico',
