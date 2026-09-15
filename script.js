@@ -190,7 +190,7 @@ function costFor(n, field) {
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
   const consumptionInput = document.getElementById('consumption');
-  const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
+  const tankerCapInput = document.getElementById('tankerQty');
   const tankerPriceInput = document.getElementById('tankerPrice');
 
   // 1. تقييد جميع الحقول بـ 3 خانات كحد أقصى وشطب أي إشارة سالب (-) فوراً
@@ -441,7 +441,6 @@ function initFadeInCards() {
       tiers[i].sewage = sanitizeNumber(t.sewage, tiers[i].sewage);
     });
   }
-  // calcAll();
   initScrollProgress();
   initFadeInCards();
 
