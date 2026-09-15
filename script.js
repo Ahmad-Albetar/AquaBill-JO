@@ -192,7 +192,6 @@ function calcAll() {
   const consumptionInput = document.getElementById('consumption');
   const tankerCapInput = document.getElementById('tankerCap') || document.getElementById('tankerQty');
   const tankerPriceInput = document.getElementById('tankerPrice');
-  const warningElem = document.getElementById('warning-message');
 
   // 1. تقييد جميع الحقول بـ 3 خانات كحد أقصى وشطب أي إشارة سالب (-) فوراً
   [consumptionInput, tankerCapInput, tankerPriceInput].forEach(input => {
@@ -212,8 +211,6 @@ function calcAll() {
 
   // 3. حالة الحقل الفارغ (عند فتح الصفحة أو عند مسح الرقم)
   if (rawInput === '') {
-    if (warningElem) warningElem.style.display = 'none';
-
     document.getElementById('waterOut').textContent = '0.00';
     document.getElementById('sewageOut').textContent = '0.00';
     document.getElementById('totalOut').textContent = '0.00';
@@ -236,15 +233,6 @@ function calcAll() {
 
   // 4. فحص الأرقام السالبة أو تجاوز الـ 500 م³
   if (isNaN(consumptionVal) || consumptionVal < 0 || consumptionVal > 500) {
-    if (warningElem) {
-      if (consumptionVal < 0) {
-        warningElem.textContent = '⚠️ تنبيه: لا يمكن إدخال قيمة استهلاك بالسالب!';
-      } else {
-        warningElem.textContent = '⚠️ تنبيه: الاستهلاك المدخل أعلى من 500 م³، هذا رقم كبير جداً خلال شهر واحد!';
-      }
-      warningElem.style.display = 'block';
-    }
-
     document.getElementById('waterOut').textContent = '0.00';
     document.getElementById('sewageOut').textContent = '0.00';
     document.getElementById('totalOut').textContent = '0.00';
@@ -260,8 +248,6 @@ function calcAll() {
     document.getElementById('networkMarginal').textContent = '0.00';
     document.getElementById('tankerMarginal').textContent = '0.00';
     return;
-  } else {
-    if (warningElem) warningElem.style.display = 'none';
   }
 
   // 5. الحسابات الطبيعية للعداد (من 0 إلى 500 م³)
