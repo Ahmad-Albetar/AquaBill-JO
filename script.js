@@ -218,9 +218,6 @@ function calcAll() {
     document.getElementById('sewageOut').textContent = '0.00';
     document.getElementById('totalOut').textContent = '0.00';
 
-    const flatTagEl = document.getElementById('flatFeeTag');
-    if (flatTagEl) flatTagEl.style.display = 'none';
-
     const flatFeeHint = document.getElementById('flatFeeHint');
     if (flatFeeHint) flatFeeHint.style.display = 'none';
 
@@ -252,9 +249,6 @@ function calcAll() {
     document.getElementById('sewageOut').textContent = '0.00';
     document.getElementById('totalOut').textContent = '0.00';
 
-    const flatTagEl = document.getElementById('flatFeeTag');
-    if (flatTagEl) flatTagEl.style.display = 'none';
-
     const flatFeeHint = document.getElementById('flatFeeHint');
     if (flatFeeHint) flatFeeHint.style.display = 'none';
 
@@ -275,11 +269,6 @@ function calcAll() {
   const water = costFor(n, 'water');
   const sewage = costFor(n, 'sewage');
   const total = water + sewage;
-
-  const flatTagEl = document.getElementById('flatFeeTag');
-  if (flatTagEl) {
-    flatTagEl.style.display = (n >= 0 && n <= 6) ? 'inline-block' : 'none';
-  }
 
   document.getElementById('waterOut').textContent = `${water.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
   document.getElementById('sewageOut').textContent = `${sewage.toFixed(2)} ${APP_CONFIG.currencyLabelAr}`;
