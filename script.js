@@ -187,54 +187,6 @@ function costFor(n, field) {
 }
 
 
-// --- 1. دالة حساب الصهريج فقط (الخطوة 3) ---
-function calcTankerOnly() {
-  const tankerPriceInput = parseFloat(document.getElementById('tankerPrice').value) || 0;
-  const tankerQtyInput = parseFloat(document.getElementById('tankerQty').value) || 0;
-  const tankerPerM3 = (tankerPriceInput > 0 && tankerQtyInput > 0) ? (tankerPriceInput / tankerQtyInput) : 0;
-
-  const currSymbol = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.currencyLabelAr) 
-    ? APP_CONFIG.currencyLabelAr[0] 
-    : 'د.أ';
-
-  const tankerMarginalElem = document.getElementById('tankerMarginal');
-  if (tankerMarginalElem) {
-    tankerMarginalElem.textContent = tankerPerM3 > 0 
-      ? `${tankerPerM3.toFixed(2)} ${currSymbol}` 
-      : `0.00 ${currSymbol}`;
-  }
-
-  // جلب كلفة المتر الهامشي للشبكة من الواجهة إن وجدت
-  const networkMarginalElem = document.getElementById('networkMarginal');
-  const networkMarginal = networkMarginalElem ? (parseFloat(networkMarginalElem.textContent) || 0) : 0;
-
-  const boxNetwork = document.getElementById('boxNetwork');
-  const boxTanker = document.getElementById('boxTanker');
-  const recommendHint = document.getElementById('recommendHint');
-
-  if (boxNetwork && boxTanker && recommendHint) {
-    if (tankerPerM3 > 0) {
-      if (networkMarginal < tankerPerM3) {
-        if (!boxNetwork.classList.contains('win')) {
-          boxNetwork.classList.add('win');
-          boxTanker.classList.remove('win');
-        }
-        recommendHint.textContent = 'الأوفر: سحب المتر الإضافي من العداد بدل طلب صهريج مياه.';
-      } else {
-        if (!boxTanker.classList.contains('win')) {
-          boxTanker.classList.add('win');
-          boxNetwork.classList.remove('win');
-        }
-        recommendHint.textContent = 'الأوفر هنا: صهريج المياه أرخص من تجاوز الشريحة الحالية.';
-      }
-    } else {
-      boxNetwork.classList.remove('win');
-      boxTanker.classList.remove('win');
-      recommendHint.textContent = 'أدخل سعر وسعة الصهريج للمقارنة مع العداد.';
-    }
-  }
-}
-
 // --- 2. دالة الحسابات الشاملة (calcAll) ---
 function calcAll() {
   const consumptionInput = document.getElementById('consumption');
